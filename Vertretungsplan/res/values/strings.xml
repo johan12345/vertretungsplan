@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Vertretungsplan</string>
+    <string name="menu_info">Info</string>
+    <string name="menu_refresh">Aktualisieren</string>
+    <string name="menu_link">Online</string>
+
+    <string-array name="klassen">
+        <item>5a</item>
+        <item>5b</item>
+        <item>5c</item>
+        <item>5d</item>
+        <item>5e</item>
+        <item>5f</item>
+        <item>5g</item>
+        <item>6a</item>
+        <item>6b</item>
+        <item>6c</item>
+        <item>6d</item>
+        <item>6e</item>
+        <item>6f</item>
+        <item>6g</item>
+        <item>7a</item>
+        <item>7b</item>
+        <item>7c</item>
+        <item>7d</item>
+        <item>7e</item>
+        <item>7f</item>
+        <item>7g</item>
+        <item>8a</item>
+        <item>8b</item>
+        <item>8c</item>
+        <item>8d</item>
+        <item>8e</item>
+        <item>8f</item>
+        <item>8g</item>
+        <item>9a</item>
+        <item>9b</item>
+        <item>9c</item>
+        <item>9d</item>
+        <item>9e</item>
+        <item>9f</item>
+        <item>9g</item>
+        <item>10a</item>
+        <item>10b</item>
+        <item>10c</item>
+        <item>10d</item>
+        <item>10e</item>
+        <item>10f</item>
+        <item>10g</item>
+        <item>11a</item>
+        <item>11b</item>
+        <item>11c</item>
+        <item>11d</item>
+        <item>11e</item>
+        <item>12a</item>
+        <item>12b</item>
+        <item>12c</item>
+        <item>12d</item>
+        <item>12e</item>
+        <item>13a</item>
+        <item>13b</item>
+        <item>13c</item>
+        <item>13d</item>
+        <item>13e</item>
+    </string-array>
+
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_afragment">AFragment</string>
+
+</resources>
