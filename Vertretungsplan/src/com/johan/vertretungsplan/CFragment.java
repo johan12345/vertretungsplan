@@ -40,7 +40,7 @@ public class CFragment extends SherlockFragment {
         bgToggle.setChecked(hintergrund);
         
         farbenToggle = (ToggleButton) view.findViewById(R.id.tglFarben);
-        farbenToggle.setChecked(hintergrund);
+        farbenToggle.setChecked(farben);
 		
 		// Inflate the layout for this fragment
         return view;
