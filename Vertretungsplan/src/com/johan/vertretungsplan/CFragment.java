@@ -14,7 +14,8 @@ import android.widget.ToggleButton;
 
 public class CFragment extends SherlockFragment {
 	
-	ToggleButton bg;
+	ToggleButton bgToggle;
+	ToggleButton farbenToggle;
 	ImageView image;
 	
     public static Context appContext;
@@ -33,8 +34,13 @@ public class CFragment extends SherlockFragment {
 		// Restore preferences
         SharedPreferences settings = getSherlockActivity().getSharedPreferences(PREFS_NAME, 0);
         Boolean hintergrund = settings.getBoolean("bg", true);
-        bg = (ToggleButton) view.findViewById(R.id.toggleButton1);
-        bg.setChecked(hintergrund);
+        Boolean farben = settings.getBoolean("farben", true);
+        
+        bgToggle = (ToggleButton) view.findViewById(R.id.tglHintergrund);
+        bgToggle.setChecked(hintergrund);
+        
+        farbenToggle = (ToggleButton) view.findViewById(R.id.tglFarben);
+        farbenToggle.setChecked(hintergrund);
 		
 		// Inflate the layout for this fragment
         return view;

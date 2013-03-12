@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/vertreter"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity"
-    android:id="@+id/vertreter">
-	
-        
+    tools:context=".CFragment" >
 
     <TextView
         android:id="@+id/textView4"
@@ -14,35 +12,64 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
         android:text="Alle Angaben ohne Gewähr. App ©2013 Johan v. Forstner"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
     <TextView
         android:id="@+id/textView2"
+        style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
         android:text="Einstellungen"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <ToggleButton
-        android:id="@+id/toggleButton1"
+        android:id="@+id/tglHintergrund"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/textView2"
-        android:text="ToggleButton"
-        android:onClick="onToggleClicked"/>
+        android:layout_marginRight="8dp"
+        android:onClick="onToggleClicked"
+        android:text="ToggleButton" />
 
-    <TextView
-        android:id="@+id/textView1"
+    <ToggleButton
+        android:id="@+id/tglFarben"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/toggleButton1"
-        android:layout_alignBottom="@+id/toggleButton1"
-        android:layout_alignParentLeft="true"
+        android:layout_alignLeft="@+id/tglHintergrund"
+        android:layout_below="@+id/tglHintergrund"
+        android:onClick="onToggle2Clicked"
+        android:text="ToggleButton" />
+
+    <TextView
+        android:id="@+id/txtBG"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tglHintergrund"
+        android:layout_alignBottom="@+id/tglHintergrund"
+        android:layout_alignLeft="@+id/txtFarben"
         android:text="Hintergrundbild"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <TextView
+        android:id="@+id/txtFarben"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/tglFarben"
+        android:layout_alignBottom="@+id/tglFarben"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_marginLeft="8dp"
+        android:text="Farben"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </RelativeLayout>
