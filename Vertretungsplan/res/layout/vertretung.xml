@@ -7,11 +7,11 @@
 
 	<TextView
 	    android:id="@+id/stunde"
-	    android:layout_width="72dp"
+	    android:layout_width="100dp"
 	    android:layout_height="48dp"
 	    android:layout_marginLeft="8dp"
 	    android:gravity="center_vertical"
-	    android:text="3 - 4"
+	    android:text="10 - 11"
 	    android:textSize="30sp"
 	    android:textStyle="bold"
 	    android:visibility="visible" />
