@@ -16,7 +16,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-		android:scaleType="fitCenter" />
+		android:scaleType="fitEnd" />
     
     <ListView
         android:id="@+id/listView2"
@@ -28,7 +28,8 @@
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true" >
+        android:layout_alignParentTop="true"
+        android:fadeScrollbars="false">
 
     </ListView>
 

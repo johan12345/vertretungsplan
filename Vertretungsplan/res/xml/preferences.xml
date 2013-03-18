@@ -1,9 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <CheckBoxPreference
-        android:key="pref_sync"
-        android:title="bla"
-        android:summary="bla"
-        android:defaultValue="true" />
-   
+<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
+	<CheckBoxPreference
+		holo:id="@+id/hintergrundbild"
+		holo:key="bg"
+		holo:defaultValue="true"
+		holo:summaryOff="kein Hintergrundbild anzeigen"
+		holo:summaryOn="Hintergrundbild anzeigen"
+		holo:title="Hintergrundbild" />
+	<CheckBoxPreference
+		holo:id="@+id/farben"
+		holo:key="farben"
+		holo:defaultValue="true"
+		holo:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
+		holo:summaryOn="Vertretungsplan mit Farben hinterlegen"
+		holo:title="Farben" />
 </PreferenceScreen>

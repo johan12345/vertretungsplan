@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.johan.vertretungsplan"
     android:versionCode="1"
-    android:versionName="1.0 beta11" >
+    android:versionName="1.0 beta12" >
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -12,29 +12,39 @@
         android:targetSdkVersion="17" />
 
     <application
+        android:name="org.holoeverywhere.app.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Sherlock.Light.DarkActionBar">
-        <activity android:name=".StartActivity" android:label="@string/app_name">
+        android:theme="@style/Holo.Theme.Light.DarkActionBar" >
+        <activity
+            android:name="com.johan.vertretungsplan.StartActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <receiver android:name="VertretungsplanWidgetProvider" >
-            <intent-filter >
-                <action 
-                    android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+
+        <receiver android:name="com.johan.vertretungsplan.VertretungsplanWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
 
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
-        
+
+        <activity
+            android:name="com.johan.vertretungsplan.SettingsActivity"
+            android:label="@string/title_activity_settings"
+            android:parentActivityName="com.johan.vertretungsplan.StartActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.johan.vertretungsplan.StartActivity" />
+        </activity>
     </application>
 
 </manifest>
