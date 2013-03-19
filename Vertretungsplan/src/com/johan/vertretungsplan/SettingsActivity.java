@@ -6,6 +6,7 @@ import org.holoeverywhere.app.Activity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
+import com.google.analytics.tracking.android.Tracker;
 
 import android.support.v4.app.NavUtils;
 
@@ -26,7 +27,7 @@ public class SettingsActivity extends Activity {
 	
 	 @Override
 	    public void onStart() {
-	      super.onStart();
+	      super.onStart();	      
 	      EasyTracker.getInstance().activityStart(this);
 	    }
 	    
