@@ -2,20 +2,21 @@ package com.johan.vertretungsplan;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import org.holoeverywhere.app.Activity;
+
+import org.holoeverywhere.preference.PreferenceActivity;
+
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Tracker;
 
 import android.support.v4.app.NavUtils;
 
-public class SettingsActivity extends Activity {
+public class SettingsActivity extends PreferenceActivity {
 
 	@SuppressLint("NewApi")
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
         getSupportFragmentManager().beginTransaction()

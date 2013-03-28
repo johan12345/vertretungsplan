@@ -53,6 +53,19 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_toLeftOf="@+id/txtStand"
         android:entries="@array/klassen" />
+
+    <TextView
+        android:id="@+id/txtStand"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="16dp"
+        android:text="Stand"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorSecondary" />
 
 </RelativeLayout>

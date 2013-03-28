@@ -1,17 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
-	<CheckBoxPreference
-		holo:id="@+id/hintergrundbild"
-		holo:key="bg"
-		holo:defaultValue="true"
-		holo:summaryOff="kein Hintergrundbild anzeigen"
-		holo:summaryOn="Hintergrundbild anzeigen"
-		holo:title="Hintergrundbild" />
-	<CheckBoxPreference
-		holo:id="@+id/farben"
-		holo:key="farben"
-		holo:defaultValue="true"
-		holo:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
-		holo:summaryOn="Vertretungsplan mit Farben hinterlegen"
-		holo:title="Farben" />
+	<PreferenceCategory 
+        holo:title="Darstellung">
+		<CheckBoxPreference
+			holo:id="@+id/hintergrundbild"
+			holo:key="bg"
+			holo:defaultValue="true"
+			holo:summaryOff="kein Hintergrundbild anzeigen"
+			holo:summaryOn="Hintergrundbild anzeigen"
+			holo:title="Hintergrundbild" />
+		<CheckBoxPreference
+			holo:id="@+id/farben"
+			holo:key="farben"
+			holo:defaultValue="true"
+			holo:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
+			holo:summaryOn="Vertretungsplan mit Farben hinterlegen"
+			holo:title="Farben" />
+		</PreferenceCategory>
+		<PreferenceCategory 
+        	holo:title="Automatische Aktualisierung">		
+			<CheckBoxPreference
+				holo:id="@+id/sync"
+				holo:key="sync"
+				holo:defaultValue="true"
+				holo:summaryOff="Der Vertretungsplan wird nicht im Hintergrund abgerufen"
+				holo:summaryOn="Der Vertretungsplan wird im Hintergrund abgerufen und das Widget aktualisiert"
+				holo:title="Automatisch aktualisieren" />
+			<ListPreference
+		        holo:dependency="sync"
+		        holo:key="syncPeriod"
+		        holo:title="Häufigkeit"
+		        holo:dialogTitle="Häufigkeit auswählen:"
+		        holo:entries="@array/syncPeriod_entries"
+		        holo:entryValues="@array/syncPeriod_values"
+		        holo:defaultValue="SCHLAU" />
+			<CheckBoxPreference
+			    holo:dependency="sync"
+				holo:id="@+id/notification"
+				holo:key="notification"
+				holo:defaultValue="true"
+				holo:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
+				holo:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde (nicht unbedingt für die gewählte Klasse!)"
+				holo:title="Benachrichtigung" />
+		</PreferenceCategory>
 </PreferenceScreen>
