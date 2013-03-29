@@ -8,8 +8,8 @@ public class OnBootReceiver extends BroadcastReceiver {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-        StartActivity sa = new StartActivity();
-        sa.setAlarms();
+		Intent autostartIntent = new Intent(context, AutostartService.class);
+		context.startService(autostartIntent);
     }
 
 }
