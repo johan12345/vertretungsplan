@@ -1,7 +1,6 @@
 package com.johan.vertretungsplan;
 
 import org.holoeverywhere.preference.PreferenceFragment;
-import org.holoeverywhere.preference.SharedPreferences;
 
 import android.os.Bundle;
 
