@@ -80,19 +80,19 @@
     </string>
     
     <string-array name="syncPeriod_entries">
+        <item>alle 30 Sekunden (verbraucht sehr viel Akku!)</item>
         <item>alle 15 Minuten (verbraucht viel Akku!)</item>
         <item>alle 30 Minuten</item>
         <item>jede Stunde</item>
         <item>alle 2 Stunden</item>
-        <item>schlau (nur zu Zeiten, wo der Vertretungsplan normalerweise aktualisiert wird)</item>
     </string-array>
     
     <string-array name="syncPeriod_values">
+        <item>30s</item>
         <item>15</item>
         <item>30</item>
         <item>60</item>
         <item>120</item>
-        <item>SCHLAU</item>
     </string-array>
 
 </resources>

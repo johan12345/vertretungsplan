@@ -33,7 +33,7 @@
 		        holo:dialogTitle="Häufigkeit auswählen:"
 		        holo:entries="@array/syncPeriod_entries"
 		        holo:entryValues="@array/syncPeriod_values"
-		        holo:defaultValue="SCHLAU" />
+		        holo:defaultValue="30" />
 			<CheckBoxPreference
 			    holo:dependency="sync"
 				holo:id="@+id/notification"
