@@ -1,9 +1,12 @@
 package com.johan.vertretungsplan;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import org.holoeverywhere.preference.PreferenceActivity;
+import org.holoeverywhere.preference.PreferenceManager;
 
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -61,5 +64,28 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
+	
+	@Override
+	public void onResume(){
+        super.onResume();
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor prefEditor = prefs.edit();
+        prefEditor.putBoolean("isInForeground",true);
+        prefEditor.commit();      
+   }
+    @Override
+    public void onPause(){
+    		super.onPause();
+            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+            SharedPreferences.Editor prefEditor = prefs.edit();
+            prefEditor.putBoolean("isInForeground", false);
+            prefEditor.commit();
+            setAlarms();
+   }
+    
+    public void setAlarms(){
+    	Intent autostartIntent = new Intent(getApplicationContext(), AutostartService.class);
+    	getApplicationContext().startService(autostartIntent);
+    }
 
 }
