@@ -7,6 +7,9 @@
     <string name="menu_refresh">Aktualisieren</string>
     <string name="menu_link">Online</string>
     <string name="menu_mail">Mail an den Entwickler</string>
+    
+    <string name="title_changelog">Changelog</string>
+    <string name="changelog_close">Schließen</string>
 
     <string-array name="klassen">
         <item>5a</item>

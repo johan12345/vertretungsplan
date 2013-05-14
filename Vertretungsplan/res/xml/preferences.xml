@@ -16,6 +16,13 @@
 			holo:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
 			holo:summaryOn="Vertretungsplan mit Farben hinterlegen"
 			holo:title="Farben" />
+		<CheckBoxPreference
+			holo:id="@+id/winter"
+			holo:key="winter"
+			holo:defaultValue="true"
+			holo:summaryOff="Hinweise zu witterungsbedingtem Unterrichtsausfall nicht anzeigen"
+			holo:summaryOn="Hinweise zu witterungsbedingtem Unterrichtsausfall anzeigen"
+			holo:title="Winter-Unterrichtsausfall" />
 		</PreferenceCategory>
 		<PreferenceCategory 
         	holo:title="Automatische Aktualisierung">		
