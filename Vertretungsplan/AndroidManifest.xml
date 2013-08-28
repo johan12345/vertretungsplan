@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.johan.vertretungsplan"
-    android:versionCode="3"
-    android:versionName="1.2"
+    android:versionCode="4"
+    android:versionName="1.3"
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -12,14 +12,14 @@
 
     <uses-sdk
         android:minSdkVersion="8"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <application
         android:name="org.holoeverywhere.app.Application"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Holo.Theme.Light.DarkActionBar" >
+        android:theme="@style/Theme.Ls" >
         <activity
             android:name="com.johan.vertretungsplan.StartActivity"
             android:label="@string/app_name" >

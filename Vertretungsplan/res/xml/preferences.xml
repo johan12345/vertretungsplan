@@ -30,9 +30,17 @@
 				holo:id="@+id/sync"
 				holo:key="sync"
 				holo:defaultValue="true"
-				holo:summaryOff="Der Vertretungsplan wird nicht im Hintergrund abgerufen"
-				holo:summaryOn="Der Vertretungsplan wird im Hintergrund abgerufen und das Widget aktualisiert"
+				holo:summaryOff="Nicht im Hintergrund abrufen"
+				holo:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
 				holo:title="Automatisch aktualisieren" />
+			<!--<CheckBoxPreference
+				holo:dependency="sync"
+				holo:id="@+id/syncWifi"
+				holo:key="syncWifi"
+				holo:defaultValue="false"
+				holo:summaryOff="Über WLAN und mobile Daten (z.B. UMTS) abrufen"
+				holo:summaryOn="Nur über WLAN abrufen"
+				holo:title="Nur bei WLAN" />  -->
 			<ListPreference
 		        holo:dependency="sync"
 		        holo:key="syncPeriod"
