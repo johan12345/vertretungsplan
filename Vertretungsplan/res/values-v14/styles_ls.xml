@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Ls" parent="Holo.Theme.Light">
+        <item name="android:actionBarItemBackground">@drawable/selectable_background_ls</item>
+        <item name="android:popupMenuStyle">@style/PopupMenu.Ls</item>
+        <item name="android:dropDownListViewStyle">@style/DropDownListView.Ls</item>
+        <item name="android:actionBarTabStyle">@style/ActionBarTabStyle.Ls</item>
+        <item name="android:actionDropDownStyle">@style/DropDownNav.Ls</item>
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.Ls</item>
+        <item name="android:actionModeBackground">@drawable/cab_background_top_ls</item>
+        <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_ls</item>
+        <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Ls</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
+        <item name="android:actionMenuTextColor">#FFFFFF</item>
+    </style>
+
+    <style name="ActionBar.Solid.Ls" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
+        <item name="android:background">@drawable/ab_solid_ls</item>
+        <item name="android:backgroundStacked">@drawable/ab_stacked_solid_ls</item>
+        <item name="android:backgroundSplit">@drawable/ab_bottom_solid_ls</item>
+        <item name="android:progressBarStyle">@style/ProgressBar.Ls</item>
+        <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+    </style>
+    
+    <style name="TitleTextStyle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+    	<item name="android:textColor">@android:color/white</item>
+	</style>
+
+    <style name="ActionBar.Transparent.Ls" parent="@style/Widget.Sherlock.Light.ActionBar">
+        <item name="background">@drawable/ab_transparent_ls</item>
+        <item name="progressBarStyle">@style/ProgressBar.Ls</item>
+    </style>
+
+</resources>

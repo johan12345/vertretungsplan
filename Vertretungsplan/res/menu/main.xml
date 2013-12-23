@@ -5,23 +5,21 @@
         android:id="@+id/menu_settings"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:icon="@drawable/ic_menu_settings"
         android:title="@string/menu_settings"/>
     
     <item
         android:id="@+id/menu_info"
         android:orderInCategory="100"
         android:showAsAction="never"
-        android:icon="@drawable/ic_menu_info_details"
         android:title="@string/menu_info"/>
     
     <item android:id="@+id/menu_refresh"
-          android:icon="@drawable/ic_menu_refresh"
+          android:icon="@drawable/ic_action_refresh"
           android:title="@string/menu_refresh"
           android:showAsAction="ifRoom" />
     
     <item android:id="@+id/menu_link"
-          android:icon="@drawable/ic_menu_forward"
+          android:icon="@drawable/ic_action_forward"
           android:title="@string/menu_link"
           android:showAsAction="ifRoom|withText" />
     

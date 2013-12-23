@@ -4,5 +4,5 @@
            android:drawable="@drawable/bildmitbg" /> <!-- pressed -->
      <item android:state_focused="true"
            android:drawable="@drawable/bildmitbg" /> <!-- focused -->
-     <item android:drawable="@drawable/ic_menu_refresh" /> <!-- default -->
+     <item android:drawable="@drawable/ic_action_refresh" /> <!-- default -->
 </selector>
