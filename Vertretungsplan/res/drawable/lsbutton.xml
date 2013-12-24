@@ -4,5 +4,5 @@
            android:drawable="@drawable/bild2mitbg" /> <!-- pressed -->
      <item android:state_focused="true"
            android:drawable="@drawable/bild2mitbg" /> <!-- focused -->
-     <item android:drawable="@drawable/ic_launcher" /> <!-- default -->
+     <item android:drawable="@drawable/ic_action_icon" /> <!-- default -->
 </selector>
