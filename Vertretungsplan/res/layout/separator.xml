@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_height="wrap_content"
-	android:layout_width="fill_parent">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
 
-	<TextView
-	    android:id="@+id/textSeparator"
-	    style="?android:attr/listSeparatorTextViewStyle"
-	    android:layout_width="fill_parent"
-	    android:layout_height="wrap_content"
-	    android:text="text"
-	    android:visibility="visible" />
+        <TextView
+            android:id="@+id/textSeparator"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:text="text"
+            android:textSize="18sp"
+            android:fontFamily="roboto-thin"
+            android:visibility="visible" />
 
 </LinearLayout>

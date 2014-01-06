@@ -36,7 +36,9 @@
         android:layout_marginBottom="8dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:fadeScrollbars="false">
+        android:fadeScrollbars="false"
+        android:divider="@null"
+		android:dividerHeight="0dp">
 
     </ListView>
 
@@ -49,7 +51,8 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginBottom="8dp"
-        android:text="Alle Angaben ohne Gewähr. App ©2013 Johan v. Forstner"
-        android:textAppearance="?android:attr/textAppearanceSmall" />
+        android:text="Alle Angaben ohne Gewähr. App ©2014 Johan v. Forstner"
+        android:textSize="12sp"
+        android:fontFamily="roboto-condensed" />
 
 </RelativeLayout>

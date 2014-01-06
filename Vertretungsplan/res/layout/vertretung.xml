@@ -1,46 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:id="@+id/layout">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
 
-	<TextView
-	    android:id="@+id/stunde"
-	    android:layout_width="100dp"
-	    android:layout_height="48dp"
-	    android:layout_marginLeft="8dp"
-	    android:gravity="center_vertical"
-	    android:text="10 - 11"
-	    android:textSize="30sp"
-	    android:textStyle="bold"
-	    android:visibility="visible" />
+    <LinearLayout
+        android:id="@+id/layout"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:background="@drawable/card_background"
+        android:orientation="horizontal" >
 
-	<LinearLayout
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_marginLeft="8dp"
-	    android:layout_marginRight="8dp"
-	    android:orientation="vertical" >
+        <View
+            android:id="@+id/stripe"
+            android:layout_width="4dp"
+            android:layout_height="match_parent"
+            android:background="#FF0000" />
 
-		<TextView
-		    android:id="@+id/art"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    android:layout_marginTop="4dp"
-		    android:text="Sondereins."
-		    android:textAppearance="?android:attr/textAppearanceMedium"
-		    android:textColor="?android:attr/textColorPrimary" />
+        <TextView
+            android:id="@+id/stunde"
+            android:layout_width="100dp"
+            android:layout_height="48dp"
+            android:gravity="center_vertical"
+            android:text="10 - 11"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginLeft="16dp"
+            android:visibility="visible" />
 
-	    <TextView
-	        android:id="@+id/text"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:layout_gravity="bottom"
-	        android:text="Fix schwyz quäkt Jürgen blöd"
-	        android:textAppearance="?android:attr/textAppearanceSmall"
-	        android:textColor="?android:attr/textColorSecondary" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="8dp"
+            android:orientation="vertical" >
 
-	</LinearLayout>
+            <TextView
+                android:id="@+id/art"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:text="Sondereins."
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary" />
 
-</LinearLayout>
+            <TextView
+                android:id="@+id/text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:text="Fix schwyz quäkt Jürgen blöd"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="#777777" />
+        </LinearLayout>
+    </LinearLayout>
+
+</FrameLayout>
