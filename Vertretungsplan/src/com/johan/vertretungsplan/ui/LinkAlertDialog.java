@@ -14,9 +14,10 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan.ui;
 
 import org.holoeverywhere.app.AlertDialog;
+import org.holoeverywhere.app.AlertDialog.Builder;
 import org.holoeverywhere.widget.TextView;
 
 import com.inscription.ChangeLogDialog;
@@ -29,7 +30,7 @@ import android.text.method.LinkMovementMethod;
 
 public class LinkAlertDialog {
 
-	 public static AlertDialog create(final Context context, String title, String text) {
+	 public static Builder create (final Context context, String title, String text) {
 	  final TextView message = new TextView(context);
 	  message.setTextAppearance(context, android.R.style.TextAppearance_Medium);
 	  
@@ -45,15 +46,6 @@ public class LinkAlertDialog {
 	  return new AlertDialog.Builder(context)
 	   .setTitle(title)
 	   .setCancelable(true)
-	   .setPositiveButton("OK", null)
-	   .setNegativeButton("Changelog", new DialogInterface.OnClickListener() {
-	    			           public void onClick(DialogInterface dialog, int id) {
-	    			        	 //Launch change log dialog
-	    				    		ChangeLogDialog _ChangelogDialog = new ChangeLogDialog(context); 
-	    				    		_ChangelogDialog.show();  
-	    			           }
-	    			       })
-	   .setView(message)
-	   .create();
+	   .setView(message);
 	 }
 	}

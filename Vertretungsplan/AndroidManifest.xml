@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.johan.vertretungsplan"
-    android:versionCode="10"
-    android:versionName="2.1.3"
+    android:versionCode="12"
+    android:versionName="2.1.5"
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -17,7 +17,7 @@
         android:targetSdkVersion="18" />
 
     <application
-        android:name="org.holoeverywhere.app.Application"
+        android:name="VertretungsplanApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
@@ -42,7 +42,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/widget_info" />
         </receiver>
-        <receiver android:name="com.johan.vertretungsplan.OnBootReceiver" >
+        <receiver android:name="com.johan.vertretungsplan.background.OnBootReceiver" >
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
@@ -58,15 +58,22 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.johan.vertretungsplan.StartActivity" />
         </activity>
+        
+        <activity android:name="org.acra.CrashReportDialog"
+	        android:theme="@style/Holo.Theme.Dialog.Light"
+	        android:launchMode="singleInstance"
+	        android:excludeFromRecents="true"
+	        android:finishOnTaskLaunch="true"
+	        android:logo="@drawable/ic_action_icon" />
 
         <service
-            android:name="com.johan.vertretungsplan.VertretungsplanService"
+            android:name="com.johan.vertretungsplan.background.VertretungsplanService"
             android:enabled="true"
             android:exported="true" >
         </service>
         
         <service
-            android:name="com.johan.vertretungsplan.AutostartService"
+            android:name="com.johan.vertretungsplan.background.AutostartService"
             android:enabled="true"
             android:exported="true" >
         </service>
