@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.johan.vertretungsplan"
-    android:versionCode="12"
-    android:versionName="2.1.5"
+    android:versionCode="13"
+    android:versionName="2.1.6"
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name="com.johan.vertretungsplan.VertretungsplanWidgetProvider" >
+        <receiver android:name="com.johan.vertretungsplan.background.VertretungsplanWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
