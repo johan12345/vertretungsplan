@@ -57,14 +57,6 @@
 				holo:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
 				holo:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
 				holo:title="Benachrichtigung" />
-			<CheckBoxPreference
-			    holo:dependency="notification"
-				holo:id="@+id/notificationOnNoInfo"
-				holo:key="notificationOnNoInfo"
-				holo:defaultValue="false"
-				holo:summaryOff="keine Benachrichtigung bei &quot;keine Informationen&quot; für die gewählte Klasse"
-				holo:summaryOn="Benachrichtigung auch bei &quot;keine Informationen&quot; für die gewählte Klasse"
-				holo:title="Benachrichtigung auch bei &quot;keine Informationen&quot;" />
 			<RingtonePreference 
 			    holo:dependency="notification"
 				holo:id="@+id/ringtone"
