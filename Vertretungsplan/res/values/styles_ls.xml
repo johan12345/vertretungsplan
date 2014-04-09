@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- File created by the Android Action Bar Style Generator
+
+     Copyright (C) 2011 The Android Open Source Project
+     Copyright (C) 2012 readyState Software Ltd
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <style name="Theme.Ls" parent="Holo.Theme.Light">
+        <item name="actionBarItemBackground">@drawable/selectable_background_ls</item>
+        <item name="popupMenuStyle">@style/PopupMenu.Ls</item>
+        <item name="dropDownListViewStyle">@style/DropDownListView.Ls</item>
+        <item name="actionBarTabStyle">@style/ActionBarTabStyle.Ls</item>
+        <item name="actionDropDownStyle">@style/DropDownNav.Ls</item>
+        <item name="actionBarStyle">@style/ActionBar.Solid.Ls</item>
+        <item name="actionModeBackground">@drawable/cab_background_top_ls</item>
+        <item name="actionModeSplitBackground">@drawable/cab_background_bottom_ls</item>
+        <item name="actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Ls</item>
+        <item name="actionOverflowButtonStyle">@style/Widget.AppCompat.ActionButton.Overflow</item>
+        <item name="actionMenuTextColor">@android:color/white</item>
+    </style>
+
+    <style name="ActionBar.Solid.Ls" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="background">@drawable/ab_solid_ls</item>
+        <item name="backgroundStacked">@drawable/ab_stacked_solid_ls</item>
+        <item name="backgroundSplit">@drawable/ab_bottom_solid_ls</item>
+        <!-- <item name="progressBarStyle">@style/ProgressBar.Ls</item> -->
+        <item name="titleTextStyle">@style/TitleTextStyle</item>
+    </style>
+    
+    <style name="TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    <item name="android:textColor">@android:color/white</item>
+</style>
+
+    <style name="ActionBar.Transparent.Ls" parent="@style/Widget.AppCompat.Light.ActionBar">
+        <item name="background">@drawable/ab_transparent_ls</item>
+        <item name="progressBarStyle">@style/ProgressBar.Ls</item>
+    </style>
+	
+    <style name="PopupMenu.Ls" parent="@style/Widget.AppCompat.Light.PopupMenu">	
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_ls</item>	
+    </style>
+	
+    <style name="DropDownListView.Ls" parent="@style/Widget.AppCompat.Light.ListView.DropDown">
+        <item name="android:listSelector">@drawable/selectable_background_ls</item>
+    </style>
+
+    <style name="ActionBarTabStyle.Ls" parent="@style/Widget.AppCompat.Light.ActionBar.TabView">
+        <item name="android:background">@drawable/tab_indicator_ab_ls</item>
+    </style>
+	
+    <style name="DropDownNav.Ls" parent="@style/Widget.AppCompat.Light.Spinner.DropDown.ActionBar">
+        <item name="android:background">@drawable/spinner_background_ab_ls</item>
+        <item name="android:popupBackground">@drawable/menu_dropdown_panel_ls</item>
+        <item name="android:dropDownSelector">@drawable/selectable_background_ls</item>
+    </style>
+    
+    <style name="ProgressBar.Ls" parent="@style/Widget.AppCompat.ProgressBar.Horizontal">
+        <item name="android:progressDrawable">@drawable/progress_horizontal_ls</item>
+    </style>
+    
+    <style name="ActionButton.CloseMode.Ls" parent="@style/Widget.AppCompat.Light.ActionButton.CloseMode">
+        <item name="android:background">@drawable/btn_cab_done_ls</item>
+    </style>
+
+</resources>

@@ -1,0 +1,12 @@
+[submodule "libraries/HoloEverywhere"]
+	path = libraries/HoloEverywhere
+	url = https://github.com/Prototik/HoloEverywhere.git
+[submodule "libraries/crouton"]
+	path = libraries/crouton
+	url = https://github.com/keyboardsurfer/Crouton.git
+[submodule "libraries/inscription"]
+	path = libraries/inscription
+	url = https://github.com/MartinvanZ/Inscription.git
+[submodule "libraries/pagerslidingtabstrip"]
+	path = libraries/pagerslidingtabstrip
+	url = https://github.com/astuetz/PagerSlidingTabStrip.git

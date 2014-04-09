@@ -13,7 +13,7 @@
             android:layout_marginBottom="4dp"
             android:text="text"
             android:textSize="18sp"
-            android:fontFamily="roboto-thin"
+            android:fontFamily="roboto-light"
             android:visibility="visible" />
 
 </LinearLayout>

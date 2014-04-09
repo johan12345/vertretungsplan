@@ -29,11 +29,11 @@
         <item name="android:actionModeBackground">@drawable/cab_background_top_ls</item>
         <item name="android:actionModeSplitBackground">@drawable/cab_background_bottom_ls</item>
         <item name="android:actionModeCloseButtonStyle">@style/ActionButton.CloseMode.Ls</item>
-        <item name="android:actionOverflowButtonStyle">@style/Widget.Sherlock.ActionButton.Overflow</item>
+        <item name="android:actionOverflowButtonStyle">@style/Widget.AppCompat.ActionButton.Overflow</item>
         <item name="android:actionMenuTextColor">#FFFFFF</item>
     </style>
 
-    <style name="ActionBar.Solid.Ls" parent="@style/Widget.Sherlock.Light.ActionBar.Solid">
+    <style name="ActionBar.Solid.Ls" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
         <item name="android:background">@drawable/ab_solid_ls</item>
         <item name="android:backgroundStacked">@drawable/ab_stacked_solid_ls</item>
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_ls</item>
@@ -41,11 +41,11 @@
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
     </style>
     
-    <style name="TitleTextStyle" parent="@style/TextAppearance.Sherlock.Widget.ActionBar.Title">
+    <style name="TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
     	<item name="android:textColor">@android:color/white</item>
 	</style>
 
-    <style name="ActionBar.Transparent.Ls" parent="@style/Widget.Sherlock.Light.ActionBar">
+    <style name="ActionBar.Transparent.Ls" parent="@style/Widget.AppCompat.Light.ActionBar">
         <item name="background">@drawable/ab_transparent_ls</item>
         <item name="progressBarStyle">@style/ProgressBar.Ls</item>
     </style>

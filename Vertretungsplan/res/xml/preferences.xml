@@ -1,70 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:holo="http://schemas.android.com/apk/res-auto" >
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 	<PreferenceCategory 
-        holo:title="Darstellung">
+        android:title="Darstellung">
 		<CheckBoxPreference
-			holo:id="@+id/hintergrundbild"
-			holo:key="bg"
-			holo:defaultValue="true"
-			holo:summaryOff="kein Hintergrundbild anzeigen"
-			holo:summaryOn="Hintergrundbild anzeigen"
-			holo:title="Hintergrundbild" />
+			android:id="@+id/hintergrundbild"
+			android:key="bg"
+			android:defaultValue="true"
+			android:summaryOff="kein Hintergrundbild anzeigen"
+			android:summaryOn="Hintergrundbild anzeigen"
+			android:title="Hintergrundbild" />
 		<CheckBoxPreference
-			holo:id="@+id/farben"
-			holo:key="farben"
-			holo:defaultValue="true"
-			holo:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
-			holo:summaryOn="Vertretungsplan mit Farben hinterlegen"
-			holo:title="Farben" />
+			android:id="@+id/farben"
+			android:key="farben"
+			android:defaultValue="true"
+			android:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
+			android:summaryOn="Vertretungsplan mit Farben hinterlegen"
+			android:title="Farben" />
 		<CheckBoxPreference
-			holo:id="@+id/winter"
-			holo:key="winter"
-			holo:defaultValue="true"
-			holo:summaryOff="Hinweise zu witterungsbedingtem Unterrichtsausfall nicht anzeigen"
-			holo:summaryOn="Hinweise zu witterungsbedingtem Unterrichtsausfall anzeigen"
-			holo:title="Winter-Unterrichtsausfall" />
+			android:id="@+id/winter"
+			android:key="winter"
+			android:defaultValue="true"
+			android:summaryOff="Hinweise zu witterungsbedingtem Unterrichtsausfall nicht anzeigen"
+			android:summaryOn="Hinweise zu witterungsbedingtem Unterrichtsausfall anzeigen"
+			android:title="Winter-Unterrichtsausfall" />
 		</PreferenceCategory>
 		<PreferenceCategory 
-        	holo:title="Automatische Aktualisierung">		
+        	android:title="Automatische Aktualisierung">		
 			<CheckBoxPreference
-				holo:id="@+id/sync"
-				holo:key="sync"
-				holo:defaultValue="true"
-				holo:summaryOff="Nicht im Hintergrund abrufen"
-				holo:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
-				holo:title="Automatisch aktualisieren" />
+				android:id="@+id/sync"
+				android:key="sync"
+				android:defaultValue="true"
+				android:summaryOff="Nicht im Hintergrund abrufen"
+				android:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
+				android:title="Automatisch aktualisieren" />
 			<!--<CheckBoxPreference
-				holo:dependency="sync"
-				holo:id="@+id/syncWifi"
-				holo:key="syncWifi"
-				holo:defaultValue="false"
-				holo:summaryOff="Über WLAN und mobile Daten (z.B. UMTS) abrufen"
-				holo:summaryOn="Nur über WLAN abrufen"
-				holo:title="Nur bei WLAN" />  -->
+				android:dependency="sync"
+				android:id="@+id/syncWifi"
+				android:key="syncWifi"
+				android:defaultValue="false"
+				android:summaryOff="Über WLAN und mobile Daten (z.B. UMTS) abrufen"
+				android:summaryOn="Nur über WLAN abrufen"
+				android:title="Nur bei WLAN" />  -->
 			<ListPreference
-		        holo:dependency="sync"
-		        holo:key="syncPeriod"
-		        holo:title="Häufigkeit"
-		        holo:dialogTitle="Häufigkeit auswählen:"
-		        holo:entries="@array/syncPeriod_entries"
-		        holo:entryValues="@array/syncPeriod_values"
-		        holo:defaultValue="30" />
+		        android:dependency="sync"
+		        android:key="syncPeriod"
+		        android:title="Häufigkeit"
+		        android:dialogTitle="Häufigkeit auswählen:"
+		        android:entries="@array/syncPeriod_entries"
+		        android:entryValues="@array/syncPeriod_values"
+		        android:defaultValue="30" />
 			<CheckBoxPreference
-			    holo:dependency="sync"
-				holo:id="@+id/notification"
-				holo:key="notification"
-				holo:defaultValue="true"
-				holo:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
-				holo:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
-				holo:title="Benachrichtigung" />
+			    android:dependency="sync"
+				android:id="@+id/notification"
+				android:key="notification"
+				android:defaultValue="true"
+				android:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
+				android:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
+				android:title="Benachrichtigung" />
 			<RingtonePreference 
-			    holo:dependency="notification"
-				holo:id="@+id/ringtone"
-				holo:key="ringtone"
-				holo:defaultValue="content://settings/system/notification_sound"
-				holo:ringtoneType="notification"
-				holo:showSilent="true"
-				holo:showDefault="true"
-				holo:title="Benachrichtigungston" />
+			    android:dependency="notification"
+				android:id="@+id/ringtone"
+				android:key="ringtone"
+				android:defaultValue="content://settings/system/notification_sound"
+				android:ringtoneType="notification"
+				android:showSilent="true"
+				android:showDefault="true"
+				android:title="Benachrichtigungston" />
 		</PreferenceCategory>
 </PreferenceScreen>

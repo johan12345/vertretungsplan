@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Vertretungsplan</string>
+    <string name="menu_info">Info</string>
+    <string name="menu_settings">Einstellungen</string>
+    <string name="menu_refresh">Aktualisieren</string>
+    <string name="menu_link">Online</string>
+    <string name="menu_mail">Mail an den Entwickler</string>
+    
+    <string name="title_changelog">Changelog</string>
+    <string name="changelog_close">Schließen</string>
+
+    <string-array name="klassen">
+        <item>5a</item>
+        <item>5b</item>
+        <item>5c</item>
+        <item>5d</item>
+        <item>5e</item>
+        <item>5f</item>
+        <item>5g</item>
+        <item>6a</item>
+        <item>6b</item>
+        <item>6c</item>
+        <item>6d</item>
+        <item>6e</item>
+        <item>6f</item>
+        <item>6g</item>
+        <item>7a</item>
+        <item>7b</item>
+        <item>7c</item>
+        <item>7d</item>
+        <item>7e</item>
+        <item>7f</item>
+        <item>7g</item>
+        <item>8a</item>
+        <item>8b</item>
+        <item>8c</item>
+        <item>8d</item>
+        <item>8e</item>
+        <item>8f</item>
+        <item>8g</item>
+        <item>9a</item>
+        <item>9b</item>
+        <item>9c</item>
+        <item>9d</item>
+        <item>9e</item>
+        <item>9f</item>
+        <item>9g</item>
+        <item>Ea</item>
+        <item>Eb</item>
+        <item>Ec</item>
+        <item>Ed</item>
+        <item>Ee</item>
+        <item>Ef</item>
+        <item>Eg</item>
+        <item>Eh</item>
+        <item>Ei</item>
+        <item>Ej</item>
+        <item>12a</item>
+        <item>12b</item>
+        <item>12c</item>
+        <item>12d</item>
+        <item>12e</item>
+        <item>13a</item>
+        <item>13b</item>
+        <item>13c</item>
+        <item>13d</item>
+        <item>13e</item>
+    </string-array>
+    
+    <string-array name="urls">
+        <item>http://vertretung.lornsenschule.de/schueler/f1/subst_001.htm</item>
+        <item>http://vertretung.lornsenschule.de/schueler/f2/subst_001.htm</item>
+        <item>http://johan12345.github.io/ls-vertretungsplan/changelog.xml</item>
+        <item>http://phpservice.schleswig-holstein.de/lage/feed.php</item>
+    </string-array>
+
+    <string name="title_activity_start">StartActivity</string>
+    <string name="title_activity_afragment">AFragment</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    
+    <string name="info_dialog"><![CDATA[
+        ©2014 Johan v. Forstner<br/><br/>
+        Diese App schickt anonyme Nutzungsdaten an den Dienst Google Analytics, damit ich sie weiter verbessern kann. Solltest du damit nicht einverstanden sein, deinstalliere bitte die App.<br/>
+        Solltest du eine Frage oder Anregung zu dieser App haben, kontaktiere mich bitte über den Button "Mail an den Entwickler" im Menü.<br/><br/>
+        Diese App nutzt die folgenden Open-Source-Bibliotheken:<br />
+        <a href="http://actionbarsherlock.com">ActionBarSherlock</a> von Jake Wharton unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="http://jsoup.org">jsoup</a> von Jonathan Hedley unter der <a href="http://jsoup.org/license">MIT-Lizenz</a><br />
+        <a href="https://github.com/ChristopheVersieux/HoloEverywhere">HoloEverywhere</a> von Christophe Versieux unter der <a href="http://www.gnu.org/licenses/lgpl-3.0.de.html">LGPL v3</a><br />
+        <a href="https://github.com/MartinvanZ/Inscription">Inscription</a> von Martin van Zuilekom unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="https://github.com/keyboardsurfer/Crouton">Crouton</a> von Cyril Mottier/Benjamin Weiss/Marie Schweiz unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="https://code.google.com/p/google-gson/">Gson</a> von Google Inc. unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="http://developer.android.com/tools/support-library/index.html">android-support-v4</a> vom Android Open Source Project unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="http://nineoldandroids.com/">NineOldAndroids</a> von Jake Wharton unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
+        <a href="https://github.com/JoeJErnst/http-client">http-client</a> von Joe J. Ernst unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a>]]>
+    </string>
+    
+    <string name="license_dialog"><![CDATA[
+        <p>Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
+	    der GNU General Public License, wie von der Free Software Foundation,
+	    Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
+	    veröffentlichten Version, weiterverbreiten und/oder modifizieren.</p>
+	
+	    <p>Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
+	    <b>ohne jede Gewährleistung</b>, bereitgestellt; sogar ohne die implizite
+	    Gewährleistung der <b>Marktfähigkeit</b> oder <b>Eignung für einen bestimmten Zweck</b>.
+	    Siehe die GNU General Public License für weitere Details.</p>
+	    
+	    <p>Eine Kopie der GNU General Public License lässt sich unter <a href="http://www.gnu.org/licenses/"> http://www.gnu.org/licenses/</a> aufrufen.</p>]]>
+    </string>
+    
+    <string-array name="syncPeriod_entries">
+        <item>alle 30 Sekunden (verbraucht sehr viel Akku!)</item>
+        <item>alle 15 Minuten (verbraucht viel Akku!)</item>
+        <item>alle 30 Minuten</item>
+        <item>jede Stunde</item>
+        <item>alle 2 Stunden</item>
+    </string-array>
+    
+    <string-array name="syncPeriod_values">
+        <item>30s</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+    </string-array>
+    
+    <string name="crash_dialog_title">Oh nein! Es ist etwas schiefgegangen.</string>
+    <string name="crash_dialog_text">Die Vertretungsplan-App ist abgestürzt. Bitte sende mir einen Fehlerbericht per E-Mail, damit ich das Problem beheben kann. Wähle bitte, nachdem du auf "OK" getippt hast, deine E-Mail-App aus, um den Bericht zu senden.</string>
+    <string name="crash_dialog_comment_prompt">Besonders hilfreich wäre es, wenn du im Kommentarfeld unten erklären würdest, was du gerade in der App gemacht hast oder ob der Fehler bei der Hintergrundaktualisierung aufgetreten ist.</string>
+
+</resources>
