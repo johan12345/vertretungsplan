@@ -36,7 +36,7 @@
             android:layout_marginTop="8dp"
             android:fadeScrollbars="false"
             android:divider="@null"
-			android:dividerHeight="0dp">
+			android:dividerHeight="8dp">
         </ListView>
 
         <TextView
