@@ -102,10 +102,10 @@ public class VertretungsplanService extends IntentService {
 			String[] urls = getResources().getStringArray(R.array.urls);
 
 			try {
-				Response heuteResponse = new Request(urls[0]).getResource();
-				Response morgenResponse = new Request(urls[1]).getResource();
+				Response heuteResponse = new Request(urls[0]).getResource("ISO-8859-1");
+				Response morgenResponse = new Request(urls[1]).getResource("ISO-8859-1");
 				Response changelogResponse = new Request(urls[2]).getResource();
-				Response winterResponse = new Request(urls[3]).getResource();
+				Response winterResponse = new Request(urls[3]).getResource("ISO-8859-1");
 				
 				if(heuteResponse.getResponseCode() == 200
 						&& morgenResponse.getResponseCode() == 200

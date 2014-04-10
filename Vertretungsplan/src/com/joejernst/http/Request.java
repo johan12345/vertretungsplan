@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import android.util.Log;
+
 /*
  * Copyright 2012 Joe J. Ernst
  * <p/>
@@ -29,7 +31,8 @@ import java.util.Map;
  */
 public class Request extends Message<Request> {
 
-    HttpURLConnection connection;
+    private static final String DEFAULT_ENCODING = "UTF-8";
+	HttpURLConnection connection;
     OutputStreamWriter writer;
 
     URL url;
@@ -45,8 +48,6 @@ public class Request extends Message<Request> {
      */
     public Request(String url) throws IOException {
         this.url = new URL(url);
-
-        connection = (HttpURLConnection) this.url.openConnection();
     }
 
     /**
@@ -92,14 +93,35 @@ public class Request extends Message<Request> {
      * @return The {@link Response} from the server
      * @throws IOException
      */
-    public Response getResource() throws IOException {
+    public Response getResource(String encoding) throws IOException {
         buildQueryString();
+		connection = (HttpURLConnection) url.openConnection();
         buildHeaders();
 
         //connection.setDoOutput(true);
         connection.setRequestMethod("GET");
 
-        return readResponse();
+        return readResponse(encoding);
+    }
+    
+    /**
+     * Issues a GET to the server and writes the response to a file.
+     * @return The {@link Response} from the server
+     * @throws IOException
+     */
+    public Response getResource(File file) throws IOException {
+        buildQueryString();
+		connection = (HttpURLConnection) url.openConnection();
+        buildHeaders();
+
+        //connection.setDoOutput(true);
+        connection.setRequestMethod("GET");
+
+        return readResponse(file);
+    }
+    
+    public Response getResource() throws IOException {
+    	return getResource(DEFAULT_ENCODING);
     }
 
     /**
@@ -107,8 +129,12 @@ public class Request extends Message<Request> {
      * @return The {@link Response} from the server
      * @throws IOException
      */
+    public Response putResource(String encoding) throws IOException {
+        return writeResource("PUT", this.body, encoding);
+    }
+    
     public Response putResource() throws IOException {
-        return writeResource("PUT", this.body);
+    	return putResource(DEFAULT_ENCODING);
     }
 
     /**
@@ -116,8 +142,12 @@ public class Request extends Message<Request> {
      * @return The {@link Response} from the server
      * @throws IOException
      */
+    public Response postResource(String encoding) throws IOException {
+        return writeResource("POST", this.body, encoding);
+    }
+    
     public Response postResource() throws IOException {
-        return writeResource("POST", this.body);
+        return postResource(DEFAULT_ENCODING);
     }
 
     /**
@@ -125,14 +155,19 @@ public class Request extends Message<Request> {
      * @return The {@link Response} from the server
      * @throws IOException
      */
-    public Response deleteResource() throws IOException {
+    public Response deleteResource(String encoding) throws IOException {
         buildQueryString();
+    	connection = (HttpURLConnection) url.openConnection();
         buildHeaders();
 
         connection.setDoOutput(true);
         connection.setRequestMethod("DELETE");
 
-        return readResponse();
+        return readResponse(encoding);
+    }
+    
+    public Response deleteResource() throws IOException {
+    	return deleteResource(DEFAULT_ENCODING);
     }
 
     /**
@@ -143,8 +178,9 @@ public class Request extends Message<Request> {
      * @return the {@link Response} from the server
      * @throws IOException
      */
-    private Response writeResource(String method, String body) throws IOException {
+    private Response writeResource(String method, String body, String encoding) throws IOException {
         buildQueryString();
+        connection = (HttpURLConnection) url.openConnection();
         buildHeaders();
 
         connection.setDoOutput(true);
@@ -154,7 +190,7 @@ public class Request extends Message<Request> {
         writer.write(body);
         writer.close();
 
-        return readResponse();
+        return readResponse(encoding);
     }
 
     /**
@@ -162,8 +198,8 @@ public class Request extends Message<Request> {
      * @return a {@link Response} from the server.
      * @throws IOException
      */
-    private Response readResponse() throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+    private Response readResponse(String encoding) throws IOException {
+        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), encoding));
 
         StringBuilder builder = new StringBuilder();
         String line;
@@ -178,6 +214,31 @@ public class Request extends Message<Request> {
                 .setResponseMessage(connection.getResponseMessage())
                 .setHeaders(connection.getHeaderFields())
                 .setBody(builder.toString());
+    }
+    
+    /**
+     * A private method that handles reading the Responses from the server to a file.
+     * @return a {@link Response} from the server.
+     * @throws IOException
+     */
+    private Response readResponse(File file) throws IOException {
+    	InputStream inputStream = connection.getInputStream();
+
+        FileOutputStream fileOutputStream = new FileOutputStream(file);
+        byte buffer[] = new byte[16 * 1024];
+        
+        int len1 = 0;
+        while ((len1 = inputStream.read(buffer)) > 0) {
+            fileOutputStream.write(buffer, 0, len1);
+        }
+        fileOutputStream.flush();
+        fileOutputStream.close();
+        inputStream.close();
+
+        return new Response()
+                .setResponseCode(connection.getResponseCode())
+                .setResponseMessage(connection.getResponseMessage())
+                .setHeaders(connection.getHeaderFields());
     }
 
     /**
