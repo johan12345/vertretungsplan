@@ -158,4 +158,8 @@
         <change>Danke für die Fehlerberichte!</change>
         <change>Viele Verbesserungen "unter der Haube", die hoffentlich einige Abstürze verhindern</change>
     </release>
+    <release version="2.1.12" versioncode="19">
+        <change>Weitere Verbesserungen im Hintergrund</change>
+        <change>Aktuelle Versionen von genutzten Bibliotheken</change>
+    </release>
 </changelog>
