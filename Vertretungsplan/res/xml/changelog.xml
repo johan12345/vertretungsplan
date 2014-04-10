@@ -161,5 +161,6 @@
     <release version="2.1.12" versioncode="19">
         <change>Weitere Verbesserungen im Hintergrund</change>
         <change>Aktuelle Versionen von genutzten Bibliotheken</change>
+        <change>Das Widget hat jetzt wie die App eine blaue Titelleiste</change>
     </release>
 </changelog>

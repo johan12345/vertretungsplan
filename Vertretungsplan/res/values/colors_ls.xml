@@ -19,7 +19,7 @@
 
 <resources>
     <color name="pressed_ls">#84b9ff</color>
-    <color name="darkBlue_ls">#338bff</color>
+    <color name="darkBlue_ls">#ffffff</color>
     <color name="lvHeaderTextColor">#338bff</color>
     <color name="lvHeaderDividerColor">#338bff</color>
 </resources>
