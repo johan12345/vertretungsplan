@@ -168,10 +168,14 @@ public class VertretungsplanWidgetProvider extends AppWidgetProvider {
 		String dateMorgen = "";
 		try {
 			dateHeute = v.getDateHeute().substring(v.getDateHeute().indexOf(" ") + 1);
-		} catch (NullPointerException e) {}
+		} catch (NullPointerException e) {
+			dateHeute = "Fehler";
+		}
 		try {
 			dateMorgen = v.getDateMorgen().substring(v.getDateMorgen().indexOf(" ") + 1);
-		} catch (NullPointerException e) {}
+		} catch (NullPointerException e) {
+			dateMorgen = "Fehler";
+		}
 		
 		remoteViews.setTextViewText(R.id.update1, textHeute);
 		remoteViews.setTextViewText(R.id.update2, textMorgen);
