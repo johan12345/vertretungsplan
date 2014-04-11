@@ -30,6 +30,7 @@ public class Vertretung implements Serializable {
 	private String teacher;
 	private String previousTeacher;
 	private String room;
+	private String previousRoom;
 	private String desc;
 	
 	public String getColor() {
@@ -196,6 +197,20 @@ public class Vertretung implements Serializable {
 	 */
 	public void setDesc(String desc) {
 		this.desc = desc;
+	}
+
+	/**
+	 * @return the previousRoom
+	 */
+	public String getPreviousRoom() {
+		return previousRoom;
+	}
+
+	/**
+	 * @param previousRoom the previousRoom to set
+	 */
+	public void setPreviousRoom(String previousRoom) {
+		this.previousRoom = previousRoom;
 	}
 		
 }

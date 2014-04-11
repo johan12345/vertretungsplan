@@ -92,7 +92,8 @@ public class UntisMonitorParser extends BaseParser {
 				&& doc.select("meta[http-equiv=refresh]").size() > 0) {
 			Element meta = doc.select("meta[http-equiv=refresh]").first();
 			String attr = meta.attr("content").toLowerCase();
-			String redirectUrl = attr.substring(attr.indexOf("url="));
+			String redirectUrl = url.substring(0, url.lastIndexOf("/") + 1) + attr.substring(attr.indexOf("url=") + 4);
+			Log.d("Vertretungsplan", redirectUrl);
 			if (!redirectUrl.equals(startUrl))
 				loadUrl(redirectUrl, encoding, true, docs, startUrl);
 		}
@@ -114,8 +115,14 @@ public class UntisMonitorParser extends BaseParser {
 	
 	protected VertretungsplanTag parseVertretungsplan(Document doc, JSONObject data) throws JSONException {
  		VertretungsplanTag tag = new VertretungsplanTag();
-		tag.setDatum(doc.select(".mon_title").first().text());	
-    	tag.setStand(doc.select("body").html().substring(0, doc.select("body").html().indexOf("<p>")-1));
+		tag.setDatum(doc.select(".mon_title").first().text().replaceAll(" \\(Seite \\d / \\d\\)", ""));	
+		if(data.getBoolean("stand_links")) {
+			tag.setStand(doc.select("body").html().substring(0, doc.select("body").html().indexOf("<p>")-1));
+		} else {
+			Element stand = doc.select("table.mon_head td[align=right] p").first();
+			String info = stand.text();
+			tag.setStand(info.substring(info.indexOf("Stand:") + 7));
+		}
  		
  		//NACHRICHTEN
  		Elements zeilen = doc.select("table.info tr:not(:contains(Nachrichten zum Tag))");
@@ -182,7 +189,7 @@ public class UntisMonitorParser extends BaseParser {
  		} else {
  			for (Element zeile:doc.select("tr.list.odd, tr.list.even")) {
  				Vertretung v = new Vertretung();
- 				String klasse = "";
+ 				String klassen = "";
  				int i = 0;
  				for(Element spalte : zeile.select("td")) {
  					String type = data.getJSONArray("columns").getString(i);
@@ -202,16 +209,22 @@ public class UntisMonitorParser extends BaseParser {
  					}
  					else if(type.equals("room"))
  						v.setRoom(spalte.text());
+ 					else if(type.equals("previousRoom"))
+ 						v.setPreviousRoom(spalte.text());
  					else if(type.equals("desc"))
  						v.setDesc(spalte.text());
  					else if(type.equals("class"))
- 						klasse = spalte.text();
+ 						klassen = spalte.text();
  					i++;
  				}
-				KlassenVertretungsplan kv = tag.getKlassen().get(klasse);
- 				if (kv == null)
- 					kv = new KlassenVertretungsplan(klasse);		
-				tag.getKlassen().put(klasse, kv);
+ 				
+ 				for(String klasse:klassen.split(", ")) {
+					KlassenVertretungsplan kv = tag.getKlassen().get(klasse);
+	 				if (kv == null)
+	 					kv = new KlassenVertretungsplan(klasse);	
+	 				kv.add(v);
+					tag.getKlassen().put(klasse, kv);
+ 				}
  				
  			}
  		}
