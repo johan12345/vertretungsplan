@@ -121,7 +121,7 @@ public class UntisMonitorParser extends BaseParser {
 		} else {
 			Element stand = doc.select("table.mon_head td[align=right] p").first();
 			String info = stand.text();
-			tag.setStand(info.substring(info.indexOf("Stand:") + 7));
+			tag.setStand(info.substring(info.indexOf("Stand:")));
 		}
  		
  		//NACHRICHTEN
