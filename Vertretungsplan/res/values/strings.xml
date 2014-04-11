@@ -12,41 +12,41 @@
     <string name="changelog_close">Schließen</string>
 
     <string-array name="klassen">
-        <item>5a</item>
-        <item>5b</item>
-        <item>5c</item>
-        <item>5d</item>
-        <item>5e</item>
-        <item>5f</item>
-        <item>5g</item>
-        <item>6a</item>
-        <item>6b</item>
-        <item>6c</item>
-        <item>6d</item>
-        <item>6e</item>
-        <item>6f</item>
-        <item>6g</item>
-        <item>7a</item>
-        <item>7b</item>
-        <item>7c</item>
-        <item>7d</item>
-        <item>7e</item>
-        <item>7f</item>
-        <item>7g</item>
-        <item>8a</item>
-        <item>8b</item>
-        <item>8c</item>
-        <item>8d</item>
-        <item>8e</item>
-        <item>8f</item>
-        <item>8g</item>
-        <item>9a</item>
-        <item>9b</item>
-        <item>9c</item>
-        <item>9d</item>
-        <item>9e</item>
-        <item>9f</item>
-        <item>9g</item>
+        <item>05a</item>
+        <item>05b</item>
+        <item>05c</item>
+        <item>05d</item>
+        <item>05e</item>
+        <item>05f</item>
+        <item>05g</item>
+        <item>06a</item>
+        <item>06b</item>
+        <item>06c</item>
+        <item>06d</item>
+        <item>06e</item>
+        <item>06f</item>
+        <item>06g</item>
+        <item>07a</item>
+        <item>07b</item>
+        <item>07c</item>
+        <item>07d</item>
+        <item>07e</item>
+        <item>07f</item>
+        <item>07g</item>
+        <item>08a</item>
+        <item>08b</item>
+        <item>08c</item>
+        <item>08d</item>
+        <item>08e</item>
+        <item>08f</item>
+        <item>08g</item>
+        <item>09a</item>
+        <item>09b</item>
+        <item>09c</item>
+        <item>09d</item>
+        <item>09e</item>
+        <item>09f</item>
+        <item>09g</item>
         <item>Ea</item>
         <item>Eb</item>
         <item>Ec</item>
@@ -129,5 +129,9 @@
     <string name="crash_dialog_title">Oh nein! Es ist etwas schiefgegangen.</string>
     <string name="crash_dialog_text">Die Vertretungsplan-App ist abgestürzt. Bitte sende mir einen Fehlerbericht per E-Mail, damit ich das Problem beheben kann. Wähle bitte, nachdem du auf "OK" getippt hast, deine E-Mail-App aus, um den Bericht zu senden.</string>
     <string name="crash_dialog_comment_prompt">Besonders hilfreich wäre es, wenn du im Kommentarfeld unten erklären würdest, was du gerade in der App gemacht hast oder ob der Fehler bei der Hintergrundaktualisierung aufgetreten ist.</string>
+    
+    <string name="welcome">Willkommen</string>
+    <string name="select_your_school">Bitte wähle deine Schule aus!</string>
+    
 
 </resources>

@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -25,12 +25,10 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 
 import com.google.gson.Gson;
-import com.johan.vertretungsplan.R;
-import com.johan.vertretungsplan.StartActivity;
-import com.johan.vertretungsplan.R.id;
-import com.johan.vertretungsplan.R.layout;
 import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan_2.StartActivity;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -67,7 +65,7 @@ public class VertretungsplanWidgetProvider extends AppWidgetProvider {
 			ComponentName thisAppWidget = new ComponentName(context.getPackageName(), VertretungsplanWidgetProvider.class.getName());
 
 			//Vertretungsplan holen
-			anzeigeÄndern(ANZEIGE_KEINE, remoteViews, appWidgetManager, thisAppWidget, allWidgetIds);
+			anzeigeÃ„ndern(ANZEIGE_KEINE, remoteViews, appWidgetManager, thisAppWidget, allWidgetIds);
 
 			remoteViews.setViewVisibility(R.id.spinner, View.VISIBLE);
 			appWidgetManager.updateAppWidget(widgetId, remoteViews);
@@ -75,14 +73,14 @@ public class VertretungsplanWidgetProvider extends AppWidgetProvider {
 			if (settings.getString("Vertretungsplan", null) != null) {
 				Gson gson = new Gson();
 				v = gson.fromJson(settings.getString("Vertretungsplan", ""), Vertretungsplan.class);
-				texteEinfügen(remoteViews, widgetId);
+//				texteEinfÃ¼gen(remoteViews, widgetId);
 			}
 
 			// Register an onClickListener	      
-			Intent intent = new Intent(context, VertretungsplanService.class);
-			intent.putExtra("AutoSync", false);
-			PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
-			remoteViews.setOnClickPendingIntent(R.id.refreshbutton, pendingIntent);
+//			Intent intent = new Intent(context, VertretungsplanService.class);
+//			intent.putExtra("AutoSync", false);
+//			PendingIntent pendingIntent = PendingIntent.getService(context, 0, intent, 0);
+//			remoteViews.setOnClickPendingIntent(R.id.refreshbutton, pendingIntent);
 
 			Intent intent2 = new Intent(context, StartActivity.class);
 			PendingIntent pendingIntent2 = PendingIntent.getActivity(context, 0, intent2, 0);
@@ -119,10 +117,10 @@ public class VertretungsplanWidgetProvider extends AppWidgetProvider {
 		ComponentName thisAppWidget = new ComponentName(context.getPackageName(), VertretungsplanWidgetProvider.class.getName());
 		int[] allWidgetIds = appWidgetManager.getAppWidgetIds(thisAppWidget);
 
-		anzeigeÄndern(intent.getAction(), remoteViews, appWidgetManager, thisAppWidget, allWidgetIds);
+		anzeigeÃ„ndern(intent.getAction(), remoteViews, appWidgetManager, thisAppWidget, allWidgetIds);
 	}
 
-	public void anzeigeÄndern(String anzeige, RemoteViews remoteViews, AppWidgetManager appWidgetManager, ComponentName thisAppWidget, int[] allWidgetIds) {
+	public void anzeigeÃ„ndern(String anzeige, RemoteViews remoteViews, AppWidgetManager appWidgetManager, ComponentName thisAppWidget, int[] allWidgetIds) {
 
 		if (anzeige != null) {
 			if (anzeige.equals(ANZEIGE_HEUTE)) {   
@@ -158,74 +156,74 @@ public class VertretungsplanWidgetProvider extends AppWidgetProvider {
 		}
 	}
 
-	public void texteEinfügen(RemoteViews remoteViews, int widgetId) {
-
-		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
-
-		String textHeute = textErstellen(v, true);
-		String textMorgen = textErstellen(v, false);
-		String dateHeute = "";
-		String dateMorgen = "";
-		try {
-			dateHeute = v.getDateHeute().substring(v.getDateHeute().indexOf(" ") + 1);
-		} catch (NullPointerException e) {
-			dateHeute = "Fehler";
-		}
-		try {
-			dateMorgen = v.getDateMorgen().substring(v.getDateMorgen().indexOf(" ") + 1);
-		} catch (NullPointerException e) {
-			dateMorgen = "Fehler";
-		}
-		
-		remoteViews.setTextViewText(R.id.update1, textHeute);
-		remoteViews.setTextViewText(R.id.update2, textMorgen);
-
-		remoteViews.setTextViewText(R.id.buttonHeute, dateHeute);
-		remoteViews.setTextViewText(R.id.buttonMorgen, dateMorgen);
-
-		remoteViews.setViewVisibility(R.id.strichMorgenAktiv, View.INVISIBLE);
-		remoteViews.setViewVisibility(R.id.strichMorgen, View.VISIBLE);
-		remoteViews.setViewVisibility(R.id.strichHeuteAktiv, View.VISIBLE);
-		remoteViews.setViewVisibility(R.id.strichHeute, View.INVISIBLE);
-
-		remoteViews.setViewVisibility(R.id.update1, View.VISIBLE);
-		remoteViews.setViewVisibility(R.id.spinner, View.INVISIBLE);
-
-		appWidgetManager.updateAppWidget(widgetId, remoteViews);
-
-	}
-
-	public String textErstellen(Vertretungsplan v, boolean heute) {
-		String text = "";
-
-		// Restore preferences
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
-		String klasse = settings.getString("klasse", "5a");
-
-		try {		 		
-			if (v.get(klasse) != null) {
-
-				ArrayList<Vertretung> list;
-				if(heute) {
-					list = v.get(klasse).getVertretungHeute();
-				} else {
-					list = v.get(klasse).getVertretungMorgen();
-				}
-
-				if (list.size() > 0) {
-					for ( Vertretung vert:list ) {
-						text = text + vert.getLesson().toString() + ".: " + vert.getType() + ": " + vert.toString() + "\n";
-					}
-				} else {
-					text = text + "keine Informationen" + "\n";
-				}
-			} else {
-				text = text + "keine Informationen" + "\n";
-			}
-			return text;
-		} catch (NullPointerException e) {
-			return "Fehler";
-		}	 		
-
-	}
+//	public void texteEinfÃ¼gen(RemoteViews remoteViews, int widgetId) {
+//
+//		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(mContext);
+//
+//		String textHeute = textErstellen(v, true);
+//		String textMorgen = textErstellen(v, false);
+//		String dateHeute = "";
+//		String dateMorgen = "";
+//		try {
+//			dateHeute = v.getDateHeute().substring(v.getDateHeute().indexOf(" ") + 1);
+//		} catch (NullPointerException e) {
+//			dateHeute = "Fehler";
+//		}
+//		try {
+//			dateMorgen = v.getDateMorgen().substring(v.getDateMorgen().indexOf(" ") + 1);
+//		} catch (NullPointerException e) {
+//			dateMorgen = "Fehler";
+//		}
+//		
+//		remoteViews.setTextViewText(R.id.update1, textHeute);
+//		remoteViews.setTextViewText(R.id.update2, textMorgen);
+//
+//		remoteViews.setTextViewText(R.id.buttonHeute, dateHeute);
+//		remoteViews.setTextViewText(R.id.buttonMorgen, dateMorgen);
+//
+//		remoteViews.setViewVisibility(R.id.strichMorgenAktiv, View.INVISIBLE);
+//		remoteViews.setViewVisibility(R.id.strichMorgen, View.VISIBLE);
+//		remoteViews.setViewVisibility(R.id.strichHeuteAktiv, View.VISIBLE);
+//		remoteViews.setViewVisibility(R.id.strichHeute, View.INVISIBLE);
+//
+//		remoteViews.setViewVisibility(R.id.update1, View.VISIBLE);
+//		remoteViews.setViewVisibility(R.id.spinner, View.INVISIBLE);
+//
+//		appWidgetManager.updateAppWidget(widgetId, remoteViews);
+//
+//	}
+//
+//	public String textErstellen(Vertretungsplan v, boolean heute) {
+//		String text = "";
+//
+//		// Restore preferences
+//		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(mContext);
+//		String klasse = settings.getString("klasse", "5a");
+//
+//		try {		 		
+//			if (v.get(klasse) != null) {
+//
+//				ArrayList<Vertretung> list;
+//				if(heute) {
+//					list = v.get(klasse).getVertretungHeute();
+//				} else {
+//					list = v.get(klasse).getVertretungMorgen();
+//				}
+//
+//				if (list.size() > 0) {
+//					for ( Vertretung vert:list ) {
+//						text = text + vert.getLesson().toString() + ".: " + vert.getType() + ": " + vert.toString() + "\n";
+//					}
+//				} else {
+//					text = text + "keine Informationen" + "\n";
+//				}
+//			} else {
+//				text = text + "keine Informationen" + "\n";
+//			}
+//			return text;
+//		} catch (NullPointerException e) {
+//			return "Fehler";
+//		}	 		
+//
+//	}
 }

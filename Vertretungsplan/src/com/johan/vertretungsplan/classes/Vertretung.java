@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -16,14 +16,19 @@
 
 package com.johan.vertretungsplan.classes;
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import java.io.Serializable;
 
-public class Vertretung implements Parcelable {
+public class Vertretung implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 8029479872726949613L;
 	private String lesson;
 	private String type;
 	private String subject;
-	private String changedSubject;
+	private String previousSubject;
+	private String teacher;
+	private String previousTeacher;
 	private String room;
 	private String desc;
 	
@@ -60,19 +65,19 @@ public class Vertretung implements Parcelable {
 		} else if (type.equals("EVA")) {
 			string = subject;
 		} else if (type.equals("Vertretung")) {
-			string = subject + " statt " + changedSubject + " in " + room;
+			string = subject + " statt " + previousSubject + " in " + room;
 		} else if (type.equals("Sondereins.")) {
 			string = subject + " in " + room;
 		} else if (type.equals("Verlegung")) {
-			string = subject + " statt " + changedSubject + " in " + room;	
+			string = subject + " statt " + previousSubject + " in " + room;	
 		} else if (type.equals("Tausch")) {
-			string = subject + " statt " + changedSubject + " in " + room;
+			string = subject + " statt " + previousSubject + " in " + room;
 		} else if (type.equals("Statt-Vertretung")) {
-			string = subject + " statt " + changedSubject + " in " + room;
+			string = subject + " statt " + previousSubject + " in " + room;
 		} else if (type.equals("Zusammenlegung")) {
 			string = subject + " in " + room;
 		} else  {
-			string = subject + " statt " + changedSubject + " in " + room;
+			string = subject + " statt " + previousSubject + " in " + room;
 		}
 		
 		if (!desc.equals("\u00a0")) {
@@ -80,139 +85,117 @@ public class Vertretung implements Parcelable {
 		}
 		return string;
 	}
-	
+
+	/**
+	 * @return the lesson
+	 */
 	public String getLesson() {
 		return lesson;
 	}
+
+	/**
+	 * @param lesson the lesson to set
+	 */
 	public void setLesson(String lesson) {
 		this.lesson = lesson;
 	}
+
+	/**
+	 * @return the type
+	 */
 	public String getType() {
 		return type;
 	}
+
+	/**
+	 * @param type the type to set
+	 */
 	public void setType(String type) {
 		this.type = type;
 	}
+
+	/**
+	 * @return the subject
+	 */
 	public String getSubject() {
 		return subject;
 	}
+
+	/**
+	 * @param subject the subject to set
+	 */
 	public void setSubject(String subject) {
 		this.subject = subject;
 	}
-	public String getChangedSubject() {
-		return changedSubject;
+
+	/**
+	 * @return the previousSubject
+	 */
+	public String getPreviousSubject() {
+		return previousSubject;
 	}
-	public void setChangedSubject(String changedSubject) {
-		this.changedSubject = changedSubject;
+
+	/**
+	 * @param previousSubject the previousSubject to set
+	 */
+	public void setPreviousSubject(String previousSubject) {
+		this.previousSubject = previousSubject;
 	}
+
+	/**
+	 * @return the teacher
+	 */
+	public String getTeacher() {
+		return teacher;
+	}
+
+	/**
+	 * @param teacher the teacher to set
+	 */
+	public void setTeacher(String teacher) {
+		this.teacher = teacher;
+	}
+
+	/**
+	 * @return the previousTeacher
+	 */
+	public String getPreviousTeacher() {
+		return previousTeacher;
+	}
+
+	/**
+	 * @param previousTeacher the previousTeacher to set
+	 */
+	public void setPreviousTeacher(String previousTeacher) {
+		this.previousTeacher = previousTeacher;
+	}
+
+	/**
+	 * @return the room
+	 */
 	public String getRoom() {
 		return room;
 	}
+
+	/**
+	 * @param room the room to set
+	 */
 	public void setRoom(String room) {
 		this.room = room;
 	}
+
+	/**
+	 * @return the desc
+	 */
 	public String getDesc() {
 		return desc;
 	}
+
+	/**
+	 * @param desc the desc to set
+	 */
 	public void setDesc(String desc) {
 		this.desc = desc;
 	}
-	
-	
-
-    protected Vertretung(Parcel in) {
-        lesson = in.readString();
-        type = in.readString();
-        subject = in.readString();
-        changedSubject = in.readString();
-        room = in.readString();
-        desc = in.readString();
-    }
-
-    public Vertretung() {
-		// TODO Auto-generated constructor stub
-	}
-
-	@Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(lesson);
-        dest.writeString(type);
-        dest.writeString(subject);
-        dest.writeString(changedSubject);
-        dest.writeString(room);
-        dest.writeString(desc);
-    }
-
-    public static final Parcelable.Creator<Vertretung> CREATOR = new Parcelable.Creator<Vertretung>() {
-        @Override
-        public Vertretung createFromParcel(Parcel in) {
-            return new Vertretung(in);
-        }
-
-        @Override
-        public Vertretung[] newArray(int size) {
-            return new Vertretung[size];
-        }
-    };
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result
-				+ ((changedSubject == null) ? 0 : changedSubject.hashCode());
-		result = prime * result + ((desc == null) ? 0 : desc.hashCode());
-		result = prime * result + ((lesson == null) ? 0 : lesson.hashCode());
-		result = prime * result + ((room == null) ? 0 : room.hashCode());
-		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
-		result = prime * result + ((type == null) ? 0 : type.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Vertretung other = (Vertretung) obj;
-		if (changedSubject == null) {
-			if (other.changedSubject != null)
-				return false;
-		} else if (!changedSubject.equals(other.changedSubject))
-			return false;
-		if (desc == null) {
-			if (other.desc != null)
-				return false;
-		} else if (!desc.equals(other.desc))
-			return false;
-		if (lesson == null) {
-			if (other.lesson != null)
-				return false;
-		} else if (!lesson.equals(other.lesson))
-			return false;
-		if (room == null) {
-			if (other.room != null)
-				return false;
-		} else if (!room.equals(other.room))
-			return false;
-		if (subject == null) {
-			if (other.subject != null)
-				return false;
-		} else if (!subject.equals(other.subject))
-			return false;
-		if (type == null) {
-			if (other.type != null)
-				return false;
-		} else if (!type.equals(other.type))
-			return false;
-		return true;
-	}
+		
 }

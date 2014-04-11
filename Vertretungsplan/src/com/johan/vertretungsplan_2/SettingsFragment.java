@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -14,10 +14,15 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan_2;
 
+import org.holoeverywhere.preference.Preference;
+import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceFragment;
 
+import com.johan.vertretungsplan_2.R;
+
+import android.content.Intent;
 import android.os.Bundle;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -25,5 +30,17 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
+        
+        Preference changeSchoolPref = findPreference("change_school");
+        changeSchoolPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+
+			@Override
+			public boolean onPreferenceClick(Preference preference) {
+				Intent intent = new Intent(getActivity(), SelectSchoolActivity.class);
+				getActivity().startActivity(intent);
+				return true;
+			}
+        	
+        });
     }
 }

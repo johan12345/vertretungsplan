@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan_2;
 
 import org.acra.ACRA;
 import org.holoeverywhere.app.Activity;
@@ -51,13 +51,14 @@ import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
 import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
-import com.johan.vertretungsplan.VertretungsplanFragment.OnFragmentInteractionListener;
 import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan.background.VertretungsplanService;
 import com.johan.vertretungsplan.background.VertretungsplanWidgetProvider;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
+import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan_2.VertretungsplanFragment.OnFragmentInteractionListener;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -86,6 +87,12 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
         appContext = getApplicationContext();
         
         settings  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        
+        if(!settings.contains("selected_school")) {
+        	Intent intent = new Intent(this, SelectSchoolActivity.class);
+			startActivity(intent);
+			finish();
+        }
         
         addTab( "Vertretungsplan", AFragment.class, AFragment.createBundle( "Vertretungsplan") );
         addTab( "Nachrichten", BFragment.class, BFragment.createBundle( "Nachrichten") ); 
@@ -139,8 +146,6 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
 	    tracker.setCustomDimension(1, klasse);
 	    tracker.setCustomDimension(2, syncPeriod);
 	    tracker.setCustomDimension(3, benachrichtigung);
-	    //ACRA
-	    ACRA.getErrorReporter().putCustomData("klasse", klasse);
 	    
       	//Aktualisieren
 //	    anzeigenAktualisieren();
@@ -238,7 +243,9 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
 		    public void handleMessage(Message message) {
 		      if (message.arg1 == RESULT_OK) {
 		    	  Log.d("Vertretungsplan", "RESULT OK");
-		     	  setVertretungsplan((Vertretungsplan) message.getData().get("Vertretungsplan"));
+		    	  Gson gson = new Gson();
+		     	  setVertretungsplan((Vertretungsplan) message.getData().getSerializable("Vertretungsplan"));
+		    	  Log.d("Vertretungsplan", gson.toJson(vertretungsplan));
 		  		  asyncRunning = false;
 		      } else if (message.arg1 == Activity.RESULT_CANCELED) {
 		    	  	asyncRunning = false;
@@ -304,16 +311,6 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
 
             @Override
             public void onNothingSelected(AdapterView<?> parentView) {
-            	// We need an Editor object to make preference changes.
-                // All objects are from android.context.Context
-                SharedPreferences.Editor editor = settings.edit();
-                editor.putString("klasse", fragment.klassen.getSelectedItem().toString());
-
-                // Commit the edits!
-                editor.commit();
-                
-            	//fragment.aktualisieren(docHeute, docMorgen);
-            	widgetAktualisieren();
             }
 
         });
@@ -349,7 +346,7 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
     @Override
     public void onSaveInstanceState(Bundle out) {
     	super.onSaveInstanceState(out);
-    	out.putParcelable("Vertretungsplan", vertretungsplan);
+//    	out.putParcelable("Vertretungsplan", vertretungsplan);
     }
     
     public void setAlarms(){

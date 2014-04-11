@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -38,7 +38,7 @@ import android.util.DisplayMetrics;
 import android.view.ViewGroup;
 import android.view.ViewParent;
 
-import com.johan.vertretungsplan.R;
+import com.johan.vertretungsplan_2.R;
   
 public abstract class TabSwipeActivity extends Activity {
   

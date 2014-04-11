@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan_2;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -26,6 +26,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import org.holoeverywhere.LayoutInflater;
 
+import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,9 +39,11 @@ import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.TextView;
 
-import com.johan.vertretungsplan.AFragment.MyCustomAdapter;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
+import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan_2.AFragment.MyCustomAdapter;
 
 
 public class BFragment extends VertretungsplanFragment {
@@ -76,7 +79,7 @@ public class BFragment extends VertretungsplanFragment {
 		list.setAdapter(listadapter);
         
         ready = true;
-        if(v != null) aktualisieren(v);
+//        if(v != null) aktualisieren(v);
 		
 		// Inflate the layout for this fragment
         return view;
@@ -101,22 +104,21 @@ public class BFragment extends VertretungsplanFragment {
     	if(ready) {
 	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
 	    	
-	    	listadapter.clear();     
-	    	listadapter.addSeparatorItem(v.getDateHeute());
-	    	for (Spanned message:v.getNachrichtenHeute()) {
-	    		listadapter.addItem(message);
-	    	}
-	    	listadapter.addSeparatorItem(v.getDateMorgen());
-	    	for (Spanned message:v.getNachrichtenMorgen()) {
-	    		listadapter.addItem(message);
+	    	listadapter.clear(); 
+	    	
+	    	for(VertretungsplanTag tag:v.getTage()) {	    	
+		    	listadapter.addSeparatorItem(tag.getDatum());
+		    	for (String message:tag.getNachrichten()) {
+		    		listadapter.addItem(Html.fromHtml(message));
+		    	}
 	    	}
 	    			
-			if(settings.getBoolean("winter", true)) {
-				String text = v.getWinterAusfall().getMessage();
-				String stand = v.getWinterAusfall().getStand();
-		    	listadapter.addSeparatorItem("Winter-Unterrichtsausfall (Stand: " + stand + ")");
-		        listadapter.addItem(text);
-			}
+//			if(settings.getBoolean("winter", true)) {
+//				String text = v.getWinterAusfall().getMessage();
+//				String stand = v.getWinterAusfall().getStand();
+//		    	listadapter.addSeparatorItem("Winter-Unterrichtsausfall (Stand: " + stand + ")");
+//		        listadapter.addItem(text);
+//			}
 			progress(false);
     	}
 }
@@ -149,21 +151,16 @@ public class BFragment extends VertretungsplanFragment {
         private static final int TYPE_SEPARATOR = 1;
         private static final int TYPE_MAX_COUNT = TYPE_SEPARATOR + 1;
  
-        private ArrayList mData = new ArrayList();
+        private ArrayList<CharSequence> mData = new ArrayList<CharSequence>();
         private LayoutInflater mInflater;
  
-        private TreeSet mSeparatorsSet = new TreeSet();
+        private TreeSet<Integer> mSeparatorsSet = new TreeSet<Integer>();
  
         public MyCustomAdapter(Context context) {
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
  
-        public void addItem(final Spanned item) {
-            mData.add(item);
-            notifyDataSetChanged();
-        }
-        
-        public void addItem(final String item) {
+        public void addItem(final CharSequence item) {
             mData.add(item);
             notifyDataSetChanged();
         }

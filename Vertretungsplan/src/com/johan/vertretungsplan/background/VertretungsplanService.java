@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -33,10 +33,13 @@ import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
 import com.joejernst.http.Request;
 import com.joejernst.http.Response;
-import com.johan.vertretungsplan.R;
-import com.johan.vertretungsplan.StartActivity;
+import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
-import com.johan.vertretungsplan.parser.VertretungsplanParser;
+import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.parser.UntisMonitorParser;
+import com.johan.vertretungsplan.utils.Utils;
+import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan_2.StartActivity;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -98,139 +101,108 @@ public class VertretungsplanService extends IntentService {
 			Log.d("Vertretungsplan", "syncWifi: " + Boolean.valueOf(settings.getBoolean("syncWifi", false)));
 
 			Log.d("Vertretungsplan", "Vertretungsplan wird abgerufen");
-
-			String[] urls = getResources().getStringArray(R.array.urls);
-
+			
 			try {
-				Response heuteResponse = new Request(urls[0]).getResource("ISO-8859-1");
-				Response morgenResponse = new Request(urls[1]).getResource("ISO-8859-1");
-				Response changelogResponse = new Request(urls[2]).getResource();
-				Response winterResponse = new Request(urls[3]).getResource("ISO-8859-1");
+
+				List<Schule> schools = Utils.getSchools(this);
+				String id = settings.getString("selected_school", "");
+				Schule schule = null;
+				int i = 0;
+				while (i < schools.size() && schule == null) {
+					if(schools.get(i).getId().equals(id))
+						schule = schools.get(i);
+					i++;
+				}
 				
-				if(heuteResponse.getResponseCode() == 200
-						&& morgenResponse.getResponseCode() == 200
-						&& changelogResponse.getResponseCode() == 200
-						&& winterResponse.getResponseCode() == 200) {
-
-					Document docHeute = Jsoup.parse(heuteResponse.getBody());
-					Document docMorgen = Jsoup.parse(morgenResponse.getBody());
-					Document docChangelog = Jsoup.parse(changelogResponse.getBody(), "", Parser.xmlParser());
-					Document docWinter = Jsoup.parse(winterResponse.getBody(), "", Parser.xmlParser());
+				BaseParser parser = null;
+				if (schule.getApi().equals("untis-monitor")) {
+					parser = new UntisMonitorParser();
+				} //else if ... (andere Parser)
+			
+				//Vertretungsplan-Objekt erzeugen
+				Vertretungsplan v = parser.parseVertretungsplan(schule);
+				settings.edit().putString("Vertretungsplan", gson.toJson(v)).commit();
 	
-					changelogPruefen(docChangelog);
+				// Sucessful finished
+				int result = Activity.RESULT_OK;	
 	
-					SharedPreferences.Editor editor = settings.edit();
-					//letzte Aktualisierungszeit aktualisieren
-					Date date = new Date(System.currentTimeMillis());
-					editor.putLong("letzteAktualisierung", date.getTime());
-	
-					//Vertretungsplan-Objekt erzeugen
-					String[] klassenListe = context.getResources().getStringArray(R.array.klassen);
-					Vertretungsplan v = new VertretungsplanParser().parseVertretungsplan(klassenListe, docHeute, docMorgen, docWinter);
-					editor.putString("Vertretungsplan", gson.toJson(v));
-					editor.commit();
-	
-					// Sucessful finished
-					int result = Activity.RESULT_OK;	
-	
-					if(extras != null) {
-						if(extras.get("MESSENGER") != null) {
-							nachrichtAnApp(extras, result, v);
-						}
+				if(extras != null) {
+					if(extras.get("MESSENGER") != null) {
+						nachrichtAnApp(extras, result, v);
 					}
-					widgetAktualisieren();
-	
-					String standWinter = null;
-					Vertretungsplan vAlt = null;
-	
-					if (settings.getBoolean("notification", true) && !settings.getBoolean("isInForeground", false)) {
-						//Benachrichtigung anzeigen
-	
-						if (settings.getString("Vertretungsplan", null) != null) {
-							vAlt = gson.fromJson(settings.getString("Vertretungsplan", ""), Vertretungsplan.class);		        						        
-							try {
-								//Alten Winterausfall-Stand lesen
-								standWinter = vAlt.getWinterAusfall().getStand();
-							} catch (NullPointerException e) {}
-						}
-						//Wenn sich etwas geändert hat, Benachrichtigungen geben
-						String standWinterNeu = docWinter.select("pubDate").first().text();
-	
-						if (standWinter != null && standWinterNeu != null && !(standWinterNeu.equals(standWinter))) {
-							//Es gibt Änderungen beim Winter-Schulausfall
-							String text = docWinter.select("item description").first().text(); 
-							if (!text.contains("Aktuell gibt es keine Hinweise auf witterungsbedingten Unterrichtsausfall.")) {
-								benachrichtigung(-1); //-1 steht für Winter-Schulausfall
-							}
-	
-						} else {
-							String klasse = settings.getString("klasse", null);
-							if(klasse != null) {
-								//Prüfen, ob Änderungen schon gestern bekannt waren und es keine Änderungen für Morgen gibt
-								boolean schonGesternBekannt = false;
-								boolean garNichtsVeraendert = false;
-								if (vAlt != null && v !=  null) {
-	
-									if (vAlt.get(klasse) != null) {
-										if (v.get(klasse) != null) {
-											//Bei alt und neu sind Änderungen
-											schonGesternBekannt = v.get(klasse).getVertretungHeute().equals(vAlt.get(klasse).getVertretungMorgen()) && v.get(klasse).getVertretungMorgen().size() == 0;
-											garNichtsVeraendert = v.get(klasse).equals(vAlt.get(klasse));
-										} else {
-											//Änderungen nur bei alt
-										}
-									} else {
-										if (v.get(klasse) != null) {
-											//Änderungen nur bei neu							    					
-										} else {
-											//Keine Änderungen bei beiden
-											garNichtsVeraendert = true; //Keine Änderungen vorher und nachher
-										}
-									}
-	
-								}
-								Log.d("Vertretungsplan", "garnichts: " + garNichtsVeraendert);
-								Log.d("Vertretungsplan", "schonGesternBekannt: " + schonGesternBekannt);
-								if (!garNichtsVeraendert && !schonGesternBekannt) {
-									int anzahlAenderungen = 0;
-									if(v.get(klasse) != null) {
-										if (v.get(klasse).getVertretungHeute() != null)
-											anzahlAenderungen += v.get(klasse).getVertretungHeute().size();
-										if (v.get(klasse).getVertretungMorgen() != null)
-											anzahlAenderungen += v.get(klasse).getVertretungMorgen().size();
-									}
-									if (anzahlAenderungen != 0) {
-										benachrichtigung(anzahlAenderungen);
-									}
-								}
-							}
-						}		
-					}
-				} else {
-					Log.d("Vertretungsplan" , heuteResponse.toString());
-					Log.d("Vertretungsplan" , morgenResponse.toString());
-					Log.d("Vertretungsplan" , changelogResponse.toString());
-					Log.d("Vertretungsplan" , winterResponse.toString());					
 				}
-			} catch (IOException e) {
-				Log.d("Vertretungsplan", "Error Response code: " + e.getMessage());
+				widgetAktualisieren();
+	
+	//			String standWinter = null;
+	//			Vertretungsplan vAlt = null;
+	//
+	//			if (settings.getBoolean("notification", true) && !settings.getBoolean("isInForeground", false)) {
+	//				//Benachrichtigung anzeigen
+	//
+	//				if (settings.getString("Vertretungsplan", null) != null) {
+	//					vAlt = gson.fromJson(settings.getString("Vertretungsplan", ""), Vertretungsplan.class);		        						        
+	//					try {
+	//						//Alten Winterausfall-Stand lesen
+	//						standWinter = vAlt.getWinterAusfall().getStand();
+	//					} catch (NullPointerException e) {}
+	//				}
+	//				//Wenn sich etwas geï¿½ndert hat, Benachrichtigungen geben
+	//				String standWinterNeu = docWinter.select("pubDate").first().text();
+	//
+	//				if (standWinter != null && standWinterNeu != null && !(standWinterNeu.equals(standWinter))) {
+	//					//Es gibt ï¿½nderungen beim Winter-Schulausfall
+	//					String text = docWinter.select("item description").first().text(); 
+	//					if (!text.contains("Aktuell gibt es keine Hinweise auf witterungsbedingten Unterrichtsausfall.")) {
+	//						benachrichtigung(-1); //-1 steht fï¿½r Winter-Schulausfall
+	//					}
+	//
+	//				} else {
+	//					String klasse = settings.getString("klasse", null);
+	//					if(klasse != null) {
+	//						//Prï¿½fen, ob ï¿½nderungen schon gestern bekannt waren und es keine ï¿½nderungen fï¿½r Morgen gibt
+	//						boolean schonGesternBekannt = false;
+	//						boolean garNichtsVeraendert = false;
+	//						if (vAlt != null && v !=  null) {
+	//
+	//							if (vAlt.get(klasse) != null) {
+	//								if (v.get(klasse) != null) {
+	//									//Bei alt und neu sind ï¿½nderungen
+	//									schonGesternBekannt = v.get(klasse).getVertretungHeute().equals(vAlt.get(klasse).getVertretungMorgen()) && v.get(klasse).getVertretungMorgen().size() == 0;
+	//									garNichtsVeraendert = v.get(klasse).equals(vAlt.get(klasse));
+	//								} else {
+	//									//ï¿½nderungen nur bei alt
+	//								}
+	//							} else {
+	//								if (v.get(klasse) != null) {
+	//									//ï¿½nderungen nur bei neu							    					
+	//								} else {
+	//									//Keine ï¿½nderungen bei beiden
+	//									garNichtsVeraendert = true; //Keine ï¿½nderungen vorher und nachher
+	//								}
+	//							}
+	//
+	//						}
+	//						Log.d("Vertretungsplan", "garnichts: " + garNichtsVeraendert);
+	//						Log.d("Vertretungsplan", "schonGesternBekannt: " + schonGesternBekannt);
+	//						if (!garNichtsVeraendert && !schonGesternBekannt) {
+	//							int anzahlAenderungen = 0;
+	//							if(v.get(klasse) != null) {
+	//								if (v.get(klasse).getVertretungHeute() != null)
+	//									anzahlAenderungen += v.get(klasse).getVertretungHeute().size();
+	//								if (v.get(klasse).getVertretungMorgen() != null)
+	//									anzahlAenderungen += v.get(klasse).getVertretungMorgen().size();
+	//							}
+	//							if (anzahlAenderungen != 0) {
+	//								benachrichtigung(anzahlAenderungen);
+	//							}
+	//						}
+	//					}
+	//				}		
+	//			}
+			} catch (Exception e) {
 				e.printStackTrace();
-				if(extras.get("MESSENGER") != null) {
-					Messenger messenger = (Messenger) extras.get("MESSENGER");
-					Message msg = Message.obtain();
-
-					msg.arg1 = Activity.RESULT_CANCELED;
-					try {
-						messenger.send(msg);
-					} catch (Throwable e1) {
-						Log.w(getClass().getName(), "Exception sending message", e1);
-					}
-				}
 			}
 		}
-
-
-
 	}
 
 	private void changelogPruefen(Document docChangelog) {
@@ -313,7 +285,7 @@ public class VertretungsplanService extends IntentService {
 
 			msg.arg1 = result;
 			Bundle bundle = new Bundle();
-			bundle.putParcelable("Vertretungsplan", v);		  	      
+			bundle.putSerializable("Vertretungsplan", v);		  	      
 			msg.setData(bundle);
 			try {
 				messenger.send(msg);
@@ -342,9 +314,9 @@ public class VertretungsplanService extends IntentService {
 				}
 				if (anzahlAenderungen == -1) {
 					//Winter-Schulausfall
-					mBuilder.setContentText("Es gibt Änderungen beim Winter-Schulausfall!");
+					mBuilder.setContentText("Es gibt ï¿½nderungen beim Winter-Schulausfall!");
 				} else {
-					mBuilder.setContentText("Es gibt Änderungen auf dem Vertretungsplan!");
+					mBuilder.setContentText("Es gibt ï¿½nderungen auf dem Vertretungsplan!");
 				}
 				if (!sound.equals("")) {
 					Uri soundUri = Uri.parse(sound);

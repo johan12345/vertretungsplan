@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App für den Vertretungsplan der Lornsenschule Schleswig
+/*  LS Vertretungsplan - Android-App fï¿½r den Vertretungsplan der Lornsenschule Schleswig
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -14,7 +14,7 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan_2;
 
 import java.util.ArrayList;
 import java.util.TreeSet;
@@ -31,6 +31,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.LinearLayout;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
@@ -40,7 +41,9 @@ import org.holoeverywhere.widget.TextView;
 import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
 import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
+import com.johan.vertretungsplan_2.R;
 
 public class AFragment extends VertretungsplanFragment {
 	
@@ -52,6 +55,9 @@ public class AFragment extends VertretungsplanFragment {
 	Boolean showProgress = true;
 	Vertretungsplan v;
 	boolean ready = false;
+	String klasse;
+	
+	SharedPreferences settings;
 	
     public static Context appContext;
     public static StartActivity startActivity;
@@ -69,20 +75,12 @@ public class AFragment extends VertretungsplanFragment {
         
 		
 		// Restore preferences
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
-        String klasse = settings.getString("klasse", "5a");
+        settings = PreferenceManager.getDefaultSharedPreferences(appContext);
         list = (ListView) view.findViewById(R.id.listView1);
         klassen = (Spinner) view.findViewById(R.id.spinner1);
         image = (ImageView) view.findViewById(R.id.imageView1);
         txtStand = (TextView) view.findViewById(R.id.txtStand);
         pBar = (ProgressBar) view.findViewById(R.id.progressBar1);
-        Integer i;
-        for(i=0; i < klassen.getAdapter().getCount(); i++) {
-        	  if(klasse.equals(klassen.getAdapter().getItem(i).toString())){
-        	    klassen.setSelection(i);
-        	    break;
-        	  }
-        	}
         
         listadapter = new MyCustomAdapter(startActivity);
 		list.setAdapter(listadapter);
@@ -111,38 +109,39 @@ public class AFragment extends VertretungsplanFragment {
     public void aktualisieren(Vertretungsplan v) { 
     	this.v = v;
     	if(ready) {
-	    	txtStand.setText(v.getStand());
+	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
-	        String klasse = klassen.getSelectedItem().toString();
-	        KlassenVertretungsplan kv = v.get(klasse);
-	    	listadapter.addSeparatorItem(v.getDateHeute());
-	        if (kv != null) {
-		        if (kv.getVertretungHeute() != null && kv.getVertretungHeute().size() > 0) {
-			        for (Vertretung i:kv.getVertretungHeute()) {
-			        	listadapter.addItem(i);
-			        }
-		        } else {
-		        	listadapter.addTextItem("keine Informationen");
+	        	        	        
+	        if(klassen.getAdapter() == null) {	            
+	            klasse = settings.getString("klasse", "");
+		        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, v.getAllClasses()));
+		        for(int i=0; i < klassen.getAdapter().getCount(); i++) {
+		        	  if(klassen.getAdapter().getItem(i).toString().equals(klasse)){
+		        	    klassen.setSelection(i);
+		        	    break;
+		        	  }
 		        }
 	        } else {
-	        	listadapter.addTextItem("keine Informationen");
+		        klasse = (String) klassen.getSelectedItem();
 	        }
-		        
-	    	listadapter.addSeparatorItem(v.getDateMorgen());
-	        if (kv != null) {
-		        if (kv.getVertretungMorgen() != null && kv.getVertretungMorgen().size() > 0) {
-			        for (Vertretung i:kv.getVertretungMorgen()) {
-			        	listadapter.addItem(i);
+
+	        for (VertretungsplanTag tag:v.getTage()) {
+		    	listadapter.addSeparatorItem(tag.getDatum());
+		        if (tag.getKlassen().get(klasse) != null) {
+			        if (tag.getKlassen().get(klasse).getVertretung().size() > 0) {
+				        for (Vertretung item:tag.getKlassen().get(klasse).getVertretung()) {
+				        	listadapter.addItem(item);
+				        }
+			        } else {
+			        	listadapter.addTextItem("keine Informationen");
 			        }
 		        } else {
 		        	listadapter.addTextItem("keine Informationen");
 		        }
-	        } else {
-	        	listadapter.addTextItem("keine Informationen");
-	        } 
+	        }
     	}
     }
-    
+   
     public void bgAktualisieren() {
         // Restore preferences
         SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);

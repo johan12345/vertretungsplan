@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.johan.vertretungsplan"
+    package="com.johan.vertretungsplan_2"
     android:versionCode="19"
-    android:versionName="2.1.12"
+    android:versionName="1.0.0"
     android:installLocation="internalOnly">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -21,16 +21,20 @@
         android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Ls" >
+        android:theme="@style/Theme.Ls"
+        android:logo="@drawable/ic_action_icon" >
         <activity
-            android:name="com.johan.vertretungsplan.StartActivity"
-            android:label="@string/app_name"
-            android:logo="@drawable/ic_action_icon" >
+            android:name="com.johan.vertretungsplan_2.StartActivity"
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        
+        <activity
+            android:name="com.johan.vertretungsplan_2.SelectSchoolActivity"
+            android:label="@string/app_name">
         </activity>
 
         <receiver android:name="com.johan.vertretungsplan.background.VertretungsplanWidgetProvider" >
@@ -50,9 +54,9 @@
         </receiver>
 
         <activity
-            android:name="com.johan.vertretungsplan.SettingsActivity"
+            android:name="com.johan.vertretungsplan_2.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.johan.vertretungsplan.StartActivity"
+            android:parentActivityName="com.johan.vertretungsplan_2.StartActivity"
             android:logo="@drawable/ic_action_icon" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

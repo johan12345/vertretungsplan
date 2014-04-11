@@ -1,4 +1,4 @@
-package com.johan.vertretungsplan;
+package com.johan.vertretungsplan_2;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
