@@ -10,7 +10,8 @@ Dies ist eine Android-App für den Vertretungsplan der Lornsenschule Schleswig. 
 Anleitung zum Importieren in Eclipse
 ------------------------------------
 
-Klone das git-Repository mit allen Submodules. Importiere dann in Eclipse (ADT) folgende Projekte:
+Klone das git-Repository mit allen Submodules. 
+Importiere dann in Eclipse (ADT) folgende Projekte:
 
 * Vertretungsplan
 * HoloEverywhere Library
@@ -20,6 +21,8 @@ Klone das git-Repository mit allen Submodules. Importiere dann in Eclipse (ADT) 
 * PagerSlidingTabStrip Library
 
 Bei den letzten drei Projekten ist darauf zu achten, dass sie alle standardmäßig "library" heißen und darum nur eines zur Zeit in Eclipse importiert werden kann und danach umbenannt werden muss. Alternativ kann man die Projekte auch vorher in der ".project"-Datei umbenennen.
+
+Achte darauf, dass in Eclipse (zumindest beim Projekt "Vertretungsplan") in den Eigenschaften das Encoding auf `UTF-8` (und nicht etwa `Cp1252`) gestellt ist.
 
 Füge die beiden .jar-Dateien aus dem Ordner "libs" der HoloEverywhere Library zum Build Path dieser Bibliothek hinzu (Rechtsklick -> Build Path -> Add to Build Path).
 
