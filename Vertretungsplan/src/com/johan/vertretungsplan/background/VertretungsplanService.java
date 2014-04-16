@@ -16,30 +16,24 @@
 
 package com.johan.vertretungsplan.background;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.parser.Parser;
 import com.google.analytics.tracking.android.EasyTracker;
 import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
-import com.joejernst.http.Request;
-import com.joejernst.http.Response;
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.parser.BaseParser;
-import com.johan.vertretungsplan.parser.UntisMonitorParser;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 import com.johan.vertretungsplan_2.StartActivity;
+import com.johan.vertretungsplan_2.VertretungsplanApplication;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -103,24 +97,10 @@ public class VertretungsplanService extends IntentService {
 			Log.d("Vertretungsplan", "Vertretungsplan wird abgerufen");
 			
 			try {
-
-				List<Schule> schools = Utils.getSchools(this);
-				String id = settings.getString("selected_school", "");
-				Schule schule = null;
-				int i = 0;
-				while (i < schools.size() && schule == null) {
-					if(schools.get(i).getId().equals(id))
-						schule = schools.get(i);
-					i++;
-				}
-				
-				BaseParser parser = null;
-				if (schule.getApi().equals("untis-monitor")) {
-					parser = new UntisMonitorParser();
-				} //else if ... (andere Parser)
+				BaseParser parser = ((VertretungsplanApplication) getApplication()).getParser();
 			
 				//Vertretungsplan-Objekt erzeugen
-				Vertretungsplan v = parser.parseVertretungsplan(schule);
+				Vertretungsplan v = parser.getVertretungsplan();
 				settings.edit().putString("Vertretungsplan", gson.toJson(v)).commit();
 	
 				// Sucessful finished

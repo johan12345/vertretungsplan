@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -18,9 +20,9 @@ import com.johan.vertretungsplan.classes.Schule;
 
 public class Utils {
 	public static boolean isEqual(Object o1, Object o2) {
-	    return o1 == o2 || (o1 != null && o1.equals(o2));
+		return o1 == o2 || (o1 != null && o1.equals(o2));
 	}
-	
+
 	private static String SCHULEN_DIR = "schulen";
 
 	public static List<Schule> getSchools(Context context) throws IOException {
@@ -59,5 +61,23 @@ public class Utils {
 		}
 
 		return schools;
+	}
+
+
+	public static Schule getSelectedSchool(Context context) throws IOException {
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context.getApplicationContext());
+		List<Schule> schools = getSchools(context);
+		String id = settings.getString("selected_school", "");
+		Schule schule = null;
+		int i = 0;
+		while (i < schools.size() && schule == null) {
+			if(schools.get(i).getId().equals(id))
+				schule = schools.get(i);
+			i++;
+		}
+		if(schule != null)
+			return schule;
+		else
+			throw new IOException();
 	}
 }

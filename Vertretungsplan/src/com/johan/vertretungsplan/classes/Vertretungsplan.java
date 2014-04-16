@@ -26,7 +26,6 @@ public class Vertretungsplan implements Serializable {
 	 */
 	private static final long serialVersionUID = -1753326921591151152L;
 	private List<VertretungsplanTag> tage;
-	private List<String> allClasses;
 
 	/**
 	 * @return the tage
@@ -40,20 +39,6 @@ public class Vertretungsplan implements Serializable {
 	 */
 	public void setTage(List<VertretungsplanTag> tage) {
 		this.tage = tage;
-	}
-
-	/**
-	 * @return all the classes
-	 */
-	public List<String> getAllClasses() {
-		return allClasses;
-	}
-
-	/**
-	 * @param allClasses the allClasses to set
-	 */
-	public void setAllClasses(List<String> allClasses) {
-		this.allClasses = allClasses;
 	}
 
 }

@@ -16,12 +16,15 @@
 
 package com.johan.vertretungsplan_2;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import org.holoeverywhere.LayoutInflater;
 
@@ -37,15 +40,23 @@ import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.TextView;
+import org.json.JSONException;
 
 import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
+import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
+import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Animations;
+import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 public class AFragment extends VertretungsplanFragment {
+	
+	public interface Callback {
+
+	}
 	
 	ListView list;
 	Spinner klassen;
@@ -84,6 +95,8 @@ public class AFragment extends VertretungsplanFragment {
         
         listadapter = new MyCustomAdapter(startActivity);
 		list.setAdapter(listadapter);
+		
+		new LoadClassesTask().execute();
         
         ready = true;
         if(v != null) aktualisieren(v);
@@ -111,19 +124,8 @@ public class AFragment extends VertretungsplanFragment {
     	if(ready) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
-	        	        	        
-	        if(klassen.getAdapter() == null) {	            
-	            klasse = settings.getString("klasse", "");
-		        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, v.getAllClasses()));
-		        for(int i=0; i < klassen.getAdapter().getCount(); i++) {
-		        	  if(klassen.getAdapter().getItem(i).toString().equals(klasse)){
-		        	    klassen.setSelection(i);
-		        	    break;
-		        	  }
-		        }
-	        } else {
-		        klasse = (String) klassen.getSelectedItem();
-	        }
+	        
+		    klasse = (String) klassen.getSelectedItem();
 
 	        for (VertretungsplanTag tag:v.getTage()) {
 		    	listadapter.addSeparatorItem(tag.getDatum());
@@ -329,6 +331,38 @@ public class AFragment extends VertretungsplanFragment {
 		public TextView textView;
 		public LinearLayout layout;
 		public View stripe;
+    }
+    
+    private class LoadClassesTask extends AsyncTask<Void, Void, List<String>> {
+    	
+		@Override
+		protected List<String> doInBackground(Void... params) {
+			BaseParser parser = ((VertretungsplanApplication) AFragment.this.getActivity().getApplication()).getParser();
+			try {
+				List<String> klassen = parser.getAllClasses();
+				return klassen;
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		@Override
+		protected void onPostExecute(List<String> result) {
+			if(result != null) {
+				klasse = settings.getString("klasse", "");
+		        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, result));
+		        for(int i=0; i < klassen.getAdapter().getCount(); i++) {
+		        	  if(klassen.getAdapter().getItem(i).toString().equals(klasse)){
+		        	    klassen.setSelection(i);
+		        	    break;
+		        	  }
+		        }
+			}
+		}
+    	
     }
     
 }

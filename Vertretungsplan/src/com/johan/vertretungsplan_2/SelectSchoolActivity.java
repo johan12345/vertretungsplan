@@ -58,6 +58,8 @@ public class SelectSchoolActivity extends Activity {
 				Schule selectedSchool = schools.get(position);
 				settings.edit().putString("selected_school", selectedSchool.getId()).commit();
 				
+				((VertretungsplanApplication) getApplication()).notifySchoolChanged();
+				
 				Intent intent = new Intent(SelectSchoolActivity.this, StartActivity.class);
 				startActivity(intent);
 			}

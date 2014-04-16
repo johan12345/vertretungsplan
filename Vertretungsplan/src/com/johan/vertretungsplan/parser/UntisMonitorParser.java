@@ -44,9 +44,14 @@ import android.text.Spanned;
 import android.util.Log;
 
 public class UntisMonitorParser extends BaseParser {
+	
+	public UntisMonitorParser(Schule schule) {
+		super(schule);
+	}
+
 	StartActivity mActivity;
 	
-	public Vertretungsplan parseVertretungsplan(Schule schule) throws IOException, JSONException {	
+	public Vertretungsplan getVertretungsplan() throws IOException, JSONException {	
 		JSONArray urls = schule.getData().getJSONArray("urls");
 		String encoding = schule.getData().getString("encoding");
 		List<Document> docs = new ArrayList<Document>();
@@ -59,7 +64,7 @@ public class UntisMonitorParser extends BaseParser {
 		HashMap<String, VertretungsplanTag> tage = new HashMap<String, VertretungsplanTag>();
 		for(Document doc:docs) {
 			if (doc.title().contains("Untis")) {
-				VertretungsplanTag tag = parseVertretungsplan(doc, schule.getData());
+				VertretungsplanTag tag = parseVertretungsplanTag(doc, schule.getData());
 				if(!tage.containsKey(tag.getDatum())) {
 					tage.put(tag.getDatum(), tag);
 				} else {
@@ -73,13 +78,6 @@ public class UntisMonitorParser extends BaseParser {
 		}
 		Vertretungsplan v = new Vertretungsplan();
 		v.setTage(new ArrayList<VertretungsplanTag>(tage.values()));
-		
-		JSONArray classesJson = schule.getData().getJSONArray("classes");
-		List<String> classes = new ArrayList<String>();
-		for(int i = 0; i < classesJson.length(); i++) {
-			classes.add(classesJson.getString(i));
-		}
-		v.setAllClasses(classes);
 		
 		return v;
 	}
@@ -113,7 +111,7 @@ public class UntisMonitorParser extends BaseParser {
 //		
 //	}
 	
-	protected VertretungsplanTag parseVertretungsplan(Document doc, JSONObject data) throws JSONException {
+	protected VertretungsplanTag parseVertretungsplanTag(Document doc, JSONObject data) throws JSONException {
  		VertretungsplanTag tag = new VertretungsplanTag();
 		tag.setDatum(doc.select(".mon_title").first().text().replaceAll(" \\(Seite \\d / \\d\\)", ""));	
 		if(data.getBoolean("stand_links")) {
@@ -125,111 +123,20 @@ public class UntisMonitorParser extends BaseParser {
 		}
  		
  		//NACHRICHTEN
- 		Elements zeilen = doc.select("table.info tr:not(:contains(Nachrichten zum Tag))");
- 		for ( Element i:zeilen ) {	
- 			Elements spalten = i.select("td");
- 			String info = "";
- 			for (Element b:spalten) {
- 				info += "\n" + TextNode.createFromEncoded(b.html(), doc.baseUri()).getWholeText();			 		 				
- 			}
- 			info = info.substring(1); //remove first \n
- 			tag.getNachrichten().add(info); 			
- 		}
+ 		UntisCommon.parseNachrichten(doc.select("table.info").first(), data, tag);
  		
  		//VERTRETUNGSPLAN
- 		if(data.getBoolean("class_in_extra_line")) { 		
-	 		for (Element element:doc.select("td.inline_header")) {
-	 			
-	 			KlassenVertretungsplan kv = new KlassenVertretungsplan(element.text());
-		 			
-		 		Element zeile = null;
-		 		try {
-		 			zeile = element.parent().nextElementSibling();
-		 			if (zeile.select("td") == null) { zeile=zeile.nextElementSibling();}
-		 			while (zeile != null && !zeile.select("td").attr("class").equals("list inline_header")) {
-		 				Vertretung v = new Vertretung();
-		 				
-		 				int i = 0;
-		 				for(Element spalte : zeile.select("td")) {
-		 					String type = data.getJSONArray("columns").getString(i);
-		 					if(type.equals("lesson"))
-		 						v.setLesson(spalte.text());
-		 					else if(type.equals("subject"))
-		 						v.setSubject(spalte.text());
-		 					else if(type.equals("previousSubject"))
-		 						v.setPreviousSubject(spalte.text());
-		 					else if(type.equals("type"))
-		 						v.setType(spalte.text());
-		 					else if(type.equals("type-entfall")) {
-		 						if(spalte.text().equals("x"))
-		 							v.setType("Entfall");
-		 						else
-		 							v.setType("Vertretung");
-		 					}
-		 					else if(type.equals("room"))
-		 						v.setRoom(spalte.text());
-		 					else if(type.equals("desc"))
-		 						v.setDesc(spalte.text());
-		 					i++;
-		 				}
-		 	 			
-		 				if(!v.getLesson().equals("")) {
-			 	 			kv.add(v);
-			 	 		}
-		 	 			
-		 	 			zeile = zeile.nextElementSibling();
-		 	 			
-		 			}
-			 		tag.getKlassen().put(element.text(), kv);
-		 		} catch (Throwable e) {
-	
-		 			e.printStackTrace();
-		 		}
-	 		}
- 		} else {
- 			for (Element zeile:doc.select("tr.list.odd, tr.list.even")) {
- 				Vertretung v = new Vertretung();
- 				String klassen = "";
- 				int i = 0;
- 				for(Element spalte : zeile.select("td")) {
- 					String type = data.getJSONArray("columns").getString(i);
- 					if(type.equals("lesson"))
- 						v.setLesson(spalte.text());
- 					else if(type.equals("subject"))
- 						v.setSubject(spalte.text());
- 					else if(type.equals("previousSubject"))
- 						v.setPreviousSubject(spalte.text());
- 					else if(type.equals("type"))
- 						v.setType(spalte.text());
- 					else if(type.equals("type-entfall")) {
- 						if(spalte.text().equals("x"))
- 							v.setType("Entfall");
- 						else
- 							v.setType("Vertretung");
- 					}
- 					else if(type.equals("room"))
- 						v.setRoom(spalte.text());
- 					else if(type.equals("previousRoom"))
- 						v.setPreviousRoom(spalte.text());
- 					else if(type.equals("desc"))
- 						v.setDesc(spalte.text());
- 					else if(type.equals("class"))
- 						klassen = spalte.text();
- 					i++;
- 				}
- 				
- 				for(String klasse:klassen.split(", ")) {
-					KlassenVertretungsplan kv = tag.getKlassen().get(klasse);
-	 				if (kv == null)
-	 					kv = new KlassenVertretungsplan(klasse);	
-	 				kv.add(v);
-					tag.getKlassen().put(klasse, kv);
- 				}
- 				
- 			}
- 		}
-	 		
+ 		UntisCommon.parseVertretungsplanTable(doc, data, tag);	 		
  		
  		return tag;
+	}
+	
+	public List<String> getAllClasses() throws JSONException {
+		JSONArray classesJson = schule.getData().getJSONArray("classes");
+		List<String> classes = new ArrayList<String>();
+		for(int i = 0; i < classesJson.length(); i++) {
+			classes.add(classesJson.getString(i));
+		}
+		return classes;
 	}
 }
