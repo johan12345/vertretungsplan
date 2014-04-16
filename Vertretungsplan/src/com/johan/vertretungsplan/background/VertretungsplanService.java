@@ -24,8 +24,6 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
@@ -73,8 +71,6 @@ public class VertretungsplanService extends IntentService {
 		settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		extras = intent.getExtras();
 		Gson gson = new Gson();
-
-		analytics();
 
 		boolean autoSync;
 		try {
@@ -329,26 +325,6 @@ public class VertretungsplanService extends IntentService {
 				mNotificationManager.notify(mId, mBuilder.build());
 			}
 		}
-	}
-
-	private void analytics() {
-		EasyTracker.getInstance().setContext(this);
-		Tracker tracker = EasyTracker.getTracker();
-
-		String klasse = settings.getString("klasse", "unbekannt");
-		Boolean sync = settings.getBoolean("sync", true);
-		String syncPeriod;
-		String benachrichtigung;
-		if (sync == true) {
-			syncPeriod = settings.getString("syncPeriod", "unbekannt");
-			benachrichtigung = Boolean.valueOf(settings.getBoolean("notification", true)).toString();
-		} else {
-			syncPeriod = "Sync ausgeschaltet";
-			benachrichtigung = "Sync ausgeschaltet";
-		}
-		tracker.setCustomDimension(1, klasse);
-		tracker.setCustomDimension(2, syncPeriod);
-		tracker.setCustomDimension(3, benachrichtigung);
 	}
 
 }

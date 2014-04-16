@@ -46,8 +46,6 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.widget.AdapterView;
 import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
-import com.google.analytics.tracking.android.EasyTracker;
-import com.google.analytics.tracking.android.Tracker;
 import com.google.gson.Gson;
 import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
@@ -126,36 +124,10 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
     @Override
     public void onStart() {
     	Log.d("Vertretungsplan", "onStart");
-    	super.onStart();
-      	//Google Analytics
-    	EasyTracker.getInstance().activityStart(this);
-	    Tracker tracker = EasyTracker.getTracker();
-	    
-	    String klasse = settings.getString("klasse", "unbekannt");
-	    Boolean sync = settings.getBoolean("sync", true);
-	    String syncPeriod;
-	    String benachrichtigung;
-	    if (sync == true) {
-	    	syncPeriod = settings.getString("syncPeriod", "unbekannt");
-	    	benachrichtigung = Boolean.valueOf(settings.getBoolean("notification", true)).toString();
-	    } else {
-	    	syncPeriod = "Sync ausgeschaltet";
-	    	benachrichtigung = "Sync ausgeschaltet";
-	    }
-	    //Analytics
-	    tracker.setCustomDimension(1, klasse);
-	    tracker.setCustomDimension(2, syncPeriod);
-	    tracker.setCustomDimension(3, benachrichtigung);
-	    
+    	super.onStart();	    
       	//Aktualisieren
 //	    anzeigenAktualisieren();
 	    Log.d("Vertretungsplan", "/onStart");
-    }
-    
-    @Override
-    public void onStop() {
-      super.onStop();
-      EasyTracker.getInstance().activityStop(this);
     }
     
     

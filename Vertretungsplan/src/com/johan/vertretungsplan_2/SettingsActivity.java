@@ -24,7 +24,6 @@ import android.os.Bundle;
 import org.holoeverywhere.preference.PreferenceActivity;
 import org.holoeverywhere.preference.PreferenceManager;
 
-import com.google.analytics.tracking.android.EasyTracker;
 import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan_2.R;
 
@@ -36,28 +35,16 @@ public class SettingsActivity extends PreferenceActivity {
 
 	@SuppressLint("NewApi")
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-        // Display the fragment as the main content.
-        getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
-        
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-	
-	 @Override
-	    public void onStart() {
-	      super.onStart();	      
-	      EasyTracker.getInstance().activityStart(this);
-	    }
-	    
-	    @Override
-	    public void onStop() {
-	      super.onStop();
-	      EasyTracker.getInstance().activityStop(this);
-	    }
+		// Display the fragment as the main content.
+		getSupportFragmentManager().beginTransaction()
+		.replace(android.R.id.content, new SettingsFragment())
+		.commit();
+
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -82,28 +69,28 @@ public class SettingsActivity extends PreferenceActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onResume(){
-        super.onResume();
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        SharedPreferences.Editor prefEditor = prefs.edit();
-        prefEditor.putBoolean("isInForeground",true);
-        prefEditor.commit();      
-   }
-    @Override
-    public void onPause(){
-    		super.onPause();
-            SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-            SharedPreferences.Editor prefEditor = prefs.edit();
-            prefEditor.putBoolean("isInForeground", false);
-            prefEditor.commit();
-            setAlarms();
-   }
-    
-    public void setAlarms(){
-    	Intent autostartIntent = new Intent(getApplicationContext(), AutostartService.class);
-    	getApplicationContext().startService(autostartIntent);
-    }
+		super.onResume();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor prefEditor = prefs.edit();
+		prefEditor.putBoolean("isInForeground",true);
+		prefEditor.commit();      
+	}
+	@Override
+	public void onPause(){
+		super.onPause();
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences.Editor prefEditor = prefs.edit();
+		prefEditor.putBoolean("isInForeground", false);
+		prefEditor.commit();
+		setAlarms();
+	}
+
+	public void setAlarms(){
+		Intent autostartIntent = new Intent(getApplicationContext(), AutostartService.class);
+		getApplicationContext().startService(autostartIntent);
+	}
 
 }
