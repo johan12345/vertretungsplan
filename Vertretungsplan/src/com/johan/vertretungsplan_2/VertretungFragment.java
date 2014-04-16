@@ -52,7 +52,7 @@ import com.johan.vertretungsplan.utils.Animations;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
-public class AFragment extends VertretungsplanFragment {
+public class VertretungFragment extends VertretungsplanFragment {
 	
 	public interface Callback {
 
@@ -337,7 +337,7 @@ public class AFragment extends VertretungsplanFragment {
     	
 		@Override
 		protected List<String> doInBackground(Void... params) {
-			BaseParser parser = ((VertretungsplanApplication) AFragment.this.getActivity().getApplication()).getParser();
+			BaseParser parser = ((VertretungsplanApplication) VertretungFragment.this.getActivity().getApplication()).getParser();
 			try {
 				List<String> klassen = parser.getAllClasses();
 				return klassen;

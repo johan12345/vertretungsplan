@@ -43,10 +43,10 @@ import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
 import com.johan.vertretungsplan_2.R;
-import com.johan.vertretungsplan_2.AFragment.MyCustomAdapter;
+import com.johan.vertretungsplan_2.VertretungFragment.MyCustomAdapter;
 
 
-public class BFragment extends VertretungsplanFragment {
+public class NachrichtenFragment extends VertretungsplanFragment {
 	
 	TextView text;
 	ListView list;

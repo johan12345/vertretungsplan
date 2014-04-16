@@ -66,9 +66,9 @@ import de.keyboardsurfer.android.widget.crouton.Style;
 public class StartActivity extends TabSwipeActivity implements OnFragmentInteractionListener {
 	public static Context appContext;
 	public static final String PREFS_NAME = "VertretungsplanLS";
-	private AFragment fragment;
+	private VertretungFragment fragment;
 	StartActivity thisActivity = this;
-	private BFragment fragment2;
+	private NachrichtenFragment fragment2;
 	Vertretungsplan vertretungsplan;
     Boolean asyncRunning = false;
     SharedPreferences settings;
@@ -94,11 +94,11 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
 			finish();
         }
         
-        addTab( "Vertretungsplan", AFragment.class, AFragment.createBundle( "Vertretungsplan") );
-        addTab( "Nachrichten", BFragment.class, BFragment.createBundle( "Nachrichten") ); 
+        addTab( "Vertretungsplan", VertretungFragment.class, VertretungFragment.createBundle( "Vertretungsplan") );
+        addTab( "Nachrichten", NachrichtenFragment.class, NachrichtenFragment.createBundle( "Nachrichten") ); 
         
-        fragment = (AFragment) adapter.getItem(0);
-        fragment2 = (BFragment) adapter.getItem(1);
+        fragment = (VertretungFragment) adapter.getItem(0);
+        fragment2 = (NachrichtenFragment) adapter.getItem(1);
         
         tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
         tabs.setViewPager(mViewPager);
@@ -366,13 +366,13 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
 		Log.d("Vertretungsplan", "Message");
 		if (type.equals("ViewCreated"))	{
 			Log.d("Vertretungsplan", "Message: ViewCreated");
-			if (sender instanceof AFragment) {
+			if (sender instanceof VertretungFragment) {
 				Log.d("Vertretungsplan", "Message: fragment 1 loaded");
-				fragment = (AFragment) sender;
+				fragment = (VertretungFragment) sender;
 				aFragmentLoaded = true;
-			} else if (sender instanceof BFragment) {
+			} else if (sender instanceof NachrichtenFragment) {
 				Log.d("Vertretungsplan", "Message: fragment 2 loaded");
-				fragment2 = (BFragment) sender;
+				fragment2 = (NachrichtenFragment) sender;
 				bFragmentLoaded = true;
 			}
 			if (aFragmentLoaded && bFragmentLoaded && vertretungsplan != null) {
