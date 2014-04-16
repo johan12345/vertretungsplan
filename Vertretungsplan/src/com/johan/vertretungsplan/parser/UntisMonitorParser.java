@@ -43,7 +43,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.util.Log;
 
-public class UntisMonitorParser extends BaseParser {
+public class UntisMonitorParser extends UntisCommonParser {
 	
 	public UntisMonitorParser(Schule schule) {
 		super(schule);
@@ -123,10 +123,10 @@ public class UntisMonitorParser extends BaseParser {
 		}
  		
  		//NACHRICHTEN
- 		UntisCommon.parseNachrichten(doc.select("table.info").first(), data, tag);
+ 		parseNachrichten(doc.select("table.info").first(), data, tag);
  		
  		//VERTRETUNGSPLAN
- 		UntisCommon.parseVertretungsplanTable(doc, data, tag);	 		
+ 		parseVertretungsplanTable(doc, data, tag);	 		
  		
  		return tag;
 	}

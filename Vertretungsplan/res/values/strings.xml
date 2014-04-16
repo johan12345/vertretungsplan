@@ -68,5 +68,6 @@
     <string name="welcome">Willkommen</string>
     <string name="select_your_school">Bitte wähle deine Schule aus!</string>
     
+    <string name="no_info">Keine Informationen</string>
 
 </resources>

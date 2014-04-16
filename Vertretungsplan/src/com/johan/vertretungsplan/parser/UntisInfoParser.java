@@ -2,7 +2,6 @@ package com.johan.vertretungsplan.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -15,17 +14,13 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import android.util.Log;
-
-import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
 
-public class UntisInfoParser extends BaseParser {
+public class UntisInfoParser extends UntisCommonParser {
 	
 	private String baseUrl;
-	private List<Integer> availableWeeks;
 	private JSONObject data;
 
 	public UntisInfoParser(Schule schule) {
@@ -61,23 +56,20 @@ public class UntisInfoParser extends BaseParser {
 				tag.setStand(stand);
 				tag.setDatum(day.text());
 				Element next = null;		
-				Log.d("Vertretungsplan", day.parent().tagName());
 				if (day.parent().tagName().equals("p")) {
-					Log.d("Vertretungsplan", "nextelementsibling");
 					next = day.parent().nextElementSibling().nextElementSibling();
-					Log.d("Vertretungsplan", next.tagName() + " " + next.html());
 				} else
 					next = day.parent().select("p").first().nextElementSibling();
 				if (next.className().equals("subst")) {
 					//Vertretungstabelle
 					if(next.text().contains("Vertretungen sind nicht freigegeben"))
 						continue;
-					UntisCommon.parseVertretungsplanTable(next, data, tag);
+					parseVertretungsplanTable(next, data, tag);
 				} else {
 					//Nachrichten
-					UntisCommon.parseNachrichten(next, data, tag);
+					parseNachrichten(next, data, tag);
 					next = next.nextElementSibling().nextElementSibling();
-					UntisCommon.parseVertretungsplanTable(next, data, tag);
+					parseVertretungsplanTable(next, data, tag);
 				}
 				tage.add(tag);
 			}

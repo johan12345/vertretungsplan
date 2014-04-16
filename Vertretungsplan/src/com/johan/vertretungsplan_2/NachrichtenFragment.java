@@ -19,15 +19,12 @@ package com.johan.vertretungsplan_2;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import org.holoeverywhere.LayoutInflater;
 
 import android.text.Html;
-import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -43,7 +40,6 @@ import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
 import com.johan.vertretungsplan_2.R;
-import com.johan.vertretungsplan_2.VertretungFragment.MyCustomAdapter;
 
 
 public class NachrichtenFragment extends VertretungsplanFragment {
@@ -111,6 +107,8 @@ public class NachrichtenFragment extends VertretungsplanFragment {
 		    	for (String message:tag.getNachrichten()) {
 		    		listadapter.addItem(Html.fromHtml(message));
 		    	}
+		    	if(tag.getNachrichten().size() == 0)
+		    		listadapter.addItem(getResources().getString(R.string.no_info));
 	    	}
 	    			
 //			if(settings.getBoolean("winter", true)) {

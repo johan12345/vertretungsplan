@@ -135,10 +135,10 @@ public class VertretungFragment extends VertretungsplanFragment {
 				        	listadapter.addItem(item);
 				        }
 			        } else {
-			        	listadapter.addTextItem("keine Informationen");
+			        	listadapter.addTextItem(getResources().getString(R.string.no_info));
 			        }
 		        } else {
-		        	listadapter.addTextItem("keine Informationen");
+		        	listadapter.addTextItem(getResources().getString(R.string.no_info));
 		        }
 	        }
     	}

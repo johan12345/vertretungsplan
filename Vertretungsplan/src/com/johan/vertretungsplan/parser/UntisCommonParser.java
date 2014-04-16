@@ -1,5 +1,10 @@
 package com.johan.vertretungsplan.parser;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.nodes.Element;
@@ -7,11 +12,17 @@ import org.jsoup.nodes.TextNode;
 import org.jsoup.select.Elements;
 
 import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
+import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
 
-public class UntisCommon {
-	public static void parseVertretungsplanTable(Element table, JSONObject data, VertretungsplanTag tag) throws JSONException {
+public abstract class UntisCommonParser extends BaseParser {
+	
+	public UntisCommonParser(Schule schule) {
+		super(schule);
+	}
+
+	protected void parseVertretungsplanTable(Element table, JSONObject data, VertretungsplanTag tag) throws JSONException {
 		if(data.optBoolean("class_in_extra_line")) { 		
 	 		for (Element element:table.select("td.inline_header")) {
 	 			
@@ -92,8 +103,26 @@ public class UntisCommon {
  						klassen = spalte.text();
  					i++;
  				}
- 				
- 				for(String klasse:klassen.split(", ")) {
+ 				List<String> affectedClasses;
+ 				if(data.optBoolean("classes_separated", true)) {
+ 					affectedClasses = Arrays.asList(klassen.split(", "));
+ 				} else {
+ 					affectedClasses = new ArrayList<String>();
+ 					try {
+						for (String klasse:getAllClasses()) {
+							StringBuilder regex = new StringBuilder();
+							for(char character:klasse.toCharArray()) {
+								regex.append(character);
+								regex.append(".*");
+							}
+							if(klassen.matches(regex.toString()))
+								affectedClasses.add(klasse);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+ 				}
+ 				for(String klasse:affectedClasses) {
 					KlassenVertretungsplan kv = tag.getKlassen().get(klasse);
 	 				if (kv == null)
 	 					kv = new KlassenVertretungsplan(klasse);	
@@ -104,7 +133,7 @@ public class UntisCommon {
  		}
 	}
 	
-	public static void parseNachrichten(Element table, JSONObject data, VertretungsplanTag tag) {
+	protected void parseNachrichten(Element table, JSONObject data, VertretungsplanTag tag) {
 		Elements zeilen = table.select("tr:not(:contains(Nachrichten zum Tag))");
  		for ( Element i:zeilen ) {	
  			Elements spalten = i.select("td");

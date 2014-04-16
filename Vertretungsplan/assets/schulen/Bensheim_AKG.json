@@ -5,6 +5,7 @@
 		"data": {
 			"encoding": "ISO-8859-1",
 			"baseurl": "http://www.akg-bensheim.de/akgweb2011/content/Vertretung",
+			"classes_separated": false,
 			"columns": [
 				"class", "ignore", "lesson", "type", "previousSubject", "subject", "previousRoom", "room", "desc" ]
 		}
