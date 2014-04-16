@@ -51,7 +51,6 @@ import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
 import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan.background.VertretungsplanService;
-import com.johan.vertretungsplan.background.VertretungsplanWidgetProvider;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
@@ -277,7 +276,6 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
             	
                 if(vertretungsplan != null) {
 	                fragment.aktualisieren(vertretungsplan);
-	                widgetAktualisieren();
                 }
             }
 
@@ -325,13 +323,6 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
     	Intent autostartIntent = new Intent(appContext, AutostartService.class);
 		appContext.startService(autostartIntent);
     }
-    
-    public void widgetAktualisieren() {    
-  	    //Widget(s) aktualisieren
-  	    Intent i = new Intent(this, VertretungsplanWidgetProvider.class); 
-          i.setAction(VertretungsplanWidgetProvider.UPDATE_ACTION); 
-          sendBroadcast(i); 
-      }
 
 	@Override
 	public void onFragmentInteraction(String type, Fragment sender) {

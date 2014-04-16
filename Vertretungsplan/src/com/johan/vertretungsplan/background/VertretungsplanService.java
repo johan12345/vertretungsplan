@@ -107,7 +107,6 @@ public class VertretungsplanService extends IntentService {
 						nachrichtAnApp(extras, result, v);
 					}
 				}
-				widgetAktualisieren();
 	
 	//			String standWinter = null;
 	//			Vertretungsplan vAlt = null;
@@ -179,66 +178,6 @@ public class VertretungsplanService extends IntentService {
 				e.printStackTrace();
 			}
 		}
-	}
-
-	private void changelogPruefen(Document docChangelog) {
-
-		PackageInfo pInfo = null;
-		try {
-			pInfo = context.getPackageManager().getPackageInfo(context.getPackageName(), 0);
-		} catch (NameNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String version = pInfo.versionName;
-		try {
-			Element changelog = docChangelog.select("release").last();
-			if (!changelog.attr("version").equals(version)) {
-				String newVersion = changelog.attr("version");
-				String changelogText = changelog.text();
-
-				String sound = settings.getString("ringtone", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
-
-				NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-				.setSmallIcon(R.drawable.ic_notification)
-				.setContentTitle("Vertretungsplan App Update")
-				.setContentText("Version " + newVersion)
-				.setStyle(new NotificationCompat.BigTextStyle()
-				.bigText("Version " + newVersion + "\n" + changelogText));
-				if (!sound.equals("")) {
-					Uri soundUri = Uri.parse(sound);
-					mBuilder.setSound(soundUri);
-				}
-				mBuilder.setDefaults(Notification.DEFAULT_VIBRATE|Notification.DEFAULT_LIGHTS);
-				mBuilder.setOnlyAlertOnce(true);
-				mBuilder.setAutoCancel(true);
-				Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://dl.dropboxusercontent.com/u/34455869/VertretungsplanApp%20Download/Vertretungsplan.apk"));
-				TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
-				stackBuilder.addParentStack(StartActivity.class);
-				stackBuilder.addNextIntent(browserIntent);
-				PendingIntent resultPendingIntent =
-						stackBuilder.getPendingIntent(
-								0,
-								PendingIntent.FLAG_UPDATE_CURRENT
-								);
-				mBuilder.setContentIntent(resultPendingIntent);
-				NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-				// mId allows you to update the notification later on.
-				int mId = 2;
-				mNotificationManager.notify(mId, mBuilder.build());
-
-			}
-		} catch (NullPointerException e) {
-			Log.d("Vertretungsplan", "Serverproblem beim Changelog");
-		}
-
-	}
-
-	private void widgetAktualisieren() {    
-		//Widget(s) aktualisieren
-		Intent i = new Intent(context, VertretungsplanWidgetProvider.class); 
-		i.setAction(VertretungsplanWidgetProvider.UPDATE_ACTION); 
-		context.sendBroadcast(i); 
 	}
 
 	private void nachrichtAnApp(Bundle extras, int result, Vertretungsplan v) {
