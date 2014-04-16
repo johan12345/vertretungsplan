@@ -27,20 +27,11 @@ import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
-import org.jsoup.nodes.TextNode;
-import org.jsoup.select.Elements;
-
-import com.joejernst.http.Response;
-import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
 import com.johan.vertretungsplan.classes.Schule;
-import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
-import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.StartActivity;
 
-import android.text.Html;
-import android.text.Spanned;
 import android.util.Log;
 
 public class UntisMonitorParser extends UntisCommonParser {

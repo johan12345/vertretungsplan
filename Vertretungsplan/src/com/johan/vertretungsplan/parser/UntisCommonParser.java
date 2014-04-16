@@ -109,7 +109,7 @@ public abstract class UntisCommonParser extends BaseParser {
  				} else {
  					affectedClasses = new ArrayList<String>();
  					try {
-						for (String klasse:getAllClasses()) {
+						for (String klasse:getAllClasses()) { //TODO: Gibt es eine bessere Möglichkeit?
 							StringBuilder regex = new StringBuilder();
 							for(char character:klasse.toCharArray()) {
 								regex.append(character);

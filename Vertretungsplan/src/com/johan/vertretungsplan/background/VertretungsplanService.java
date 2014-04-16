@@ -27,6 +27,7 @@ import org.jsoup.nodes.Element;
 import com.google.gson.Gson;
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
@@ -107,6 +108,20 @@ public class VertretungsplanService extends IntentService {
 						nachrichtAnApp(extras, result, v);
 					}
 				}
+				
+				if (settings.getBoolean("notification", true) && !settings.getBoolean("isInForeground", false)) {
+					//Benachrichtigung anzeigen
+					String klasse = settings.getString("klasse", null);
+					String vAltJson = settings.getString("Vertretungsplan", null);
+					if (klasse != null && vAltJson != null) {
+						Vertretungsplan vAlt = gson.fromJson(vAltJson, Vertretungsplan.class);
+						if(somethingChanged(vAlt, v, klasse)) {
+							
+						}
+					}
+				}
+				
+				
 	
 	//			String standWinter = null;
 	//			Vertretungsplan vAlt = null;
@@ -178,6 +193,34 @@ public class VertretungsplanService extends IntentService {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	private boolean somethingChanged(Vertretungsplan vAlt, Vertretungsplan v,
+			String klasse) {
+		String standAlt = vAlt.getTage().get(0).getStand();
+		String standNeu = v.getTage().get(0).getStand();
+		if(!standAlt.equals(standNeu)) {
+			for(VertretungsplanTag tag:v.getTage()) {
+				//passenden alten Tag finden
+				VertretungsplanTag matchingTag = null;
+				for(VertretungsplanTag tagAlt:vAlt.getTage()) {
+					if(tagAlt.getDatum().equals(tag.getDatum())) {
+						matchingTag = tagAlt;
+						break;
+					}
+				}
+				
+				if(matchingTag == null) {
+					//dieser Tag wurde neu hinzugefügt
+					if(tag.getKlassen().get(klasse) != null
+							&& tag.getKlassen().get(klasse).getVertretung().size() > 0)
+						return true;
+				} else {
+					//TODO:
+				}
+			}
+		}
+		return false;
 	}
 
 	private void nachrichtAnApp(Bundle extras, int result, Vertretungsplan v) {
