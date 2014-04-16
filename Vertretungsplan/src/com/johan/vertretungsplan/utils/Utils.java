@@ -78,6 +78,6 @@ public class Utils {
 		if(schule != null)
 			return schule;
 		else
-			throw new IOException();
+			return null;
 	}
 }

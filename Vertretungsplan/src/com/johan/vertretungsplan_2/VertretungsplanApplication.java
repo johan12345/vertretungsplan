@@ -7,8 +7,11 @@ import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.holoeverywhere.app.Application;
 
+import android.content.Intent;
+
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.parser.UntisInfoParser;
 import com.johan.vertretungsplan.utils.Utils;
 
 @ReportsCrashes(formKey = "", mailTo = "johan.forstner+app@gmail.com", 
@@ -35,7 +38,13 @@ public class VertretungsplanApplication extends Application {
 		else {
 			try {
 				parser = BaseParser.getInstance(Utils.getSelectedSchool(this));
-				return parser;
+				if(parser == null) {
+					Intent intent = new Intent(this, SelectSchoolActivity.class);
+					startActivity(intent);
+					return BaseParser.getInstance(Utils.getSchools(this).get(0));
+				} else {
+					return parser;
+				}
 			} catch (IOException e) {
 				e.printStackTrace();
 				return null;
