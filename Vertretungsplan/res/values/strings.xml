@@ -69,5 +69,6 @@
     <string name="select_your_school">Bitte wähle deine Schule aus!</string>
     
     <string name="no_info">Keine Informationen</string>
+    <string name="notification_text">Es gibt Änderungen auf dem Vertretungsplan!</string>
 
 </resources>

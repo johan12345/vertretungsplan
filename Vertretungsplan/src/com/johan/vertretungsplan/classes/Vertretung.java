@@ -212,5 +212,87 @@ public class Vertretung implements Serializable {
 	public void setPreviousRoom(String previousRoom) {
 		this.previousRoom = previousRoom;
 	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((desc == null) ? 0 : desc.hashCode());
+		result = prime * result + ((lesson == null) ? 0 : lesson.hashCode());
+		result = prime * result
+				+ ((previousRoom == null) ? 0 : previousRoom.hashCode());
+		result = prime * result
+				+ ((previousSubject == null) ? 0 : previousSubject.hashCode());
+		result = prime * result
+				+ ((previousTeacher == null) ? 0 : previousTeacher.hashCode());
+		result = prime * result + ((room == null) ? 0 : room.hashCode());
+		result = prime * result + ((subject == null) ? 0 : subject.hashCode());
+		result = prime * result + ((teacher == null) ? 0 : teacher.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
+		return result;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Vertretung other = (Vertretung) obj;
+		if (desc == null) {
+			if (other.desc != null)
+				return false;
+		} else if (!desc.equals(other.desc))
+			return false;
+		if (lesson == null) {
+			if (other.lesson != null)
+				return false;
+		} else if (!lesson.equals(other.lesson))
+			return false;
+		if (previousRoom == null) {
+			if (other.previousRoom != null)
+				return false;
+		} else if (!previousRoom.equals(other.previousRoom))
+			return false;
+		if (previousSubject == null) {
+			if (other.previousSubject != null)
+				return false;
+		} else if (!previousSubject.equals(other.previousSubject))
+			return false;
+		if (previousTeacher == null) {
+			if (other.previousTeacher != null)
+				return false;
+		} else if (!previousTeacher.equals(other.previousTeacher))
+			return false;
+		if (room == null) {
+			if (other.room != null)
+				return false;
+		} else if (!room.equals(other.room))
+			return false;
+		if (subject == null) {
+			if (other.subject != null)
+				return false;
+		} else if (!subject.equals(other.subject))
+			return false;
+		if (teacher == null) {
+			if (other.teacher != null)
+				return false;
+		} else if (!teacher.equals(other.teacher))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
+		return true;
+	}
 		
 }
