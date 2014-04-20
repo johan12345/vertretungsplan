@@ -20,20 +20,18 @@ import java.util.ArrayList;
 import java.util.TreeSet;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import org.holoeverywhere.LayoutInflater;
 
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-
-import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
-import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.TextView;
 
 import com.johan.vertretungsplan.classes.Vertretungsplan;
@@ -44,38 +42,32 @@ import com.johan.vertretungsplan_2.R;
 
 public class NachrichtenFragment extends VertretungsplanFragment {
 	
-	TextView text;
-	ListView list;
-	Spinner klassen;
-	ImageView image;
-	ProgressBar pBar = null;
-	Boolean showProgress = true;
-	boolean ready = false;
-	Vertretungsplan v = null;
+	public interface Callback {
+		public void onFragmentLoaded(Fragment fragment);
+	}
 	
-    public static Context appContext;
-    public static StartActivity startActivity;
-    MyCustomAdapter listadapter = null;
+	private ListView list;
+	private ProgressBar pBar = null;
+	private boolean showProgress = true;
+	boolean ready = false;
+	private Callback mCallback;
+
+    private Activity activity;
+   	private NachrichtenAdapter listadapter = null;
 	
 	public static final String EXTRA_TITLE = "Vertretungsplan";
 	public static final String PREFS_NAME = "VertretungsplanLS";
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {       
-		View view = inflater.inflate(R.layout.bfragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_nachrichten, container, false);
 
-		appContext = getActivity().getApplicationContext();
-		startActivity = (StartActivity) getActivity();
-        image = (ImageView) view.findViewById(R.id.imageView2);
         pBar = (ProgressBar) view.findViewById(R.id.progressBar2);
         list = (ListView) view.findViewById(R.id.listView2);
         progress(true);
         
-        listadapter = new MyCustomAdapter(startActivity);
+        listadapter = new NachrichtenAdapter(activity);
 		list.setAdapter(listadapter);
-        
-        ready = true;
-//        if(v != null) aktualisieren(v);
 		
 		// Inflate the layout for this fragment
         return view;
@@ -83,9 +75,9 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-    	bgAktualisieren();
         progress(showProgress);
-        mListener.onFragmentInteraction("ViewCreated", this);
+        ready = true;
+        mCallback.onFragmentLoaded(this);
         super.onViewCreated(view, savedInstanceState);
     }
     
@@ -96,10 +88,8 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     }
     
     public void aktualisieren(Vertretungsplan v) {
-    	this.v = v;
     	if(ready) {
-	    	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
-	    	
+    	
 	    	listadapter.clear(); 
 	    	
 	    	for(VertretungsplanTag tag:v.getTage()) {	    	
@@ -121,17 +111,6 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     	}
 }
     
-    public void bgAktualisieren() {
-        // Restore preferences
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
-        Boolean bg = settings.getBoolean("bg", true);
-        if (bg == true) {
-        	image.setVisibility(View.VISIBLE);
-        } else {
-        	image.setVisibility(View.INVISIBLE);
-        }
-    }
-    
     public void progress(Boolean show) {
     	showProgress = show;
     	if (pBar != null) {
@@ -143,7 +122,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     	}
     }
     
-    public class MyCustomAdapter extends BaseAdapter {
+    public class NachrichtenAdapter extends BaseAdapter {
    	 
         private static final int TYPE_ITEM = 0;
         private static final int TYPE_SEPARATOR = 1;
@@ -154,7 +133,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
  
         private TreeSet<Integer> mSeparatorsSet = new TreeSet<Integer>();
  
-        public MyCustomAdapter(Context context) {
+        public NachrichtenAdapter(Context context) {
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
  
@@ -244,6 +223,19 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     public static class ViewHolder {
         public TextView text;
 		public TextView textView;
+    }
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	this.activity = activity;
+    	mCallback = (Callback) activity;
+    }
+    
+    @Override
+    public void onDetach() {
+    	super.onDetach();
+    	mCallback = null;
     }
     
 }

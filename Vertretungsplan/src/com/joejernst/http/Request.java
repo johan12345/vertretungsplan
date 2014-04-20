@@ -1,14 +1,18 @@
 package com.joejernst.http;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import android.util.Log;
 
 /*
  * Copyright 2012 Joe J. Ernst
@@ -251,7 +255,7 @@ public class Request extends Message<Request> {
 
         // Put the query parameters on the URL before issuing the request
         if (!query.isEmpty()) {
-            for (Map.Entry param : query.entrySet()) {
+            for (Map.Entry<String, String> param : query.entrySet()) {
                 builder.append(param.getKey());
                 builder.append("=");
                 builder.append(param.getValue());

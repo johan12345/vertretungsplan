@@ -1,10 +1,6 @@
 package com.johan.vertretungsplan_2;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.holoeverywhere.LayoutInflater;
@@ -14,18 +10,13 @@ import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;

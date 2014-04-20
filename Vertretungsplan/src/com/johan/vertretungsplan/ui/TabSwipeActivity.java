@@ -21,23 +21,15 @@ import java.util.List;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
-import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.ViewPager;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
 
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBar.Tab;
-import android.support.v7.app.ActionBar.TabListener;
 import android.util.DisplayMetrics;
-
-import android.view.ViewGroup;
-import android.view.ViewParent;
-
 import com.johan.vertretungsplan_2.R;
   
 public abstract class TabSwipeActivity extends Activity {
@@ -72,66 +64,40 @@ public abstract class TabSwipeActivity extends Activity {
     }
   
     /**
-     * Add a tab with a backing Fragment to the action bar
+     * Add a tab with a backing Fragment
      * @param titleRes A string resource pointing to the title for the tab
-     * @param fragmentClass The class of the Fragment to instantiate for this tab
-     * @param args An optional Bundle to pass along to the Fragment (may be null)
+     * @param fragment the Fragment
      */
-    protected void addTab(int titleRes, Class<? extends Fragment> fragmentClass, Bundle args ) {
-        adapter.addTab( getString( titleRes ), fragmentClass, args );
+    protected void addTab(int titleRes, Fragment fragment ) {
+        adapter.addTab( getString( titleRes ), fragment );
     }
     /**
-     * Add a tab with a backing Fragment to the action bar
+     * Add a tab with a backing Fragment
      * @param titleRes A string to be used as the title for the tab
-     * @param fragmentClass The class of the Fragment to instantiate for this tab
-     * @param args An optional Bundle to pass along to the Fragment (may be null)
+     * @param fragment the fragment
      */
-    protected void addTab(CharSequence title, Class<? extends Fragment> fragmentClass, Bundle args ) {
-        adapter.addTab( title, fragmentClass, args );
+    protected void addTab(CharSequence title, Fragment fragment ) {
+        adapter.addTab( title, fragment);
     }
   
-  public class TabsAdapter extends FragmentPagerAdapter implements TabListener, ViewPager.OnPageChangeListener {
+  public class TabsAdapter extends FragmentPagerAdapter implements ViewPager.OnPageChangeListener {
   
-        private final Activity mActivity;
-        private final ActionBar mActionBar;
-        private final ViewPager mPager;
-  
+	  private List<Fragment> mFragments = new ArrayList<Fragment>();;
+      private List<CharSequence> mTitles = new ArrayList<CharSequence>();
+	  
         /**
          * @param fm
          * @param fragments
          */
         public TabsAdapter(Activity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
-            this.mActivity = activity;
-            this.mActionBar = activity.getSupportActionBar();
-            this.mPager = pager;
-  
         }
+
   
-        private class TabInfo {
-            public final Class<? extends Fragment> fragmentClass;
-            public final Bundle args;
-            public TabInfo(Class<? extends Fragment> fragmentClass,
-                    Bundle args) {
-                this.fragmentClass = fragmentClass;
-                this.args = args;
-            }
-        }
+        public void addTab( CharSequence title, Fragment fragment ) {
   
-        private List<TabInfo> mTabs = new ArrayList<TabInfo>();
-        private List<CharSequence> mTitles = new ArrayList<CharSequence>();
-  
-        public void addTab( CharSequence title, Class<? extends Fragment> fragmentClass, Bundle args ) {
-            final TabInfo tabInfo = new TabInfo( fragmentClass, args );
-  
-//            Tab tab = mActionBar.newTab();
-//            tab.setText( title );
-//            tab.setTag( tabInfo );
-  
-            mTabs.add( tabInfo );
+            mFragments.add( fragment );
             mTitles.add( title );
-  
-            //mActionBar.addTab( tab );
             
             notifyDataSetChanged();
         }
@@ -140,7 +106,8 @@ public abstract class TabSwipeActivity extends Activity {
         public float getPageWidth(int position){
         	DisplayMetrics metrics = new DisplayMetrics();
         	getWindowManager().getDefaultDisplay().getMetrics(metrics);
-            if (metrics.widthPixels / (metrics.densityDpi / 160f) >= 800 && getResources().getConfiguration().orientation == getResources().getConfiguration().ORIENTATION_LANDSCAPE) {
+            getResources().getConfiguration();
+			if (metrics.widthPixels / (metrics.densityDpi / 160f) >= 800 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
                 return 0.5f;
             } else {
                 return super.getPageWidth(position);
@@ -149,13 +116,12 @@ public abstract class TabSwipeActivity extends Activity {
   
         @Override
         public Fragment getItem(int position) {
-            final TabInfo tabInfo = mTabs.get( position );
-            return (Fragment) Fragment.instantiate( mActivity, tabInfo.fragmentClass.getName(), tabInfo.args );
+            return mFragments.get(position);
         }
   
         @Override
         public int getCount() {
-            return mTabs.size();
+            return mFragments.size();
         }
         @Override
         public CharSequence getPageTitle(int position) {
@@ -170,65 +136,8 @@ public abstract class TabSwipeActivity extends Activity {
         }
   
         @Override
-        public void onPageSelected(int position)
-        {
-           ViewParent root = findViewById(android.R.id.content).getParent();
-           findAndUpdateSpinner(root, position);
+        public void onPageSelected(int position) {
         }
 
-        /**
-         * Searches the view hierarchy excluding the content view 
-         * for a possible Spinner in the ActionBar. 
-         * 
-         * @param root The parent of the content view
-         * @param position The position that should be selected
-         * @return if the spinner was found and adjusted
-         */
-        private boolean findAndUpdateSpinner(Object root, int position)
-        {
-           if (root instanceof android.widget.Spinner)
-           {
-              // Found the Spinner
-              Spinner spinner = (Spinner) root;
-              spinner.setSelection(position);
-              return true;
-           }
-           else if (root instanceof ViewGroup)
-           {
-              ViewGroup group = (ViewGroup) root;
-              if (group.getId() != android.R.id.content)
-              {
-                 // Found a container that isn't the container holding our screen layout
-                 for (int i = 0; i < group.getChildCount(); i++)
-                 {
-                    if (findAndUpdateSpinner(group.getChildAt(i), position))
-                    {
-                       // Found and done searching the View tree
-                       return true;
-                    }
-                 }
-              }
-           }
-           // Nothing found
-           return false;
-        }
-  
-        public void onTabSelected(Tab tab, FragmentTransaction ft) {
-        	/*
-        	 * Slide to selected fragment when user selected tab
-        	 */
-            TabInfo tabInfo = (TabInfo) tab.getTag();
-            for ( int i = 0; i < mTabs.size(); i++ ) {
-                if ( mTabs.get( i ) == tabInfo ) {
-                    mPager.setCurrentItem( i );
-                }
-            }
-        }
-  
-        public void onTabUnselected(Tab tab, FragmentTransaction ft) {
-        }
-  
-        public void onTabReselected(Tab tab, FragmentTransaction ft) {
-        }
     }
 }

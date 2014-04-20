@@ -26,60 +26,60 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import org.holoeverywhere.LayoutInflater;
 
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.widget.AdapterView;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.LinearLayout;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import org.json.JSONException;
 
-import com.johan.vertretungsplan.classes.KlassenVertretungsplan;
-import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.classes.Vertretung;
 import com.johan.vertretungsplan.classes.Vertretungsplan;
 import com.johan.vertretungsplan.classes.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Animations;
-import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 public class VertretungFragment extends VertretungsplanFragment {
 	
 	public interface Callback {
-
+		public void onFragmentLoaded(Fragment fragment);
+		public Vertretungsplan getVertretungsplan();
 	}
 	
-	ListView list;
-	Spinner klassen;
-	ImageView image;
-	TextView txtStand;
-	ProgressBar pBar = null;
-	Boolean showProgress = true;
-	Vertretungsplan v;
+	private ListView list;
+	private Spinner klassen;
+	private TextView txtStand;
+	private ProgressBar pBar = null;
+	private boolean showProgress = true;
 	boolean ready = false;
-	String klasse;
+	private String klasse;
+	private Callback mCallback;
 	
-	SharedPreferences settings;
+	private SharedPreferences settings;
 	
     public static Context appContext;
     public static StartActivity startActivity;
-    MyCustomAdapter listadapter = null;
+    private VertretungAdapter listadapter = null;
 	
 	public static final String EXTRA_TITLE = "Vertretungsplan";
 	public static final String PREFS_NAME = "VertretungsplanLS";
 	
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {       
-		View view = inflater.inflate(R.layout.afragment, container, false);
+		View view = inflater.inflate(R.layout.fragment_vertretung, container, false);
 
 		appContext = getActivity().getApplicationContext();
 		startActivity = (StartActivity) getActivity();
@@ -89,17 +89,13 @@ public class VertretungFragment extends VertretungsplanFragment {
         settings = PreferenceManager.getDefaultSharedPreferences(appContext);
         list = (ListView) view.findViewById(R.id.listView1);
         klassen = (Spinner) view.findViewById(R.id.spinner1);
-        image = (ImageView) view.findViewById(R.id.imageView1);
         txtStand = (TextView) view.findViewById(R.id.txtStand);
         pBar = (ProgressBar) view.findViewById(R.id.progressBar1);
         
-        listadapter = new MyCustomAdapter(startActivity);
+        listadapter = new VertretungAdapter(startActivity);
 		list.setAdapter(listadapter);
 		
 		new LoadClassesTask().execute();
-        
-        ready = true;
-        if(v != null) aktualisieren(v);
 		
 		// Inflate the layout for this fragment
         return view;
@@ -107,9 +103,34 @@ public class VertretungFragment extends VertretungsplanFragment {
     
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
-    	bgAktualisieren();
         progress(showProgress);
-        mListener.onFragmentInteraction("ViewCreated", this);
+        
+        klassen.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int pos, long id) {
+				// We need an Editor object to make preference changes.
+				// All objects are from android.context.Context
+				SharedPreferences.Editor editor = settings.edit();
+				editor.putString("klasse", klassen.getSelectedItem().toString());
+
+				// Commit the edits!
+				editor.commit();
+
+				if(mCallback.getVertretungsplan() != null) {
+					aktualisieren(mCallback.getVertretungsplan());
+				}
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parentView) {
+			}
+
+		});
+               
+        ready = true;
+        
+        mCallback.onFragmentLoaded(this);
+        
         super.onViewCreated(view, savedInstanceState);
     }
     
@@ -120,7 +141,6 @@ public class VertretungFragment extends VertretungsplanFragment {
     }
     
     public void aktualisieren(Vertretungsplan v) { 
-    	this.v = v;
     	if(ready) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
@@ -143,17 +163,6 @@ public class VertretungFragment extends VertretungsplanFragment {
 	        }
     	}
     }
-   
-    public void bgAktualisieren() {
-        // Restore preferences
-        SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(appContext);
-        Boolean bg = settings.getBoolean("bg", true);
-        if (bg == true) {
-        	image.setVisibility(View.VISIBLE);
-        } else {
-        	image.setVisibility(View.INVISIBLE);
-        }
-    }
     
     public void progress(boolean show) {
     	showProgress = show;
@@ -167,7 +176,7 @@ public class VertretungFragment extends VertretungsplanFragment {
     	}
     }
     
-    public class MyCustomAdapter extends BaseAdapter {
+    public class VertretungAdapter extends BaseAdapter {
     	 
         private static final int TYPE_ITEM = 0;
         private static final int TYPE_SEPARATOR = 1;
@@ -180,7 +189,7 @@ public class VertretungFragment extends VertretungsplanFragment {
         private TreeSet<Object> mSeparatorsSet = new TreeSet<Object>();
         private TreeSet<Object> mTextsSet = new TreeSet<Object>();
  
-        public MyCustomAdapter(Context context) {
+        public VertretungAdapter(Context context) {
             mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         }
  
@@ -363,6 +372,18 @@ public class VertretungFragment extends VertretungsplanFragment {
 			}
 		}
     	
+    }
+    
+    @Override
+    public void onAttach(Activity activity) {
+    	super.onAttach(activity);
+    	mCallback = (Callback) activity;
+    }
+    
+    @Override
+    public void onDetach() {
+    	super.onDetach();
+    	mCallback = null;
     }
     
 }

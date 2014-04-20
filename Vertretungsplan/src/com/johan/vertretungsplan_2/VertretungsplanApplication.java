@@ -1,17 +1,13 @@
 package com.johan.vertretungsplan_2;
 
 import java.io.IOException;
-import java.util.List;
-
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.holoeverywhere.app.Application;
 
 import android.content.Intent;
 
-import com.johan.vertretungsplan.classes.Schule;
 import com.johan.vertretungsplan.parser.BaseParser;
-import com.johan.vertretungsplan.parser.UntisInfoParser;
 import com.johan.vertretungsplan.utils.Utils;
 
 @ReportsCrashes(formKey = "", mailTo = "johan.forstner+app@gmail.com", 
