@@ -18,8 +18,8 @@
     
     <string name="info_dialog"><![CDATA[
         ©2014 Johan v. Forstner<br/><br/>
-        Diese App schickt anonyme Nutzungsdaten an den Dienst Google Analytics, damit ich sie weiter verbessern kann. Solltest du damit nicht einverstanden sein, deinstalliere bitte die App.<br/>
         Solltest du eine Frage oder Anregung zu dieser App haben, kontaktiere mich bitte über den Button "Mail an den Entwickler" im Menü.<br/><br/>
+        Icon-Design: Johan v. Forstner, basierend auf <a href="http://thenounproject.com/term/layout/13008/">"Layout"</a> von Qing Li, The Noun Project<br/><br/>
         Diese App nutzt die folgenden Open-Source-Bibliotheken:<br />
         <a href="http://jsoup.org">jsoup</a> von Jonathan Hedley unter der <a href="http://jsoup.org/license">MIT-Lizenz</a><br />
         <a href="https://github.com/ChristopheVersieux/HoloEverywhere">HoloEverywhere</a> von Christophe Versieux unter der <a href="http://www.gnu.org/licenses/lgpl-3.0.de.html">LGPL v3</a><br />
