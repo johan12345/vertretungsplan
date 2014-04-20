@@ -52,166 +52,166 @@ public class AutostartService extends Service {
 	   	SharedPreferences settings  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 	   	 
 	     
-//	   	Intent syncIntent = new Intent(this, VertretungsplanService.class);
+	   	Intent syncIntent = new Intent(this, VertretungsplanService.class);
 	 	
-//	   	syncIntent.putExtra("AutoSync", true);
-//	   	
-//	   	PendingIntent pintent = PendingIntent.getService(this, 0, syncIntent, 0);
+	   	syncIntent.putExtra("AutoSync", true);
+	   	
+	   	PendingIntent pintent = PendingIntent.getService(this, 0, syncIntent, 0);
 		
 	   	AlarmManager alarm = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
 			
 	   	//Alte Alarme abbrechen
-//	   	alarm.cancel(pintent);	
-//	   	
-//	   	if(settings.getBoolean("sync", true) == true) {
-//        	Calendar cal = Calendar.getInstance();
-//        	
-//        	int g;
-//        	AlarmManager[] alarmCancel=new AlarmManager[24];
-//        	for(g=0;g<12;g++){
-//     		   Intent intentSchlau = new Intent(AutostartService.this, VertretungsplanService.class);
-//     		   PendingIntent pi=PendingIntent.getBroadcast(AutostartService.this, g,intentSchlau, 0);
-//
-//     		   alarmCancel[g] = (AlarmManager) getSystemService(ALARM_SERVICE);
-//     		   alarmCancel[g].cancel(pi);
-//
-//     		}
-//        
-//        	if(settings.getString("syncPeriod", "30").equals("SCHLAU")) {
-//        		Log.d("Vertretungsplan", "schlauer Alarm");
-//        		AlarmManager[] alarmManager=new AlarmManager[24];
-//        		ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
-//        		
-//        		ArrayList<Long> zeiten = new ArrayList<Long>();
-//        		
-//        		// 7:20
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 20);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis()); 
-//        		
-//        		// 7:25
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 25);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis()); 
-//        		
-//        		// 7:30
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 30);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 7:35
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 35);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis()); 
-//        		
-//        		// 7:40
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 40);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 7:45
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 7);
-//        		cal.set(Calendar.MINUTE, 45);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 9:35
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 9);
-//        		cal.set(Calendar.MINUTE, 35);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 11:25
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 11);
-//        		cal.set(Calendar.MINUTE, 25);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 13:05
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 12);
-//        		cal.set(Calendar.MINUTE, 22);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());   
-//        		
-//        		// 14:30
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 14);
-//        		cal.set(Calendar.MINUTE, 30);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 17:00
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//        		cal.set(Calendar.HOUR_OF_DAY, 17);
-//        		cal.set(Calendar.MINUTE, 00);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		// 19:00
-//        		cal=Calendar.getInstance();
-//        		cal.setTimeInMillis(System.currentTimeMillis());
-//                cal.clear();
-//        		cal.set(Calendar.HOUR_OF_DAY, 19);
-//        		cal.set(Calendar.MINUTE, 00);
-//        		cal.set(Calendar.SECOND, 0);        		
-//        		zeiten.add(cal.getTimeInMillis());  
-//        		
-//        		
-//        		int f;
-//        		for(f=0;f<zeiten.size();f++){
-//        		   Intent intentSchlau = new Intent(AutostartService.this, VertretungsplanService.class);
-//        		   PendingIntent pi=PendingIntent.getBroadcast(AutostartService.this, f,intentSchlau, 0);
-//
-//        		   alarmManager[f] = (AlarmManager) getSystemService(ALARM_SERVICE);
-//        		   alarmManager[f].setRepeating(AlarmManager.RTC_WAKEUP,zeiten.get(f), AlarmManager.INTERVAL_DAY, pi);
-//
-//        		   intentArray.add(pi);
-//
-//        		}
-//        		
-//        	} else if (settings.getString("syncPeriod", "30").equals("30s")) {
-//        		Log.d("Vertretungsplan", "30s Alarm");
-//        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 30*1000, 30*1000, pintent); 
-//        	} else if (settings.getString("syncPeriod", "30").equals("15")) {
-//        		Log.d("Vertretungsplan", "15min Alarm");
-//        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 15*60*1000, 15*60*1000, pintent); 
-//        	} else if (settings.getString("syncPeriod", "30").equals("30")) {
-//        		Log.d("Vertretungsplan", "30min Alarm");
-//        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 30*60*1000, 30*60*1000, pintent); 
-//        	} else if (settings.getString("syncPeriod", "30").equals("60")) {
-//        		Log.d("Vertretungsplan", "1h Alarm");
-//        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 60*60*1000, 60*60*1000, pintent); 
-//        	} else if (settings.getString("syncPeriod", "30").equals("120")) {
-//        		Log.d("Vertretungsplan", "2h Alarm");
-//        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 120*60*1000, 120*60*1000, pintent); 
-//        	} else {
-//        		Log.d("Vertretungsplan", "Unbekannt: " + settings.getString("syncPeriod", "30"));
-//        	}
+	   	alarm.cancel(pintent);	
+	   	
+	   	if(settings.getBoolean("sync", true) == true) {
+        	Calendar cal = Calendar.getInstance();
+        	
+        	int g;
+        	AlarmManager[] alarmCancel=new AlarmManager[24];
+        	for(g=0;g<12;g++){
+     		   Intent intentSchlau = new Intent(AutostartService.this, VertretungsplanService.class);
+     		   PendingIntent pi=PendingIntent.getBroadcast(AutostartService.this, g,intentSchlau, 0);
+
+     		   alarmCancel[g] = (AlarmManager) getSystemService(ALARM_SERVICE);
+     		   alarmCancel[g].cancel(pi);
+
+     		}
+        
+        	if(settings.getString("syncPeriod", "30").equals("SCHLAU")) {
+        		Log.d("Vertretungsplan", "schlauer Alarm");
+        		AlarmManager[] alarmManager=new AlarmManager[24];
+        		ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
+        		
+        		ArrayList<Long> zeiten = new ArrayList<Long>();
+        		
+        		// 7:20
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 20);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis()); 
+        		
+        		// 7:25
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 25);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis()); 
+        		
+        		// 7:30
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 30);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 7:35
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 35);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis()); 
+        		
+        		// 7:40
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 40);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 7:45
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 7);
+        		cal.set(Calendar.MINUTE, 45);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 9:35
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 9);
+        		cal.set(Calendar.MINUTE, 35);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 11:25
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 11);
+        		cal.set(Calendar.MINUTE, 25);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 13:05
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 12);
+        		cal.set(Calendar.MINUTE, 22);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());   
+        		
+        		// 14:30
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 14);
+        		cal.set(Calendar.MINUTE, 30);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 17:00
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+        		cal.set(Calendar.HOUR_OF_DAY, 17);
+        		cal.set(Calendar.MINUTE, 00);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		// 19:00
+        		cal=Calendar.getInstance();
+        		cal.setTimeInMillis(System.currentTimeMillis());
+                cal.clear();
+        		cal.set(Calendar.HOUR_OF_DAY, 19);
+        		cal.set(Calendar.MINUTE, 00);
+        		cal.set(Calendar.SECOND, 0);        		
+        		zeiten.add(cal.getTimeInMillis());  
+        		
+        		
+        		int f;
+        		for(f=0;f<zeiten.size();f++){
+        		   Intent intentSchlau = new Intent(AutostartService.this, VertretungsplanService.class);
+        		   PendingIntent pi=PendingIntent.getBroadcast(AutostartService.this, f,intentSchlau, 0);
+
+        		   alarmManager[f] = (AlarmManager) getSystemService(ALARM_SERVICE);
+        		   alarmManager[f].setRepeating(AlarmManager.RTC_WAKEUP,zeiten.get(f), AlarmManager.INTERVAL_DAY, pi);
+
+        		   intentArray.add(pi);
+
+        		}
+        		
+        	} else if (settings.getString("syncPeriod", "30").equals("30s")) {
+        		Log.d("Vertretungsplan", "30s Alarm");
+        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 30*1000, 30*1000, pintent); 
+        	} else if (settings.getString("syncPeriod", "30").equals("15")) {
+        		Log.d("Vertretungsplan", "15min Alarm");
+        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 15*60*1000, 15*60*1000, pintent); 
+        	} else if (settings.getString("syncPeriod", "30").equals("30")) {
+        		Log.d("Vertretungsplan", "30min Alarm");
+        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 30*60*1000, 30*60*1000, pintent); 
+        	} else if (settings.getString("syncPeriod", "30").equals("60")) {
+        		Log.d("Vertretungsplan", "1h Alarm");
+        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 60*60*1000, 60*60*1000, pintent); 
+        	} else if (settings.getString("syncPeriod", "30").equals("120")) {
+        		Log.d("Vertretungsplan", "2h Alarm");
+        		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 120*60*1000, 120*60*1000, pintent); 
+        	} else {
+        		Log.d("Vertretungsplan", "Unbekannt: " + settings.getString("syncPeriod", "30"));
+        	}
         }
    }
-//}
+}

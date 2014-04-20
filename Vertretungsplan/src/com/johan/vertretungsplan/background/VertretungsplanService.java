@@ -92,7 +92,6 @@ public class VertretungsplanService extends IntentService {
 			
 				//Vertretungsplan-Objekt erzeugen
 				Vertretungsplan v = parser.getVertretungsplan();
-				settings.edit().putString("Vertretungsplan", gson.toJson(v)).commit();
 	
 				// Sucessful finished
 				int result = Activity.RESULT_OK;	
@@ -114,6 +113,8 @@ public class VertretungsplanService extends IntentService {
 						}
 					}
 				}
+				
+				settings.edit().putString("Vertretungsplan", gson.toJson(v)).commit();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -152,6 +153,8 @@ public class VertretungsplanService extends IntentService {
 									tag.getKlassen().get(klasse).getVertretung())) {
 								//Die Vertretungen sind nicht gleich
 								return true;
+							} else {
+								//keine Veränderung
 							}
 						} else {
 							//vorher waren keine Vertretungen für die gewählte Klasse bekannt -> es wurde etwas verändert
@@ -166,7 +169,6 @@ public class VertretungsplanService extends IntentService {
 
 	private void nachrichtAnApp(Bundle extras, int result, Vertretungsplan v) {
 		//Nachricht senden an App
-		Log.d("Vertretungsplan", "heruntergeladen, sende Nachricht an App");
 		if (extras != null) {
 			Messenger messenger = (Messenger) extras.get("MESSENGER");
 			Message msg = Message.obtain();

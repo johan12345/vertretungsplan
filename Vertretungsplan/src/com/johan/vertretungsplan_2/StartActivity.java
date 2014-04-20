@@ -122,11 +122,9 @@ public class StartActivity extends TabSwipeActivity implements OnFragmentInterac
     
     @Override
     public void onStart() {
-    	Log.d("Vertretungsplan", "onStart");
     	super.onStart();	    
       	//Aktualisieren
 //	    anzeigenAktualisieren();
-	    Log.d("Vertretungsplan", "/onStart");
     }
     
     
