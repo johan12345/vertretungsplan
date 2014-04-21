@@ -111,7 +111,7 @@ public class UntisMonitorParser extends UntisCommonParser {
 	protected VertretungsplanTag parseVertretungsplanTag(Document doc, JSONObject data) throws JSONException {
  		VertretungsplanTag tag = new VertretungsplanTag();
 		tag.setDatum(doc.select(".mon_title").first().text().replaceAll(" \\(Seite \\d / \\d\\)", ""));	
-		if(data.getBoolean("stand_links")) {
+		if(data.optBoolean("stand_links", false)) {
 			tag.setStand(doc.select("body").html().substring(0, doc.select("body").html().indexOf("<p>")-1));
 		} else {
 			Element stand = doc.select("table.mon_head td[align=right] p").first();
