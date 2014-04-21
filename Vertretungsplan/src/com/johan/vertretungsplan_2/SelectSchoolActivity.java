@@ -16,6 +16,7 @@
 package com.johan.vertretungsplan_2;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import org.holoeverywhere.LayoutInflater;
@@ -26,6 +27,7 @@ import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
 
+import com.johan.vertretungsplan.comparators.AlphabeticalSchoolComparator;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
@@ -52,6 +54,7 @@ public class SelectSchoolActivity extends Activity {
 		lstSchools = (ListView) findViewById(R.id.listSchools);
 		try {
 			schools = Utils.getSchools(this);
+			Collections.sort(schools, new AlphabeticalSchoolComparator());
 			lstSchools.setAdapter(new SchoolsAdapter(this, schools));
 		} catch (IOException e) {
 			e.printStackTrace();
