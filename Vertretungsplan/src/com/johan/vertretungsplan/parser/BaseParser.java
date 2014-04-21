@@ -7,8 +7,8 @@ import org.json.JSONException;
 
 import com.joejernst.http.Request;
 import com.joejernst.http.Response;
-import com.johan.vertretungsplan.classes.Schule;
-import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
 
 public abstract class BaseParser {
 	protected Schule schule;
@@ -27,11 +27,13 @@ public abstract class BaseParser {
 
 	public static BaseParser getInstance(Schule schule) {
 		BaseParser parser = null;
-		if (schule.getApi().equals("untis-monitor")) {
-			parser = new UntisMonitorParser(schule);
-		} else if (schule.getApi().equals("untis-info")) {
-			parser = new UntisInfoParser(schule);
-		} //else if ... (andere Parser)
+		if(schule != null) {
+			if (schule.getApi().equals("untis-monitor")) {
+				parser = new UntisMonitorParser(schule);
+			} else if (schule.getApi().equals("untis-info")) {
+				parser = new UntisInfoParser(schule);
+			} //else if ... (andere Parser)
+		}
 		return parser;
 	}
 }

@@ -14,9 +14,9 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import com.johan.vertretungsplan.classes.Schule;
-import com.johan.vertretungsplan.classes.Vertretungsplan;
-import com.johan.vertretungsplan.classes.VertretungsplanTag;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
 
 public class UntisInfoParser extends UntisCommonParser {
 	

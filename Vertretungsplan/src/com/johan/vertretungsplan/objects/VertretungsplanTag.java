@@ -1,4 +1,4 @@
-package com.johan.vertretungsplan.classes;
+package com.johan.vertretungsplan.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;

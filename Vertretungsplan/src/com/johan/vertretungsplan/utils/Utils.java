@@ -16,7 +16,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.johan.vertretungsplan.classes.Schule;
+import com.johan.vertretungsplan.objects.Schule;
 
 public class Utils {
 	public static boolean isEqual(Object o1, Object o2) {

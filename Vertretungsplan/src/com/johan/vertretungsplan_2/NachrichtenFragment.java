@@ -28,14 +28,16 @@ import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.TextView;
 
-import com.johan.vertretungsplan.classes.Vertretungsplan;
-import com.johan.vertretungsplan.classes.VertretungsplanTag;
+import com.johan.vertretungsplan.objects.AdditionalInfo;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
 import com.johan.vertretungsplan_2.R;
 
@@ -100,13 +102,10 @@ public class NachrichtenFragment extends VertretungsplanFragment {
 		    	if(tag.getNachrichten().size() == 0)
 		    		listadapter.addItem(getResources().getString(R.string.no_info));
 	    	}
-	    			
-//			if(settings.getBoolean("winter", true)) {
-//				String text = v.getWinterAusfall().getMessage();
-//				String stand = v.getWinterAusfall().getStand();
-//		    	listadapter.addSeparatorItem("Winter-Unterrichtsausfall (Stand: " + stand + ")");
-//		        listadapter.addItem(text);
-//			}
+	    	for(AdditionalInfo info:v.getAdditionalInfos())	 {	
+		    	listadapter.addSeparatorItem(info.getTitle());
+		        listadapter.addItem(info.getText());
+	    	}
 			progress(false);
     	}
 }

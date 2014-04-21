@@ -32,6 +32,7 @@ import org.holoeverywhere.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.PreferenceManager;
@@ -45,9 +46,9 @@ import org.holoeverywhere.widget.TextView;
 import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import org.json.JSONException;
 
-import com.johan.vertretungsplan.classes.Vertretung;
-import com.johan.vertretungsplan.classes.Vertretungsplan;
-import com.johan.vertretungsplan.classes.VertretungsplanTag;
+import com.johan.vertretungsplan.objects.Vertretung;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Animations;
 import com.johan.vertretungsplan_2.R;

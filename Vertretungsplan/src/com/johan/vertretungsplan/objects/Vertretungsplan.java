@@ -14,38 +14,51 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
-package com.johan.vertretungsplan.classes;
+package com.johan.vertretungsplan.objects;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
-public class KlassenVertretungsplan implements Serializable {
+
+public class Vertretungsplan implements Serializable {
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 5487489708857673784L;
-	private ArrayList<Vertretung> vertretung;
-	private String klasse;
+	private static final long serialVersionUID = -1753326921591151152L;
+	private List<VertretungsplanTag> tage;
+	private List<AdditionalInfo> additionalInfos;
 	
-	public KlassenVertretungsplan(String klasse) {
-		this.vertretung = new ArrayList<Vertretung>();
-		this.klasse = klasse;
+	public Vertretungsplan() {
+		additionalInfos = new ArrayList<AdditionalInfo>();
 	}
-	
-	public ArrayList<Vertretung> getVertretung() {
-		return vertretung;
+
+	/**
+	 * @return the tage
+	 */
+	public List<VertretungsplanTag> getTage() {
+		return tage;
 	}
-	public void setVertretung(ArrayList<Vertretung> vertretung) {
-		this.vertretung = vertretung;
+
+	/**
+	 * @param tage the tage to set
+	 */
+	public void setTage(List<VertretungsplanTag> tage) {
+		this.tage = tage;
 	}
-	
-	public String getKlasse() {
-		return klasse;
+
+	/**
+	 * @return the additionalInfos
+	 */
+	public List<AdditionalInfo> getAdditionalInfos() {
+		return additionalInfos;
 	}
-	public void setKlasse(String klasse) {
-		this.klasse = klasse;
-	}	
-	public void add(Vertretung vertretung) {
-		this.vertretung.add(vertretung);
+
+	/**
+	 * @param additionalInfos the additionalInfos to set
+	 */
+	public void setAdditionalInfos(List<AdditionalInfo> additionalInfos) {
+		this.additionalInfos = additionalInfos;
 	}
+
 }

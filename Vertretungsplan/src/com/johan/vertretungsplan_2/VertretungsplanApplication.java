@@ -1,12 +1,17 @@
 package com.johan.vertretungsplan_2;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.holoeverywhere.app.Application;
 
 import android.content.Intent;
 
+import com.johan.vertretungsplan.additionalinfo.BaseAdditionalInfoParser;
+import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Utils;
 
@@ -19,6 +24,7 @@ resDialogCommentPrompt = R.string.crash_dialog_comment_prompt)
 public class VertretungsplanApplication extends Application {
 
 	private BaseParser parser;
+	private List<BaseAdditionalInfoParser> additionalInfoParsers;
 
 	@Override
 	public void onCreate() {
@@ -33,9 +39,10 @@ public class VertretungsplanApplication extends Application {
 			return parser;
 		else {
 			try {
-				parser = BaseParser.getInstance(Utils.getSelectedSchool(this));
+				notifySchoolChanged();
 				if(parser == null) {
 					Intent intent = new Intent(this, SelectSchoolActivity.class);
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					startActivity(intent);
 					return BaseParser.getInstance(Utils.getSchools(this).get(0));
 				} else {
@@ -46,12 +53,33 @@ public class VertretungsplanApplication extends Application {
 				return null;
 			}
 		}
-
+	}
+	
+	public List<BaseAdditionalInfoParser> getAdditionalInfoParsers() {
+		if(additionalInfoParsers != null) {
+			return additionalInfoParsers;
+		} else {
+			notifySchoolChanged();
+			if(additionalInfoParsers == null) {
+				Intent intent = new Intent(this, SelectSchoolActivity.class);
+				startActivity(intent);
+				return new ArrayList<BaseAdditionalInfoParser>();
+			} else {
+				return additionalInfoParsers;
+			}
+		}
 	}
 
 	public void notifySchoolChanged() {
 		try {
-			parser = BaseParser.getInstance(Utils.getSelectedSchool(this));
+			Schule schule = Utils.getSelectedSchool(this);
+			if(schule != null) {
+				parser = BaseParser.getInstance(schule);
+				additionalInfoParsers = new ArrayList<BaseAdditionalInfoParser>();
+				for (String infoType:schule.getAdditionalInfos()) {
+					additionalInfoParsers.add(BaseAdditionalInfoParser.getInstance(infoType));
+				}
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -10,7 +10,8 @@ import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
-import com.johan.vertretungsplan.classes.Schule;
+
+import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 

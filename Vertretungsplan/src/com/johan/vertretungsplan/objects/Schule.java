@@ -1,5 +1,9 @@
-package com.johan.vertretungsplan.classes;
+package com.johan.vertretungsplan.objects;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -8,6 +12,7 @@ public class Schule {
 	private String name;
 	private String city;
 	private String api;
+	private List<String> additionalInfos;
 	private JSONObject data;
 	
 	
@@ -17,6 +22,16 @@ public class Schule {
 		schule.setCity(json.getString("city"));
 		schule.setName(json.getString("name"));
 		schule.setApi(json.getString("api"));
+		
+		JSONArray infosJson = json.optJSONArray("additional_info");
+		List<String> additionalInfos = new ArrayList<String>();
+		if(infosJson != null) {
+			for (int i = 0; i < infosJson.length(); i++) {
+				additionalInfos.add(infosJson.getString(i));
+			}
+		}
+		schule.setAdditionalInfos(additionalInfos);
+		
 		schule.setData(json.getJSONObject("data"));
 		return schule;
 	}
@@ -67,6 +82,18 @@ public class Schule {
 	 */
 	public void setApi(String api) {
 		this.api = api;
+	}
+	/**
+	 * @return the additionalInfos
+	 */
+	public List<String> getAdditionalInfos() {
+		return additionalInfos;
+	}
+	/**
+	 * @param additionalInfos the additionalInfos to set
+	 */
+	public void setAdditionalInfos(List<String> additionalInfos) {
+		this.additionalInfos = additionalInfos;
 	}
 	/**
 	 * @return the data

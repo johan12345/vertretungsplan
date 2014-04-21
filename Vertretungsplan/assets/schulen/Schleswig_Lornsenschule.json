@@ -25,5 +25,8 @@
 				"Ea", "Eb", "Ec", "Ed", "Ee", "Ef", "Eg", "Eh", "Ei", "Ej",
 				"12a", "12b", "12c", "12d", "12e",
 				"13a", "13b", "13c", "13d", "13e" ]
-		}
+		},
+		"additional_info": [
+			"winter-sh"
+		]
 }

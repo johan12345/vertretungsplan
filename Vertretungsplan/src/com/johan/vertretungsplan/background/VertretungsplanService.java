@@ -22,9 +22,12 @@ import java.util.List;
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+
 import com.google.gson.Gson;
-import com.johan.vertretungsplan.classes.Vertretungsplan;
-import com.johan.vertretungsplan.classes.VertretungsplanTag;
+import com.johan.vertretungsplan.additionalinfo.BaseAdditionalInfoParser;
+import com.johan.vertretungsplan.objects.AdditionalInfo;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan_2.R;
 import com.johan.vertretungsplan_2.StartActivity;
@@ -89,9 +92,15 @@ public class VertretungsplanService extends IntentService {
 			
 			try {
 				BaseParser parser = ((VertretungsplanApplication) getApplication()).getParser();
-			
+				List<BaseAdditionalInfoParser> additionalInfoParsers = ((VertretungsplanApplication) getApplication()).getAdditionalInfoParsers();
+				
 				//Vertretungsplan-Objekt erzeugen
 				Vertretungsplan v = parser.getVertretungsplan();
+				
+				//Zusätzliche Informationen hinzufügen
+				for(BaseAdditionalInfoParser additionalInfoParser:additionalInfoParsers) {
+					v.getAdditionalInfos().add(additionalInfoParser.getAdditionalInfo());
+				}
 	
 				// Sucessful finished
 				int result = Activity.RESULT_OK;	
@@ -123,7 +132,24 @@ public class VertretungsplanService extends IntentService {
 
 	private boolean somethingChanged(Vertretungsplan vAlt, Vertretungsplan v,
 			String klasse) {
-		//Stand hat sich verändert
+		
+		for(AdditionalInfo info:v.getAdditionalInfos()) {
+			if(info.hasInformation()) {
+				//passende alte Info finden
+				AdditionalInfo oldInfo = null;
+				for(AdditionalInfo infoAlt:vAlt.getAdditionalInfos()) {
+					if(infoAlt.getText().equals(info.getText())) {
+						oldInfo = infoAlt;
+						break;
+					}
+				}
+				if(oldInfo == null) {
+					//es wurde keine passende alte Info gefunden
+					return true;
+				}
+			}
+		}
+		
 		for(VertretungsplanTag tag:v.getTage()) {
 			//passenden alten Tag finden
 			VertretungsplanTag oldTag = null;

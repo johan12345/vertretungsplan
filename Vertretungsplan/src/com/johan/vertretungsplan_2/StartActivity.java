@@ -42,16 +42,18 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.holoeverywhere.preference.PreferenceManager;
+
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.google.gson.Gson;
 import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
 import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan.background.VertretungsplanService;
-import com.johan.vertretungsplan.classes.Vertretungsplan;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
 import com.johan.vertretungsplan_2.R;
+
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
