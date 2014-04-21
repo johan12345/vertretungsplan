@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App f�r den Vertretungsplan der Lornsenschule Schleswig
+/*  Vertretungsplan - Android-App für Vertretungspläne von Schulen
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -20,7 +20,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Ein Vertretungsplan einer Schule für mehrere Tage
+ */
 public class Vertretungsplan implements Serializable {
 	/**
 	 * 

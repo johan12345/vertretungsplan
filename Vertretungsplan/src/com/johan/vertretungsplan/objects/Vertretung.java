@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App f�r den Vertretungsplan der Lornsenschule Schleswig
+/*  Vertretungsplan - Android-App für Vertretungspläne von Schulen
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -33,6 +33,11 @@ public class Vertretung implements Serializable {
 	private String previousRoom;
 	private String desc;
 	
+	/**
+	 * Erzeugt eine Farbe für die Vertretung
+	 * @return Die ermittelte Farbe als Hexadezimaldarstellung,
+	 * bei unbekannten Vertretungsarten lila.
+	 */
 	public String getColor() {
 		String farbe;
 		if (type.equals("Entfall")) {
@@ -57,6 +62,10 @@ public class Vertretung implements Serializable {
 		return farbe;
 	}
 	
+	/**
+	 * Erzeugt einen Text, der die Vertretung beschreibt
+	 * (ohne die Art und die Stunde).
+	 */
 	public String toString() {
 		String string;
 		if(type.equals("anderer Raum")) {

@@ -1,3 +1,19 @@
+/*  Vertretungsplan - Android-App für Vertretungspläne von Schulen
+    Copyright (C) 2014  Johan v. Forstner
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see [http://www.gnu.org/licenses/]. */
+
 package com.johan.vertretungsplan.parser;
 
 import java.io.IOException;
@@ -16,12 +32,24 @@ import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 
+/**
+ * Enthält gemeinsam genutzte Funktionen für die Parser für
+ * Untis-Vertretungspläne
+ *
+ */
 public abstract class UntisCommonParser extends BaseParser {
 	
 	public UntisCommonParser(Schule schule) {
 		super(schule);
 	}
 
+	/**
+	 * Parst eine Vertretungstabelle eines Untis-Vertretungsplans
+	 * @param table das <code>table</code>-Element des HTML-Dokuments, das geparst werden soll
+	 * @param data Daten von der Schule (aus <code>Schule.getData()</code>)
+	 * @param tag der {@link VertretungsplanTag} in dem die Vertretungen gespeichert werden sollen
+	 * @throws JSONException
+	 */
 	protected void parseVertretungsplanTable(Element table, JSONObject data, VertretungsplanTag tag) throws JSONException {
 		if(data.optBoolean("class_in_extra_line")) { 		
 	 		for (Element element:table.select("td.inline_header")) {
@@ -133,6 +161,12 @@ public abstract class UntisCommonParser extends BaseParser {
  		}
 	}
 	
+	/**
+	 * Parst eine "Nachrichten zum Tag"-Tabelle aus Untis-Vertretungsplänen
+	 * @param table das <code>table</code>-Element des HTML-Dokuments, das geparst werden soll
+	 * @param data Daten von der Schule (aus <code>Schule.getData()</code>)
+	 * @param tag der {@link VertretungsplanTag} in dem die Nachrichten gespeichert werden sollen
+	 */
 	protected void parseNachrichten(Element table, JSONObject data, VertretungsplanTag tag) {
 		Elements zeilen = table.select("tr:not(:contains(Nachrichten zum Tag))");
  		for ( Element i:zeilen ) {	

@@ -1,4 +1,4 @@
-/*  LS Vertretungsplan - Android-App f�r den Vertretungsplan der Lornsenschule Schleswig
+/*  Vertretungsplan - Android-App für Vertretungspläne von Schulen
     Copyright (C) 2014  Johan v. Forstner
 
     This program is free software: you can redistribute it and/or modify
@@ -35,6 +35,11 @@ import com.johan.vertretungsplan_2.StartActivity;
 
 import android.util.Log;
 
+/**
+ * Parser für Untis-Vertretungspläne mit dem Monitor-Stundenplan-Layout
+ * Beispiel: Lornsenschule Schleswig http://vertretung.lornsenschule.de/schueler/subst_001.htm
+ * Funktioniert mit vielen anderen Schulen mit unterschiedlichen Layouts.
+ */
 public class UntisMonitorParser extends UntisCommonParser {
 	
 	public UntisMonitorParser(Schule schule) {
