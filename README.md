@@ -1,11 +1,7 @@
 vertretungsplan
 ==================
 
-Änderungen an der App ls-vertretungsplan zur Anpassung auf mehrere Schulen.
-
-*Original-Beschreibung:*
-
-Dies ist eine Android-App für den Vertretungsplan der Lornsenschule Schleswig. Weitere Informationen auf der [Internetseite](http://johan12345.github.io/ls-vertretungsplan/)
+Dies ist eine Android-App für Vertretungspläne von Schulen. Sie basiert auf meiner [App für die Lornsenschule Schleswig](https://github.com/johan12345/ls-vertretungsplan), ist aber leicht auf andere Schulen erweiterbar. Weitere Informationen dazu im [Wiki](https://github.com/johan12345/vertretungsplan/wiki).
 
 Anleitung zum Importieren in Eclipse
 ------------------------------------
