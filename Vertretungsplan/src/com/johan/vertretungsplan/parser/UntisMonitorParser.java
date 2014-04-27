@@ -98,16 +98,6 @@ public class UntisMonitorParser extends UntisCommonParser {
 		loadUrl(url, encoding, following, docs, url);
 	}
 	
-//	protected WinterAusfall parseWinter(Document doc) {
-//		Element stand = doc.select("pubDate").first();
-//    	String text = doc.select("item description").first().text(); 
-//    	if (text.contains("Aktuell gibt es keine Hinweise auf witterungsbedingten Unterrichtsausfall.")) {
-//    		text = "keine Informationen";
-//    	}
-//		return new WinterAusfall(stand.text(), text);
-//		
-//	}
-	
 	protected VertretungsplanTag parseVertretungsplanTag(Document doc, JSONObject data) throws JSONException {
  		VertretungsplanTag tag = new VertretungsplanTag();
 		tag.setDatum(doc.select(".mon_title").first().text().replaceAll(" \\(Seite \\d / \\d\\)", ""));	
