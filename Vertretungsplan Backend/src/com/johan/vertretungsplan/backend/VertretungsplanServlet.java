@@ -204,10 +204,11 @@ public class VertretungsplanServlet extends HttpServlet {
 		
 		int i = 0;
 		for(Element e:table.select("tr")) {
-			if((e.classNames().contains("odd") || e.classNames().contains("even")) && i > 1) {
-				e.remove();
+			if(e.classNames().contains("odd") || e.classNames().contains("even")) {
+				if(i > 1)
+					e.remove();
+				i++;
 			}
-			i++;
 		}
 		
 		return table.parent().html();
