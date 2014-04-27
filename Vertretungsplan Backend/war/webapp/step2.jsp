@@ -16,11 +16,13 @@
 <body>
 <% JSONObject info = VertretungsplanServlet.createMonitorPlan(request.getParameter("url")); %>
 <p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
-<form id="form1" name="form1" method="get" action="step3.jsp">
+<form id="form1" name="form1" method="post" action="step3.jsp">
+  <input type="hidden" name="json" id="json" value='<%= info.toString() %>' />
+  
   <label for="name">Schulname</label>
   <input type="text" name="name" id="name" value="<%= info.getString("name") %>"><br/>
   <label for="name">Ort</label>
-  <input type="text" name="name" id="name" value="<%= info.getString("city") %>"><br/>
+  <input type="text" name="city" id="city" value="<%= info.getString("city") %>"><br/>
   <input type="submit" name="send" id="send" value="Weiter" />
 </form>
 </body>

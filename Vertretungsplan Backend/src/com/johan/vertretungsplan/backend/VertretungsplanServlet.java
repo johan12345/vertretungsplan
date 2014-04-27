@@ -64,14 +64,16 @@ public class VertretungsplanServlet extends HttpServlet {
 			if(doc.getElementsByTag("frameset").size() > 0) {
 				System.out.println("Schule benutzt frames");
 			} else {
-				return createMonitorJSON(doc);
+				return createMonitorJSON(doc, url);
 			}
 		}
 		return null;
 	}
 
-	private static JSONObject createMonitorJSON(Document doc) throws JSONException, IOException {
+	private static JSONObject createMonitorJSON(Document doc, String url) throws JSONException, IOException {
 		JSONObject json = new JSONObject();
+		
+		json.put("api", "untis-monitor");
 		
 		//Information about the school
 		Element info = doc.select(".mon_head td p").first();
@@ -103,7 +105,7 @@ public class VertretungsplanServlet extends HttpServlet {
 		JSONObject geocodeResult = geocode(plz);
 		JSONArray results = geocodeResult.getJSONArray("resourceSets").getJSONObject(0).getJSONArray("resources");
 		if(results.length() > 0
-				&& results.getJSONObject(0).getJSONObject("address").getString("locality").equals(json.get("name"))) {				
+				&& results.getJSONObject(0).getJSONObject("address").getString("locality").equals(json.get("city"))) {				
 			JSONObject result = results.getJSONObject(0);						
 			JSONArray geo = result.getJSONObject("point").getJSONArray("coordinates");
 			json.put("geo", geo);
@@ -173,7 +175,7 @@ public class VertretungsplanServlet extends HttpServlet {
 				columns.put("ignore");
 				break;
 			default:
-				throw new IOException("unbekannte Überschrift: " + head.text());
+				columns.put("unknown");
 			}
 			i++;
 		}
@@ -184,10 +186,31 @@ public class VertretungsplanServlet extends HttpServlet {
 		data.put("columns", columns);
 		
 		//URLs
+		JSONArray urls = new JSONArray();
+		JSONObject urlobj = new JSONObject();
+		urlobj.put("url", url);
+		urls.put(urlobj);
+		data.put("urls", urls);
 		
 		json.put("data", data);
 		
 		return json;
+	}
+	
+	public static String getTableHeaders(JSONObject json) throws JSONException, IOException {
+		String url = json.getJSONObject("data").getJSONArray("urls").getJSONObject(0).getString("url");
+		Document doc = Jsoup.connect(url).get();
+		Element table = doc.select(".mon_list").first();
+		
+		int i = 0;
+		for(Element e:table.select("tr")) {
+			if((e.classNames().contains("odd") || e.classNames().contains("even")) && i > 1) {
+				e.remove();
+			}
+			i++;
+		}
+		
+		return table.parent().html();
 	}
 	
 	private static JSONObject geocode(String plz) {

@@ -13,9 +13,9 @@
 <title>Vertretungsplan</title>
 </head>
 <body>
-<form id="form1" name="form1" method="get" action="step2.jsp">
-  <label for="url">Adresse des Vertretungsplans: </label>
-  <input type="text" name="url" id="url" />
+<form id="form1" name="form1" method="post" action="step2.jsp">
+  <label for="url">Internetadresse des Vertretungsplans: </label>
+  <input type="text" name="url" id="url" width="500" />
   <p>
     <label>
       <input type="radio" name="type" value="untis-monitor" id="type_0" />
