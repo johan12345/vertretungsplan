@@ -58,10 +58,9 @@ tr.even { background: #fdecd9; }
     <p><%= info.toString(2) %></p>
 <p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
 
-<%= VertretungsplanServlet.getTableHeaders(info) %>
 
 <form id="form1" name="form1" method="get" action="step3.jsp">
-
+	<%= VertretungsplanServlet.getTableHeaders(info) %>
   <input type="submit" name="send" id="send" value="Weiter" />
 </form>
 </body>

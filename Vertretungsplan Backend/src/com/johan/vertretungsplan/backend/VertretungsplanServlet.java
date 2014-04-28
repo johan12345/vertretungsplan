@@ -8,6 +8,8 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -211,7 +213,62 @@ public class VertretungsplanServlet extends HttpServlet {
 			}
 		}
 		
-		return table.parent().html();
+		Element tbody = table.select("tbody").first();
+		Element form = tbody.prependElement("tr");
+		JSONArray columns = json.getJSONObject("data").getJSONArray("columns");
+		for(i = 0; i < columns.length(); i++) {
+			String name = columns.getString(i);
+			Element column = form.appendElement("th");
+			column.html(generateSelect(i, name));
+		}
+		
+		return table.outerHtml() ;
+	}
+	
+	private static String generateSelect(int nr, String selectedItem) {
+		StringBuilder builder = new StringBuilder();
+		builder.append("<select name=\"column_" + String.valueOf(nr) + "\" id=\"column_" + String.valueOf(nr) + "\">");
+		
+		List<NameValuePair> options = new ArrayList<NameValuePair>();
+		options.add(new NameValuePair("Klasse", "class"));
+		options.add(new NameValuePair("Stunde", "lesson"));
+		options.add(new NameValuePair("Fach", "subject"));
+		options.add(new NameValuePair("geplanter Raum", "previousRoom"));
+		options.add(new NameValuePair("neuer Raum", "room"));
+		options.add(new NameValuePair("Art", "type"));
+		options.add(new NameValuePair("Vertretungstext", "desc"));
+		options.add(new NameValuePair("Vertretungslehrer", "teacher"));
+		options.add(new NameValuePair("abwesender Lehrer", "previousTeacher"));
+		options.add(new NameValuePair("ignorieren", "ignore"));
+		
+		for(NameValuePair option:options) {
+			builder.append("<option value=\"" + option.getValue() + "\"" + 
+					(option.getValue().equals(selectedItem) ? " selected " : "") + ">" + option.getName() + "</option>");
+		}
+		builder.append("</select>");
+		return builder.toString();
+	}
+	
+	private static class NameValuePair {
+		private String name;
+		private String value;
+		public NameValuePair(String name, String value) {
+			this.name = name;
+			this.value = value;
+		}
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getValue() {
+			return value;
+		}
+		public void setValue(String value) {
+			this.value = value;
+		}
+		
 	}
 	
 	private static JSONObject geocode(String plz) {
