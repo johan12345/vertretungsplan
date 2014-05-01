@@ -86,7 +86,6 @@ table.mon_list .header-selectors th:after {
 	info.put("name", request.getParameter("name"));
 	info.put("city", request.getParameter("city")); %>
     
-    <p><%= info.toString(2) %></p>
 <p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
 
 

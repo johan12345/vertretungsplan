@@ -53,7 +53,6 @@ public abstract class UntisCommonParser extends BaseParser {
 	protected void parseVertretungsplanTable(Element table, JSONObject data, VertretungsplanTag tag) throws JSONException {
 		if(data.optBoolean("class_in_extra_line")) { 		
 	 		for (Element element:table.select("td.inline_header")) {
-	 			
 	 			KlassenVertretungsplan kv = new KlassenVertretungsplan(element.text());
 		 			
 		 		Element zeile = null;

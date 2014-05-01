@@ -7,9 +7,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -18,52 +16,25 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.http.*;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import com.google.appengine.api.urlfetch.HTTPMethod;
-import com.google.appengine.api.urlfetch.HTTPRequest;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.UntisMonitorParser;
 
 @SuppressWarnings("serial")
-public class VertretungsplanServlet extends HttpServlet {
+public class VertretungsplanServlet {
 	
 	private static final String GEOCODE_URL = "http://dev.virtualearth.net/REST/v1/Locations";
 	private static final Logger log = Logger.getLogger(VertretungsplanServlet.class.getName());
-	
-	public void doGet(HttpServletRequest req, HttpServletResponse resp)
-			throws IOException {     
-//		JSONObject schule = new JSONObject(req.getParameter("schule"));
-//		int i = 0;
-//		while (schule == null && i < schulen.length()) {
-//			JSONObject current = schulen.getJSONObject(i);
-//			if(current.getString("name").equals(name)
-//					&& current.getString("city").equals(city))
-//				schule = current;
-//			i++;
-//		}
-//		
-//        try {
-//			Vertretungsplan v = getVertretungsplan(schule);
-//			Gson gson = new Gson();
-//			resp.setContentType("text/json; charset=utf-8");
-//			resp.getWriter().print(gson.toJson(v));
-//		} catch (VertretungsplanErrorException e) {
-//			resp.setContentType("text/plain");
-//			resp.getWriter().println(e.getMessage());
-//		}
-	}
-	
-	
+		
 	public static JSONObject createMonitorPlan(String url) throws MalformedURLException, IOException, JSONException {
 		HttpURLConnection conn = (HttpURLConnection) new URL(url).openConnection();
 		conn.connect();
@@ -73,6 +44,22 @@ public class VertretungsplanServlet extends HttpServlet {
 			Document doc = Jsoup.parse(html);
 			if(doc.getElementsByTag("frameset").size() > 0) {
 				System.out.println("Schule benutzt frames");
+				Elements frames = doc.select("frameset frame[src*=subst_001.htm]");
+				List<String> urls = new ArrayList<String>();
+				for(Element frame:frames) {
+					urls.add(url.substring(0, url.lastIndexOf("/") + 1) + frame.attr("src"));
+				}
+				Document doc2 = Jsoup.connect(urls.get(0)).get();
+				JSONObject json = createMonitorJSON(doc2, urls.get(0));
+				JSONArray urlsJson = new JSONArray();
+				for(String url2:urls) {
+					JSONObject urlJson = new JSONObject();
+					urlJson.put("url", url2);
+					urlJson.put("following", false);
+					urlsJson.put(urlJson);
+				}
+				json.getJSONObject("data").put("urls", urlsJson);
+				return json;
 			} else {
 				return createMonitorJSON(doc, url);
 			}
@@ -82,51 +69,55 @@ public class VertretungsplanServlet extends HttpServlet {
 
 	private static JSONObject createMonitorJSON(Document doc, String url) throws JSONException, IOException {
 		JSONObject json = new JSONObject();
+		JSONObject data = new JSONObject();
 		
 		json.put("api", "untis-monitor");
 		
 		//Information about the school
 		Element info = doc.select(".mon_head td p").first();
-		String infoText = info.text();
-		
-		String plz = "";
-		
-		//Möglichkeit 1: Stadt steht hinter der PLZ
-		System.out.println(infoText);
-		Pattern regex = Pattern.compile("(.*)([A-Z]-\\d*) (.*), .* Stand:");
-		Matcher matcher = regex.matcher(infoText);
-		if(matcher.find()) {
-			json.put("name", matcher.group(1).trim());
-			plz = matcher.group(2).trim();
-			json.put("city", matcher.group(3).trim());		
-		} else {
-			//Möglichkeit 2: Stadt steht hinter dem Schulnamen
-			regex = Pattern.compile("(.*) (.*)   ([A-Z]-\\d*), .* Stand:");
-			matcher = regex.matcher(infoText);
+		if(info != null) {
+			String infoText = info.text();
+			
+			String plz = "";
+			
+			//Möglichkeit 1: Stadt steht hinter der PLZ
+			System.out.println(infoText);
+			Pattern regex = Pattern.compile("(.*)([A-Z]-\\d*) (.*), .* Stand:");
+			Matcher matcher = regex.matcher(infoText);
 			if(matcher.find()) {
 				json.put("name", matcher.group(1).trim());
-				json.put("city", matcher.group(2).trim());
-				plz = matcher.group(3).trim();				
-			} else {			
-				//throw new IOException("Fehler beim Regex: Info-Text");
+				plz = matcher.group(2).trim();
+				json.put("city", matcher.group(3).trim());		
+			} else {
+				//Möglichkeit 2: Stadt steht hinter dem Schulnamen
+				regex = Pattern.compile("(.*) (.*)   ([A-Z]-\\d*), .* Stand:");
+				matcher = regex.matcher(infoText);
+				if(matcher.find()) {
+					json.put("name", matcher.group(1).trim());
+					json.put("city", matcher.group(2).trim());
+					plz = matcher.group(3).trim();				
+				} else {			
+					//throw new IOException("Fehler beim Regex: Info-Text");
+				}
 			}
-		}
-		
-		//Position nach PLZ herausfinden
-		JSONObject geocodeResult = geocode(plz);
-		JSONArray results = geocodeResult.getJSONArray("resourceSets").getJSONObject(0).getJSONArray("resources");
-		if(results.length() > 0
-				&& results.getJSONObject(0).getJSONObject("address").getString("locality").equals(json.get("city"))) {				
-			JSONObject result = results.getJSONObject(0);						
-			JSONArray geo = result.getJSONObject("point").getJSONArray("coordinates");
-			json.put("geo", geo);
-		} else {
 			
+			//Position nach PLZ herausfinden
+			JSONObject geocodeResult = geocode(plz);
+			JSONArray results = geocodeResult.getJSONArray("resourceSets").getJSONObject(0).getJSONArray("resources");
+			if(results.length() > 0
+					&& results.getJSONObject(0).getJSONObject("address").getString("locality").equals(json.get("city"))) {				
+				JSONObject result = results.getJSONObject(0);						
+				JSONArray geo = result.getJSONObject("point").getJSONArray("coordinates");
+				json.put("geo", geo);
+			} else {
+				
+			}
+		} else {
+			data.put("stand_links", true);
 		}
 			
 		
 		//Parser-Daten
-		JSONObject data = new JSONObject();
 		//Encoding
 		data.put("encoding", "ISO-8859-1");
 		//Spalten
@@ -134,7 +125,6 @@ public class VertretungsplanServlet extends HttpServlet {
 		Element header = table.select("tr.list:not(.odd,.even)").last();		
 		JSONArray columns = new JSONArray();
 		
-		int i = 0;
 		for(Element head:header.children()) {
 			switch(head.text()) {
 			case "Klasse(n)":
@@ -188,9 +178,8 @@ public class VertretungsplanServlet extends HttpServlet {
 			default:
 				columns.put("unknown");
 			}
-			i++;
 		}
-		if(columns.toString().contains("class"))
+		if(doc.select(".inline_header").size() == 0)
 			data.put("class_in_extra_line", false);
 		else
 			data.put("class_in_extra_line", true);
@@ -294,14 +283,8 @@ public class VertretungsplanServlet extends HttpServlet {
 		public String getName() {
 			return name;
 		}
-		public void setName(String name) {
-			this.name = name;
-		}
 		public String getValue() {
 			return value;
-		}
-		public void setValue(String value) {
-			this.value = value;
 		}
 		
 	}

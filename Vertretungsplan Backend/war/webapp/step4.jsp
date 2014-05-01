@@ -29,17 +29,18 @@
 		i++;
 	}
 	data.put("columns", columns); %>
-    
-    <%= info.toString(2) %>
-<!-- <p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
+
+<p>Die Informationen für deine Schule wurden erstellt. Du kannst sie jetzt abschicken.</p>
+<p>Wenn ich die Daten erhalten habe, werde ich sie testen und schnellstmöglich in die App einbauen. Bitte beachte, dass ich als Student und freiwilliger Programmierer dieser App häufig wenig Zeit dafür habe und es dementsprechend manchmal etwas länger dauern kann, bis deine Schule hinzugefügt wird.</p>
 
 
-<form id="form1" name="form1" method="post" action="step4.jsp">
-	<input type="hidden" name="json" id="json" value='' />
-	
-  <label for="classes">Liste ALLER Klassen (durch Kommas getrennt, bitte fehlende ergänzen!)</label><br/>
-    <textarea name="classes" id="classes" cols="45" rows="10"></textarea><br/>
-  <input type="submit" name="send" id="send" value="Weiter" />
-</form> -->
+<form id="form1" name="form1" method="post" action="sendmail">
+	<input type="hidden" name="json" id="json" value='<%= info.toString()%>' />
+	<label for="email">Dein Name (für Rückfragen): </label>
+	<input type="text" name="name" id="name"><br/>
+    <label for="email">Deine E-Mail-Adresse (für Rückfragen): </label>
+	<input type="text" name="email" id="email"><br/>
+<input type="submit" name="send" id="send" value="Senden" />
+</form>
 </body>
 </html>

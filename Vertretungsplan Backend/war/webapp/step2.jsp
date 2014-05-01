@@ -14,16 +14,20 @@
 <title>Vertretungsplan</title>
 </head>
 <body>
-<% JSONObject info = VertretungsplanServlet.createMonitorPlan(request.getParameter("url")); %>
-<p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
-<form id="form1" name="form1" method="post" action="step3.jsp">
-  <input type="hidden" name="json" id="json" value='<%= info.toString() %>' />
-  
-  <label for="name">Schulname</label>
-  <input type="text" name="name" id="name" value="<%= info.getString("name") %>"><br/>
-  <label for="name">Ort</label>
-  <input type="text" name="city" id="city" value="<%= info.getString("city") %>"><br/>
-  <input type="submit" name="send" id="send" value="Weiter" />
-</form>
+<% if(request.getParameter("type").equals("untis-monitor")) {
+	JSONObject info = VertretungsplanServlet.createMonitorPlan(request.getParameter("url")); %>
+    <p>Bitte prüfe die Informationen unten und ergänze fehlende oder falsche Angaben: </p>
+    <form id="form1" name="form1" method="post" action="step3.jsp">
+      <input type="hidden" name="json" id="json" value='<%= info.toString() %>' />
+      
+      <label for="name">Schulname</label>
+      <input type="text" name="name" id="name" value="<%= info.optString("name", "") %>"><br/>
+      <label for="name">Ort</label>
+      <input type="text" name="city" id="city" value="<%= info.optString("city", "") %>"><br/>
+      <input type="submit" name="send" id="send" value="Weiter" />
+    </form>
+<% } else { %>
+	<p>Das von dir gewählte System kann nicht automatisch mit dem Assistenten eingefügt werden. Schicke mir bitte eine <a href="mailto:johan.forstner@gmail.com">E-Mail</a> mit der Adresse des Vertretungsplans und Angaben über die Schule.</p>
+<% } %>
 </body>
 </html>
