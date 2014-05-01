@@ -18,11 +18,6 @@
           android:title="@string/menu_refresh"
           android:showAsAction="ifRoom" />
     
-    <item android:id="@+id/menu_link"
-          android:icon="@drawable/ic_action_forward"
-          android:title="@string/menu_link"
-          android:showAsAction="ifRoom|withText" />
-    
     <item
         android:id="@+id/menu_mail"
         android:orderInCategory="100"

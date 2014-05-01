@@ -166,11 +166,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 			dialog.show();	
 			break;
 
-		case R.id.menu_link:
-			Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("http://vertretung.lornsenschule.de/schueler/subst_001.htm"));
-			startActivity(browserIntent);
-			break;
-
 		case R.id.menu_settings:
 			Log.d("Vertretungsplan", "settings aufgerufen");
 			Intent settingsIntent = new Intent(this, SettingsActivity.class);
