@@ -9,7 +9,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +29,10 @@ import org.jsoup.nodes.Element;
 
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
+import com.johan.vertretungsplan.parser.UntisMonitorParser;
 
 @SuppressWarnings("serial")
 public class VertretungsplanServlet extends HttpServlet {
@@ -81,9 +89,10 @@ public class VertretungsplanServlet extends HttpServlet {
 		Element info = doc.select(".mon_head td p").first();
 		String infoText = info.text();
 		
-		String plz;
+		String plz = "";
 		
 		//Möglichkeit 1: Stadt steht hinter der PLZ
+		System.out.println(infoText);
 		Pattern regex = Pattern.compile("(.*)([A-Z]-\\d*) (.*), .* Stand:");
 		Matcher matcher = regex.matcher(infoText);
 		if(matcher.find()) {
@@ -99,7 +108,7 @@ public class VertretungsplanServlet extends HttpServlet {
 				json.put("city", matcher.group(2).trim());
 				plz = matcher.group(3).trim();				
 			} else {			
-				throw new IOException("Fehler beim Regex: Info-Text");
+				//throw new IOException("Fehler beim Regex: Info-Text");
 			}
 		}
 		
@@ -191,6 +200,7 @@ public class VertretungsplanServlet extends HttpServlet {
 		JSONArray urls = new JSONArray();
 		JSONObject urlobj = new JSONObject();
 		urlobj.put("url", url);
+		urlobj.put("following", true);
 		urls.put(urlobj);
 		data.put("urls", urls);
 		
@@ -215,6 +225,7 @@ public class VertretungsplanServlet extends HttpServlet {
 		
 		Element tbody = table.select("tbody").first();
 		Element form = tbody.prependElement("tr");
+		form.addClass("header-selectors");
 		JSONArray columns = json.getJSONObject("data").getJSONArray("columns");
 		for(i = 0; i < columns.length(); i++) {
 			String name = columns.getString(i);
@@ -233,7 +244,7 @@ public class VertretungsplanServlet extends HttpServlet {
 		options.add(new NameValuePair("Klasse", "class"));
 		options.add(new NameValuePair("Stunde", "lesson"));
 		options.add(new NameValuePair("Fach", "subject"));
-		options.add(new NameValuePair("geplanter Raum", "previousRoom"));
+		options.add(new NameValuePair("alter Raum", "previousRoom"));
 		options.add(new NameValuePair("neuer Raum", "room"));
 		options.add(new NameValuePair("Art", "type"));
 		options.add(new NameValuePair("Vertretungstext", "desc"));
@@ -247,6 +258,30 @@ public class VertretungsplanServlet extends HttpServlet {
 		}
 		builder.append("</select>");
 		return builder.toString();
+	}
+	
+	public static String classesList(JSONObject json) throws JSONException, IOException {
+		Vertretungsplan v = new UntisMonitorParser(Schule.fromJSON("Test", json)).getVertretungsplan();
+		Set<String> classes = new HashSet<String>();
+		for (VertretungsplanTag tag:v.getTage()) {
+			classes.addAll(tag.getKlassen().keySet());
+		}
+		List<String> classesList = new ArrayList<String>(classes);
+		Collections.sort(classesList);
+		StringBuilder classesSeparated = new StringBuilder();
+		boolean first = true;
+		String previous = null;
+		for (String singleClass:classesList) {
+			if(!first)
+				classesSeparated.append(", ");
+			else
+				first = false;
+			if(previous != null && !previous.startsWith(singleClass.substring(0,1)))
+				classesSeparated.append("\n");
+			classesSeparated.append(singleClass);
+			previous = singleClass;
+		}
+		return classesSeparated.toString();
 	}
 	
 	private static class NameValuePair {

@@ -110,7 +110,8 @@ public class UntisMonitorParser extends UntisCommonParser {
 		}
  		
  		//NACHRICHTEN
- 		parseNachrichten(doc.select("table.info").first(), data, tag);
+		if(doc.select("table.info").size() > 0)
+			parseNachrichten(doc.select("table.info").first(), data, tag);
  		
  		//VERTRETUNGSPLAN
  		parseVertretungsplanTable(doc, data, tag);	 		
