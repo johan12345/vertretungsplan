@@ -90,7 +90,7 @@ public class Vertretung implements Serializable {
 			string = subject + " statt " + previousSubject + " in " + room;
 		}
 		
-		if (!desc.equals("\u00a0")) {
+		if (!desc.equals("")) {
 			string = string + " - " + desc;
 		}
 		return string;
