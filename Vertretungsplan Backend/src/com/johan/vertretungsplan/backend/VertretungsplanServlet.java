@@ -9,7 +9,9 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -25,6 +27,10 @@ import org.jsoup.nodes.Element;
 
 import com.google.appengine.api.urlfetch.HTTPMethod;
 import com.google.appengine.api.urlfetch.HTTPRequest;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
+import com.johan.vertretungsplan.parser.UntisMonitorParser;
 
 @SuppressWarnings("serial")
 public class VertretungsplanServlet extends HttpServlet {
@@ -92,7 +98,7 @@ public class VertretungsplanServlet extends HttpServlet {
 			json.put("city", matcher.group(3).trim());		
 		} else {
 			//Möglichkeit 2: Stadt steht hinter dem Schulnamen
-			regex = Pattern.compile("(.*) (.*)   ([A-Z]-\\d*), .* Stand:");
+			regex = Pattern.compile("(.*) (.*)   ([A-Z]-\\d*), .* Stand:");
 			matcher = regex.matcher(infoText);
 			if(matcher.find()) {
 				json.put("name", matcher.group(1).trim());
@@ -102,7 +108,7 @@ public class VertretungsplanServlet extends HttpServlet {
 				throw new IOException("Fehler beim Regex: Info-Text");
 			}
 		}
-		
+
 		//Position nach PLZ herausfinden
 		JSONObject geocodeResult = geocode(plz);
 		JSONArray results = geocodeResult.getJSONArray("resourceSets").getJSONObject(0).getJSONArray("resources");
@@ -191,6 +197,7 @@ public class VertretungsplanServlet extends HttpServlet {
 		JSONArray urls = new JSONArray();
 		JSONObject urlobj = new JSONObject();
 		urlobj.put("url", url);
+		urlobj.put("following", true);
 		urls.put(urlobj);
 		data.put("urls", urls);
 		
@@ -222,7 +229,29 @@ public class VertretungsplanServlet extends HttpServlet {
 			column.html(generateSelect(i, name));
 		}
 		
-		return table.outerHtml() ;
+		return table.outerHtml();
+	}
+	
+	public static String getClassList(JSONObject json) throws JSONException, IOException {
+		Vertretungsplan v = new UntisMonitorParser(Schule.fromJSON("", json)).getVertretungsplan();
+		Set<String> klassen = new HashSet<String>();
+		for(VertretungsplanTag tag:v.getTage()) {
+			klassen.addAll(tag.getKlassen().keySet());
+		}
+		StringBuilder builder = new StringBuilder();
+		builder.append("<textarea name=\"classes\" id=\"classes\" cols=\"80\" rows=\"10\">");
+		boolean first = true;
+		for(String klasse:klassen) {
+			if(first) {
+				builder.append(klasse);
+				first = false;
+			} else {
+				builder.append(",");
+				builder.append(klasse);
+			}
+		}
+		builder.append("</textarea>");
+		return builder.toString();
 	}
 	
 	private static String generateSelect(int nr, String selectedItem) {

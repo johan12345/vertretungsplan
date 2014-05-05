@@ -61,6 +61,8 @@ tr.even { background: #fdecd9; }
 
 <form id="form1" name="form1" method="get" action="step3.jsp">
 	<%= VertretungsplanServlet.getTableHeaders(info) %>
+  <label for="classes">Liste aller Klassen (entstprechend der Darstellung im Vertretungsplan)</label>
+    <%= VertretungsplanServlet.getClassList(info) %>
   <input type="submit" name="send" id="send" value="Weiter" />
 </form>
 </body>
