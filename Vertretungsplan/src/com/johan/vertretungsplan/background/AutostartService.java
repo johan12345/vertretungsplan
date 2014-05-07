@@ -63,7 +63,14 @@ public class AutostartService extends Service {
 	   	//Alte Alarme abbrechen
 	   	alarm.cancel(pintent);	
 	   	
-	   	if(settings.getBoolean("sync", true) == true) {
+	   	Schule schule = null;
+		try {
+			schule = Utils.getSelectedSchool(this);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	   	
+	   	if(settings.getBoolean("sync", true) == true && schule != null && !schule.usesPush()) {
         	Calendar cal = Calendar.getInstance();
         	
         	int g;
