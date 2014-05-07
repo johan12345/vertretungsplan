@@ -110,9 +110,9 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
-		sendNotificationIntent(
-				context,
-						intent.getStringExtra("message"), true, false);
+		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
+		if(settings.getBoolean("notification", true))
+			sendNotificationIntent(context, intent.getStringExtra("message"), true, false);
 	}
 
 	/**
