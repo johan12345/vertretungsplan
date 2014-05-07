@@ -80,7 +80,7 @@ public class UntisMonitorParser extends UntisCommonParser {
 	}
 	
 	private void loadUrl(String url, String encoding, boolean following, List<Document> docs, String startUrl) throws IOException {
-		String html = httpGet(url, encoding);
+		String html = httpGet(url, encoding).replace("&nbsp;", "");
 		Document doc = Jsoup.parse(html);
 		docs.add(doc);
 		if(following

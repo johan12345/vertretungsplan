@@ -2,12 +2,23 @@
 <classpath>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
 	<classpathentry kind="lib" path="libs/jsoup-1.7.2.jar"/>
-	<classpathentry kind="lib" path="libs/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="libs/acra-4.5.0.jar"/>
 	<classpathentry kind="lib" path="libs/support-v4-19.1.0.jar"/>
+	<classpathentry kind="lib" path="libs/gson-2.1.jar"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.LIBRARIES"/>
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
+	<classpathentry kind="lib" path="D:/Eigene Dateien/adt-bundle-windows-x86_64-20130911/sdk/platforms/android-18/android.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="file:/D:/Eigene Dateien/adt-bundle-windows-x86_64-20130911/sdk/docs/reference"/>
+		</attributes>
+		<accessrules>
+			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
+		</accessrules>
+	</classpathentry>
+	<classpathentry kind="src" path="endpoint-libs/libdeviceinfoendpoint-v1/deviceinfoendpoint/deviceinfoendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libmessageEndpoint-v1/messageEndpoint/messageendpoint-v1-generated-source"/>
+	<classpathentry kind="src" path="endpoint-libs/libvertretungsplanserializedendpoint-v1/vertretungsplanserializedendpoint/vertretungsplanserializedendpoint-v1-generated-source"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

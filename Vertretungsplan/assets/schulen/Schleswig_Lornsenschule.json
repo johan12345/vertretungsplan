@@ -1,22 +1,8 @@
 {
 		"name": "Lornsenschule",
 		"city": "Schleswig",
-		"api": "untis-monitor",
+		"api": "backend-connect",
 		"data": {
-			"encoding": "ISO-8859-1",
-			"urls": [
-				{
-					"url": "http://vertretung.lornsenschule.de/schueler/f1/subst_001.htm",
-					"following": false
-				},
-				{
-					"url": "http://vertretung.lornsenschule.de/schueler/f2/subst_001.htm",
-					"following": false
-				} ],
-			"stand_links": true,
-			"columns": [
-				"lesson", "type", "subject", "previousSubject", "room", "desc" ],
-			"class_in_extra_line": true,
 			"classes": [ "05a", "05b", "05c", "05d", "05e", "05f", "05g",
 				"06a", "06b", "06c", "06d", "06e", "06f", "06g",
 				"07a", "07b", "07c", "07d", "07e", "07f", "07g",
@@ -26,7 +12,5 @@
 				"12a", "12b", "12c", "12d", "12e",
 				"13a", "13b", "13c", "13d", "13e" ]
 		},
-		"additional_info": [
-			"winter-sh"
-		]
+		"uses-push": true
 }

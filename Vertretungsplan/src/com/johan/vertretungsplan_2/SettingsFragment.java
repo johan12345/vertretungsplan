@@ -16,10 +16,17 @@
 
 package com.johan.vertretungsplan_2;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.holoeverywhere.preference.Preference;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
+import org.holoeverywhere.preference.PreferenceCategory;
 import org.holoeverywhere.preference.PreferenceFragment;
+import org.holoeverywhere.preference.PreferenceScreen;
 
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 import android.content.Intent;
@@ -31,7 +38,7 @@ public class SettingsFragment extends PreferenceFragment {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
         
-        Preference changeSchoolPref = findPreference("change_school");
+        Preference changeSchoolPref = findPreference(R.id.change_school);
         changeSchoolPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override
@@ -42,5 +49,31 @@ public class SettingsFragment extends PreferenceFragment {
 			}
         	
         });
+        
+        try {
+			Schule schule = Utils.getSelectedSchool(getActivity());
+			PreferenceCategory syncCategory = (PreferenceCategory) findPreference(R.id.sync_category);
+			Preference syncPref = findPreference(R.id.sync);
+			Preference syncPeriodPref = findPreference(R.id.syncPeriod);
+			Preference notificationPref = findPreference(R.id.notification);
+			Preference ringtonePref = findPreference(R.id.ringtone);
+			
+			if(schule.usesPush()) {
+				syncCategory.removePreference(syncPref);
+				syncCategory.removePreference(syncPeriodPref);
+				notificationPref.setDependency(null);
+				ringtonePref.setDependency(null);
+			}
+			
+			PreferenceScreen screen = getPreferenceScreen();
+			List<Schule> schulen = Utils.getSchools(getActivity());
+			if(schulen.size() <= 1) {
+				screen.removePreference(changeSchoolPref);
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
     }
 }

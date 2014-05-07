@@ -18,6 +18,8 @@ package com.johan.vertretungsplan.objects;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
 /**
  * Eine zusätzliche Information zum Vertretungsplan,
  * z.B. witterungsbedingter Schulausfall im Winter.

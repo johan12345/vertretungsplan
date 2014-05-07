@@ -53,14 +53,13 @@ public class SelectSchoolActivity extends Activity {
 		
 		lstSchools = (ListView) findViewById(R.id.listSchools);
 		try {
-			schools = Utils.getSchools(this);
+			schools = Utils.getSchools(this);			
 			Collections.sort(schools, new AlphabeticalSchoolComparator());
 			lstSchools.setAdapter(new SchoolsAdapter(this, schools));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		lstSchools.setOnItemClickListener(new OnItemClickListener() {
+		OnItemClickListener listener = new OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
@@ -74,7 +73,13 @@ public class SelectSchoolActivity extends Activity {
 				startActivity(intent);
 			}
 			
-		});
+		};
+		lstSchools.setOnItemClickListener(listener);
+		
+		
+		if (schools.size() == 1) {
+			listener.onItemClick(lstSchools, null, 0, 0);
+		}
 	}
 	
 	private class SchoolsAdapter extends ArrayAdapter<Schule> {

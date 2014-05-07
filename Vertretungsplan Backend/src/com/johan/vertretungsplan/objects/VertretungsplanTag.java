@@ -22,6 +22,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import javax.persistence.Embeddable;
+
 /**
  * Ein Tag eines Vertretungsplans. Er enthält eine Liste
  * der Klassen mit den entsprechenden Vertretungen und

@@ -55,24 +55,26 @@ public class Utils {
 		String json = null;
 
 		for (int i = 0; i < num; i++) {
-			builder = new StringBuilder();
-			fis = assets.open(SCHULEN_DIR + "/" + files[i]);
-
-			reader = new BufferedReader(new InputStreamReader(fis, "utf-8"));
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-			}
-
-			fis.close();
-			json = builder.toString();
-			try {
-				Schule schule = Schule.fromJSON(files[i].replace(".json", ""),
-						new JSONObject(json));
-				schools.add(schule);
-			} catch (JSONException e) {
-				Log.w("JSON files", "Failed parsing "
-						+ files[i]);
-				e.printStackTrace();
+			if(files[i].endsWith(".json")) {
+				builder = new StringBuilder();
+				fis = assets.open(SCHULEN_DIR + "/" + files[i]);
+	
+				reader = new BufferedReader(new InputStreamReader(fis, "utf-8"));
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+	
+				fis.close();
+				json = builder.toString();
+				try {
+					Schule schule = Schule.fromJSON(files[i].replace(".json", ""),
+							new JSONObject(json));
+					schools.add(schule);
+				} catch (JSONException e) {
+					Log.w("JSON files", "Failed parsing "
+							+ files[i]);
+					e.printStackTrace();
+				}
 			}
 		}
 

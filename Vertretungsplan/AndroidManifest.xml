@@ -1,77 +1,60 @@
-<?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.johan.vertretungsplan_2"
-    android:versionCode="19"
-    android:versionName="1.0.0"
-    android:installLocation="internalOnly">
+<?xml version="1.0" encoding="utf-8" standalone="no"?><manifest xmlns:android="http://schemas.android.com/apk/res/android" android:installLocation="internalOnly" android:versionCode="19" android:versionName="1.0.0" package="com.johan.vertretungsplan_2">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
 
-    <uses-sdk
-        android:minSdkVersion="8"
-        android:targetSdkVersion="19" />
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
 
-    <application
-        android:name="VertretungsplanApplication"
-        android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
-        android:theme="@style/Theme.Ls"
-        android:logo="@drawable/ic_action_icon" >
-        <activity
-            android:name="com.johan.vertretungsplan_2.StartActivity"
-            android:label="@string/app_name" >
+    <permission android:name="com.johan.vertretungsplan_2.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
+
+   <uses-permission android:name="com.johan.vertretungsplan_2.permission.C2D_MESSAGE"/>
+   <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE"/>
+   <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+   <uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+   <application android:allowBackup="true" android:icon="@drawable/ic_launcher" android:label="@string/app_name" android:logo="@drawable/ic_action_icon" android:name="VertretungsplanApplication" android:theme="@style/Theme.Ls">
+        <activity android:label="@string/app_name" android:name="com.johan.vertretungsplan_2.StartActivity">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         
-        <activity
-            android:name="com.johan.vertretungsplan_2.SelectSchoolActivity"
-            android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name="com.johan.vertretungsplan_2.SelectSchoolActivity">
         </activity>
 
-        <receiver android:name="com.johan.vertretungsplan.background.OnBootReceiver" >
+        <receiver android:name="com.johan.vertretungsplan.background.OnBootReceiver">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
 
-        <activity
-            android:name="com.johan.vertretungsplan_2.SettingsActivity"
-            android:label="@string/title_activity_settings"
-            android:parentActivityName="com.johan.vertretungsplan_2.StartActivity"
-            android:logo="@drawable/ic_action_icon" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.johan.vertretungsplan.StartActivity" />
+        <activity android:label="@string/title_activity_settings" android:logo="@drawable/ic_action_icon" android:name="com.johan.vertretungsplan_2.SettingsActivity" android:parentActivityName="com.johan.vertretungsplan_2.StartActivity">
+            <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.johan.vertretungsplan.StartActivity"/>
         </activity>
         
-        <activity android:name="org.acra.CrashReportDialog"
-	        android:theme="@style/Holo.Theme.Dialog.Light"
-	        android:launchMode="singleInstance"
-	        android:excludeFromRecents="true"
-	        android:finishOnTaskLaunch="true"
-	        android:logo="@drawable/ic_action_icon" />
+        <activity android:excludeFromRecents="true" android:finishOnTaskLaunch="true" android:launchMode="singleInstance" android:logo="@drawable/ic_action_icon" android:name="org.acra.CrashReportDialog" android:theme="@style/Holo.Theme.Dialog.Light"/>
 
-        <service
-            android:name="com.johan.vertretungsplan.background.VertretungsplanService"
-            android:enabled="true"
-            android:exported="true" >
+        <service android:enabled="true" android:exported="true" android:name="com.johan.vertretungsplan.background.VertretungsplanService">
         </service>
         
-        <service
-            android:name="com.johan.vertretungsplan.background.AutostartService"
-            android:enabled="true"
-            android:exported="true" >
+        <service android:enabled="true" android:exported="true" android:name="com.johan.vertretungsplan.background.AutostartService">
         </service>
-    </application>
+        <service android:name=".GCMIntentService"/>
+        <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.RECEIVE"/>
+                <category android:name="com.johan.vertretungsplan_2"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.google.android.c2dm.intent.REGISTRATION"/>
+                <category android:name="com.johan.vertretungsplan_2"/>
+            </intent-filter>
+        </receiver>
+</application>
 
 </manifest>

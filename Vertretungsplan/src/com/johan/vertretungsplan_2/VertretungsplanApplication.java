@@ -56,10 +56,11 @@ public class VertretungsplanApplication extends Application {
 			try {
 				notifySchoolChanged();
 				if(parser == null) {
-					Intent intent = new Intent(this, SelectSchoolActivity.class);
-					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-					startActivity(intent);
-					return BaseParser.getInstance(Utils.getSchools(this).get(0));
+					List<Schule> schools = Utils.getSchools(this);
+					if(schools.size() > 1)
+						startSelectSchoolActivity();
+					parser = BaseParser.getInstance(schools.get(0));
+					return parser;
 				} else {
 					return parser;
 				}
@@ -74,13 +75,23 @@ public class VertretungsplanApplication extends Application {
 		if(additionalInfoParsers != null) {
 			return additionalInfoParsers;
 		} else {
-			notifySchoolChanged();
-			if(additionalInfoParsers == null) {
-				Intent intent = new Intent(this, SelectSchoolActivity.class);
-				startActivity(intent);
-				return new ArrayList<BaseAdditionalInfoParser>();
-			} else {
-				return additionalInfoParsers;
+			try {
+				notifySchoolChanged();
+				if(additionalInfoParsers == null) {
+					List<Schule> schools = Utils.getSchools(this);
+					if(schools.size() > 1)
+						startSelectSchoolActivity();
+					additionalInfoParsers = new ArrayList<BaseAdditionalInfoParser>();
+					for (String infoType:schools.get(0).getAdditionalInfos()) {
+						additionalInfoParsers.add(BaseAdditionalInfoParser.getInstance(infoType));
+					}
+					return additionalInfoParsers;
+				} else {
+					return additionalInfoParsers;
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+				return null;
 			}
 		}
 	}
@@ -98,5 +109,11 @@ public class VertretungsplanApplication extends Application {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void startSelectSchoolActivity() {
+		Intent intent = new Intent(this, SelectSchoolActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(intent);
 	}
 }

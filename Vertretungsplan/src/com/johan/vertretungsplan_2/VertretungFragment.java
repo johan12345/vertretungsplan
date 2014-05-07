@@ -58,6 +58,7 @@ public class VertretungFragment extends VertretungsplanFragment {
 	public interface Callback {
 		public void onFragmentLoaded(Fragment fragment);
 		public Vertretungsplan getVertretungsplan();
+		public void onClassSelected();
 	}
 	
 	private ListView list;
@@ -120,6 +121,8 @@ public class VertretungFragment extends VertretungsplanFragment {
 				if(mCallback.getVertretungsplan() != null) {
 					aktualisieren(mCallback.getVertretungsplan());
 				}
+				
+				mCallback.onClassSelected();
 			}
 
 			@Override

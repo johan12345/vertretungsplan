@@ -18,6 +18,8 @@ package com.johan.vertretungsplan.objects;
 
 import java.io.Serializable;
 
+import javax.persistence.Embeddable;
+
 public class Vertretung implements Serializable {
 	/**
 	 * 
@@ -90,7 +92,7 @@ public class Vertretung implements Serializable {
 			string = subject + " statt " + previousSubject + " in " + room;
 		}
 		
-		if (!desc.equals("")) {
+		if (!desc.equals("\u00a0")) {
 			string = string + " - " + desc;
 		}
 		return string;

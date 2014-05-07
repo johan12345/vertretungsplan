@@ -78,6 +78,8 @@ public abstract class BaseParser {
 				parser = new UntisMonitorParser(schule);
 			} else if (schule.getApi().equals("untis-info")) {
 				parser = new UntisInfoParser(schule);
+			} else if (schule.getApi().equals("backend-connect")) {
+				parser = new BackendConnectParser(schule);
 			} //else if ... (andere Parser)
 		}
 		return parser;

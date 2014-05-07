@@ -19,6 +19,8 @@ package com.johan.vertretungsplan.objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import javax.persistence.Embeddable;
+
 public class KlassenVertretungsplan implements Serializable {
 	/**
 	 * 
@@ -26,6 +28,9 @@ public class KlassenVertretungsplan implements Serializable {
 	private static final long serialVersionUID = 5487489708857673784L;
 	private ArrayList<Vertretung> vertretung;
 	private String klasse;
+	
+	public KlassenVertretungsplan() {
+	}
 	
 	public KlassenVertretungsplan(String klasse) {
 		this.vertretung = new ArrayList<Vertretung>();

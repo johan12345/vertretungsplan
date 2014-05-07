@@ -30,7 +30,7 @@ public class Schule {
 	private String api;
 	private List<String> additionalInfos;
 	private JSONObject data;
-	
+	private boolean usesPush;
 	
 	public static Schule fromJSON(String id, JSONObject json) throws JSONException {
 		Schule schule = new Schule();
@@ -38,6 +38,7 @@ public class Schule {
 		schule.setCity(json.getString("city"));
 		schule.setName(json.getString("name"));
 		schule.setApi(json.getString("api"));
+		schule.setUsesPush(json.optBoolean("uses-push"));
 		
 		JSONArray infosJson = json.optJSONArray("additional_info");
 		List<String> additionalInfos = new ArrayList<String>();
@@ -122,5 +123,11 @@ public class Schule {
 	 */
 	public void setData(JSONObject data) {
 		this.data = data;
+	}
+	public boolean usesPush() {
+		return usesPush;
+	}
+	public void setUsesPush(boolean usesPush) {
+		this.usesPush = usesPush;
 	}
 }

@@ -118,7 +118,12 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 
 	@Override
 	public void onStart() {
-		super.onStart();	    
+		super.onStart();
+		registerGCM();
+	}
+	
+	private void registerGCM() {
+		GCMIntentService.register(this);
 	}
 
 
@@ -326,5 +331,10 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 	@Override
 	public Vertretungsplan getVertretungsplan() {
 		return vertretungsplan;
+	}
+
+	@Override
+	public void onClassSelected() {
+		registerGCM();
 	}
 }

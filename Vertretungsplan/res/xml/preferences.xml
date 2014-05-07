@@ -1,66 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
-    <Preference 
-        android:title="Schule wechseln"
-        android:key="change_school"/>
-	<PreferenceCategory 
-        android:title="Darstellung">
-		<CheckBoxPreference
-			android:id="@+id/farben"
-			android:key="farben"
-			android:defaultValue="true"
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+	<Preference android:title="Schule wechseln" android:id="@+id/change_school" />
+	<PreferenceCategory android:title="Darstellung"
+		android:id="@+id/view_category">
+		<CheckBoxPreference android:id="@+id/farben"
+			android:key="farben" android:defaultValue="true"
 			android:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
 			android:summaryOn="Vertretungsplan mit Farben hinterlegen"
 			android:title="Farben" />
-		<CheckBoxPreference
-			android:id="@+id/winter"
-			android:key="winter"
+	</PreferenceCategory>
+	<PreferenceCategory android:title="Automatische Aktualisierung"
+	    android:id="@+id/sync_category">
+		<CheckBoxPreference android:id="@+id/sync"
+			android:key="sync" android:defaultValue="true"
+			android:summaryOff="Nicht im Hintergrund abrufen"
+			android:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
+			android:title="Automatisch aktualisieren" />
+		<!--<CheckBoxPreference android:dependency="sync" android:id="@+id/syncWifi" 
+			android:key="syncWifi" android:defaultValue="false" android:summaryOff="Über 
+			WLAN und mobile Daten (z.B. UMTS) abrufen" android:summaryOn="Nur über WLAN 
+			abrufen" android:title="Nur bei WLAN" /> -->
+		<ListPreference android:dependency="sync" android:id="@+id/syncPeriod"
+			android:key="syncPeriod" android:title="Häufigkeit"
+			android:dialogTitle="Häufigkeit auswählen:" android:entries="@array/syncPeriod_entries"
+			android:entryValues="@array/syncPeriod_values" android:defaultValue="30" />
+		<CheckBoxPreference android:dependency="sync"
+			android:id="@+id/notification" android:key="notification"
 			android:defaultValue="true"
-			android:summaryOff="Hinweise zu witterungsbedingtem Unterrichtsausfall nicht anzeigen"
-			android:summaryOn="Hinweise zu witterungsbedingtem Unterrichtsausfall anzeigen"
-			android:title="Winter-Unterrichtsausfall" />
-		</PreferenceCategory>
-		<PreferenceCategory 
-        	android:title="Automatische Aktualisierung">		
-			<CheckBoxPreference
-				android:id="@+id/sync"
-				android:key="sync"
-				android:defaultValue="true"
-				android:summaryOff="Nicht im Hintergrund abrufen"
-				android:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
-				android:title="Automatisch aktualisieren" />
-			<!--<CheckBoxPreference
-				android:dependency="sync"
-				android:id="@+id/syncWifi"
-				android:key="syncWifi"
-				android:defaultValue="false"
-				android:summaryOff="Über WLAN und mobile Daten (z.B. UMTS) abrufen"
-				android:summaryOn="Nur über WLAN abrufen"
-				android:title="Nur bei WLAN" />  -->
-			<ListPreference
-		        android:dependency="sync"
-		        android:key="syncPeriod"
-		        android:title="Häufigkeit"
-		        android:dialogTitle="Häufigkeit auswählen:"
-		        android:entries="@array/syncPeriod_entries"
-		        android:entryValues="@array/syncPeriod_values"
-		        android:defaultValue="30" />
-			<CheckBoxPreference
-			    android:dependency="sync"
-				android:id="@+id/notification"
-				android:key="notification"
-				android:defaultValue="true"
-				android:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
-				android:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
-				android:title="Benachrichtigung" />
-			<RingtonePreference 
-			    android:dependency="notification"
-				android:id="@+id/ringtone"
-				android:key="ringtone"
-				android:defaultValue="content://settings/system/notification_sound"
-				android:ringtoneType="notification"
-				android:showSilent="true"
-				android:showDefault="true"
-				android:title="Benachrichtigungston" />
-		</PreferenceCategory>
+			android:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
+			android:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
+			android:title="Benachrichtigung" />
+		<RingtonePreference android:dependency="notification"
+			android:id="@+id/ringtone" android:key="ringtone"
+			android:defaultValue="content://settings/system/notification_sound"
+			android:ringtoneType="notification" android:showSilent="true"
+			android:showDefault="true" android:title="Benachrichtigungston" />
+	</PreferenceCategory>
 </PreferenceScreen>
