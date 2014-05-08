@@ -166,7 +166,7 @@ public class MessageEndpoint {
 			for (DeviceInfo deviceInfo : response.getItems()) {
 				if(deviceInfo.getSchoolId().equals(school) &&
 						changedClasses.contains(deviceInfo.getKlasse())) {
-					doSendViaGcm("something changed", sender, deviceInfo);
+					doSendViaGcm("Es gibt Veränderungen auf dem Vertretungsplan", sender, deviceInfo);
 				}
 			}
 		}
