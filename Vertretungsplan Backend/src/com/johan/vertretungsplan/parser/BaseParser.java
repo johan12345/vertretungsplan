@@ -61,7 +61,8 @@ public abstract class BaseParser {
 	public abstract List<String> getAllClasses() throws IOException, JSONException;
 	
 	protected String httpGet(String url, String encoding) throws IOException {
-		Response response = new Request(url).getResource(encoding);
+		Response response = new Request(url)
+		.addHeader("Cache-Control", "max-age=10").getResource(encoding);
 		return response.getBody();
 	}
 

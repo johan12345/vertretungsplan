@@ -18,7 +18,7 @@ package com.johan.vertretungsplan.parser;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import org.json.JSONArray;
@@ -53,7 +53,7 @@ public class UntisMonitorParser extends UntisCommonParser {
 			loadUrl(url.getString("url"), encoding, url.getBoolean("following"), docs);
 		}
 		
-		HashMap<String, VertretungsplanTag> tage = new HashMap<String, VertretungsplanTag>();
+		LinkedHashMap<String, VertretungsplanTag> tage = new LinkedHashMap<String, VertretungsplanTag>();
 		for(Document doc:docs) {
 			if (doc.title().contains("Untis")) {
 				VertretungsplanTag tag = parseVertretungsplanTag(doc, schule.getData());
