@@ -2,6 +2,9 @@
 		"name": "Lornsenschule",
 		"city": "Schleswig",
 		"api": "backend-connect",
+		"geo": [
+        		54.51646,9.55664
+    		]
 		"data": {
 			"classes": [ "05a", "05b", "05c", "05d", "05e", "05f", "05g",
 				"06a", "06b", "06c", "06d", "06e", "06f", "06g",
