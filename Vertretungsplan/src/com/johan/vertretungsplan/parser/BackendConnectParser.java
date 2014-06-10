@@ -39,7 +39,13 @@ public class BackendConnectParser extends BaseParser {
 
 	@Override
 	public List<String> getAllClasses() throws IOException, JSONException {
-		JSONArray classesJson = schule.getData().getJSONArray("classes");
+		JSONArray classesJson;
+		if(schule.getData().has("classes")) {
+			classesJson = schule.getData().getJSONArray("classes");
+		} else {
+			String url = BASE_URL + "classes?school=" + schule.getId();
+			classesJson = new JSONArray(httpGet(url, "UTF-8"));
+		}
 		List<String> classes = new ArrayList<String>();
 		for(int i = 0; i < classesJson.length(); i++) {
 			classes.add(classesJson.getString(i));

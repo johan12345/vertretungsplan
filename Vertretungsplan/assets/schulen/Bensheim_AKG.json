@@ -1,15 +1,10 @@
 {
 		"name": "Altes Kurfürstliches Gymnasium",
 		"city": "Bensheim",
-		"api": "untis-info",
+		"api": "backend-connect",
 		"geo": [
         		49.68954,8.61806
     		],
 		"data": {
-			"encoding": "ISO-8859-1",
-			"baseurl": "http://www.akg-bensheim.de/akgweb2011/content/Vertretung",
-			"classes_separated": false,
-			"columns": [
-				"class", "ignore", "lesson", "type", "previousSubject", "subject", "previousRoom", "room", "desc" ]
 		}
 }
