@@ -29,7 +29,8 @@
         <a href="http://developer.android.com/tools/support-library/index.html">android-support-v4</a> und <a href="http://developer.android.com/tools/support-library/index.html">android-support-v7</a> vom Android Open Source Project unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
         <a href="http://nineoldandroids.com/">NineOldAndroids</a> von Jake Wharton unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br />
         <a href="https://github.com/JoeJErnst/http-client">http-client</a> von Joe J. Ernst unter der <a href="http://opensource.org/licenses/Apache-2.0">Apache 2.0 Lizenz</a><br/><br/>
-        Außerdem wurden kleine Teile des Codes aus <a href="https://github.com/raphaelm/opacclient">opacclient</a> von Raphael Michel unter der <a href="http://opensource.org/licenses/MIT">MIT-Lizenz</a> wiederverwendet.]]>
+        Außerdem wurden kleine Teile des Codes aus <a href="https://github.com/raphaelm/opacclient">opacclient</a> von Raphael Michel unter der <a href="http://opensource.org/licenses/MIT">MIT-Lizenz</a> wiederverwendet.<br/>
+        Einige Grafiken wurden mit dem <a href="http://romannurik.github.io/AndroidAssetStudio/index.html">Android Asset Studio</a> von Roman Nurik erstellt.]]>
     </string>
     
     <string name="license_dialog"><![CDATA[
