@@ -1,11 +1,14 @@
 package com.johan.vertretungsplan_2;
 
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URLEncoder;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.Toast;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -20,13 +23,9 @@ import android.util.Log;
 
 import com.google.android.gcm.GCMBaseIntentService;
 import com.google.android.gcm.GCMRegistrar;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson.JacksonFactory;
-
-import com.johan.vertretungsplan_2.deviceinfoendpoint.Deviceinfoendpoint;
-import com.johan.vertretungsplan_2.deviceinfoendpoint.model.DeviceInfo;
+import com.joejernst.http.Request;
+import com.joejernst.http.Response;
+import com.johan.vertretungsplan.background.VertretungsplanService;
 
 /**
  * This class is started up as a service of the Android application. It listens
@@ -48,7 +47,6 @@ import com.johan.vertretungsplan_2.deviceinfoendpoint.model.DeviceInfo;
  * information.
  */
 public class GCMIntentService extends GCMBaseIntentService {
-	private final Deviceinfoendpoint endpoint;
 
 	/*
 	 * TODO: Set this to a valid project number. See
@@ -56,6 +54,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * information.
 	 */
 	protected static final String PROJECT_NUMBER = "133323756868";
+	private static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
 
 	/**
 	 * Register the device for GCM.
@@ -81,13 +80,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 
 	public GCMIntentService() {
 		super(PROJECT_NUMBER);
-		Deviceinfoendpoint.Builder endpointBuilder = new Deviceinfoendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) {
-					}
-				});
-		endpoint = CloudEndpointUtils.updateBuilder(endpointBuilder).build();
 	}
 
 	/**
@@ -110,8 +102,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	@Override
 	public void onMessage(Context context, Intent intent) {
+		Intent intent2 = new Intent(this, VertretungsplanService.class);
+		intent2.putExtra(VertretungsplanService.KEY_NOTIFICATION, false);
+		startService(intent2);
+		
 		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		if(settings.getBoolean("notification", true))
+		if(settings.getBoolean("notification", true) && !intent.getStringExtra("message").equals("NO_NOTIFICATION"))
 			sendNotificationIntent(context, intent.getStringExtra("message"), true, false);
 	}
 
@@ -130,29 +126,23 @@ public class GCMIntentService extends GCMBaseIntentService {
 			
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
 			
-			DeviceInfo deviceInfo = new DeviceInfo();
-			deviceInfo
-				.setDeviceRegistrationID(registration)
-				.setTimestamp(System.currentTimeMillis())
-				.setDeviceInformation(
-						URLEncoder
+			String deviceInfo = URLEncoder
 						.encode(android.os.Build.MANUFACTURER
 								+ " "
 								+ android.os.Build.PRODUCT,
-								"UTF-8"));
-			deviceInfo.setKlasse(settings.getString("klasse", ""));
-			deviceInfo.setSchoolId(settings.getString("selected_school", ""));
+								"UTF-8");
+			String klasse = settings.getString("klasse", "");
+			String schoolId = settings.getString("selected_school", "");
 
 			/*
 			 * Using cloud endpoints, see if the device has already been
 			 * registered with the backend
 			 */
-			DeviceInfo existingInfo = endpoint.getDeviceInfo(registration)
-					.execute();
+			DeviceInfo existingInfo = getDeviceInfo(registration);
 
-			if (existingInfo != null && registration.equals(existingInfo.getDeviceRegistrationID())
-					&& deviceInfo.getKlasse().equals(existingInfo.getKlasse())
-					&& deviceInfo.getSchoolId().equals(existingInfo.getSchoolId())) {
+			if (existingInfo != null && registration.equals(existingInfo.subId)
+					&& klasse.equals(existingInfo.klasse)
+					&& schoolId.equals(existingInfo.schoolId)) {
 				alreadyRegisteredWithEndpointServer = true;
 			}
 
@@ -163,26 +153,59 @@ public class GCMIntentService extends GCMBaseIntentService {
 				 * product information over to the backend. Then, we'll be
 				 * registered.
 				 */
-				if(existingInfo != null) {
-					endpoint.removeDeviceInfo(registration).execute();
-				}
-				endpoint.insertDeviceInfo(deviceInfo).execute();
+				insertDeviceInfo(deviceInfo, klasse, schoolId, registration);
 			}
-		} catch (IOException e) {
+		} catch (IOException | JSONException e) {
 			Log.e(GCMIntentService.class.getName(),
-					"Exception received when attempting to register with server at "
-							+ endpoint.getRootUrl(), e);
+					"Exception received when attempting to register with server", e);
 
 			Log.d("Vertretungsplan",
 					"1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
 							+ "2) Registration with Endpoints Server...FAILED!\n\n"
-							+ "Unable to register your device with your Cloud Endpoints server running at "
-							+ endpoint.getRootUrl()
-							+ ". Either your Cloud Endpoints server is not deployed to App Engine, or "
+							+ "Unable to register your device with your Cloud Endpoints server. "
+							+ "Either your Cloud Endpoints server is not deployed to App Engine, or "
 							+ "your settings need to be changed to run against a local instance "
 							+ "by setting LOCAL_ANDROID_RUN to 'true' in CloudEndpointUtils.java.");
 			return;
 		}
+	}
+	
+	private void insertDeviceInfo(String deviceInfo, String klasse, String schoolId, String registration) throws IOException {
+		String url = BASE_URL + "register?subId=" + registration + "&klasse=" + klasse
+				+ "&school=" + schoolId + "&deviceInfo=" + deviceInfo;
+		Response response = new Request(url).getResource("UTF-8");
+		if(response.getResponseCode() == 200) {
+			Log.d("GCM", "inserted device info");
+		}		
+	}
+
+	private DeviceInfo getDeviceInfo(String registration) throws IOException, JSONException {
+		String url = BASE_URL + "getregistration?subId=" + registration;
+		try {
+			Response response = new Request(url).getResource("UTF-8");	
+			JSONObject json = new JSONObject(response.getBody());
+			DeviceInfo info = new DeviceInfo();
+			info.subId = json.getString("_id");
+			info.deviceInfo = json.getString("deviceInfo");
+			info.klasse = json.getString("klasse");
+			info.schoolId = json.getString("schoolId");
+			return info;	
+		} catch (FileNotFoundException e) {
+			return null;
+		}
+	}
+	
+	private DeviceInfo removeDeviceInfo(String registration) throws IOException {
+		String url = BASE_URL + "removeregistration?subId=" + registration;
+		new Request(url).getResource("UTF-8");
+		return null;
+	}
+
+	private class DeviceInfo {
+		public String klasse;
+		public String subId;
+		public String deviceInfo;
+		public String schoolId;
 	}
 
 	/**
@@ -198,11 +221,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if (registrationId != null && registrationId.length() > 0) {
 
 			try {
-				endpoint.removeDeviceInfo(registrationId).execute();
+				removeDeviceInfo(registrationId);
 			} catch (IOException e) {
 				Log.e(GCMIntentService.class.getName(),
-						"Exception received when attempting to unregister with server at "
-								+ endpoint.getRootUrl(), e);
+						"Exception received when attempting to unregister with server", e);
 				return;
 			}
 		}
@@ -265,14 +287,5 @@ public class GCMIntentService extends GCMBaseIntentService {
 		// mId allows you to update the notification later on.
 		int mId = 1;
 		mNotificationManager.notify(mId, mBuilder.build());
-	}
-
-	private String getWebSampleUrl(String endpointUrl) {
-		// Not the most elegant solution; we'll improve this in the future
-		if (CloudEndpointUtils.LOCAL_ANDROID_RUN) {
-			return CloudEndpointUtils.LOCAL_APP_ENGINE_SERVER_URL
-					+ "index.html";
-		}
-		return endpointUrl.replace("/_ah/api/", "/index.html");
 	}
 }

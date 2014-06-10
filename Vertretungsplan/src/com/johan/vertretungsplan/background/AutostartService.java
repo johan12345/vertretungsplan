@@ -16,12 +16,15 @@
 
 package com.johan.vertretungsplan.background;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.utils.Utils;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;

@@ -57,6 +57,8 @@ public class VertretungsplanService extends IntentService {
 	static SharedPreferences settings;
 	static Bundle extras;
 	static Context context;
+	
+	public static String KEY_NOTIFICATION = "notification";
 
 	public VertretungsplanService() {
 		super("VertretungsplanService");

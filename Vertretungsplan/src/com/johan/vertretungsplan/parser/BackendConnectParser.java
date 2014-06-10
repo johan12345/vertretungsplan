@@ -7,24 +7,16 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpRequestInitializer;
-import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.gson.Gson;
+import com.joejernst.http.Request;
+import com.joejernst.http.Response;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
-import com.johan.vertretungsplan_2.CloudEndpointUtils;
-import com.johan.vertretungsplan_2.GCMIntentService;
-import com.johan.vertretungsplan_2.vertretungsplanserializedendpoint.Vertretungsplanserializedendpoint;
-import com.johan.vertretungsplan_2.vertretungsplanserializedendpoint.model.VertretungsplanSerialized;
 
 public class BackendConnectParser extends BaseParser {
 	
 	private Schule schule;
+	private static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
 	
 	public BackendConnectParser(Schule schule) {
 		super(schule);
@@ -34,17 +26,10 @@ public class BackendConnectParser extends BaseParser {
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException {
-		Vertretungsplanserializedendpoint.Builder endpointBuilder = new Vertretungsplanserializedendpoint.Builder(
-				AndroidHttp.newCompatibleTransport(),
-				new JacksonFactory(),
-				new HttpRequestInitializer() {
-					public void initialize(HttpRequest httpRequest) { }
-				});
-		Vertretungsplanserializedendpoint endpoint = CloudEndpointUtils.updateBuilder(
-				endpointBuilder).build();
+		String url = BASE_URL + "vertretungsplan?school=" + schule.getId();
 		try {
-			VertretungsplanSerialized vs = endpoint.getVertretungsplanSerialized(schule.getId()).execute();
-			Vertretungsplan v = new Gson().fromJson(vs.getJson(), Vertretungsplan.class);
+			Response response = new Request(url).getResource("UTF-8");
+			Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
 			return v;
 		} catch (IOException e) {
 			e.printStackTrace();
