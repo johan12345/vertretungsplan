@@ -25,6 +25,8 @@ import org.holoeverywhere.app.Application;
 
 import android.content.Intent;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.Tracker;
 import com.johan.vertretungsplan.additionalinfo.BaseAdditionalInfoParser;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.parser.BaseParser;
@@ -40,6 +42,7 @@ public class VertretungsplanApplication extends Application {
 
 	private BaseParser parser;
 	private List<BaseAdditionalInfoParser> additionalInfoParsers;
+	private Tracker mTracker;
 
 	@Override
 	public void onCreate() {
@@ -116,4 +119,13 @@ public class VertretungsplanApplication extends Application {
 		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(intent);
 	}
+	synchronized Tracker getTracker() {
+	    if (mTracker == null) {
+
+	      GoogleAnalytics analytics = GoogleAnalytics.getInstance(this);
+	      mTracker = analytics.newTracker(R.xml.analytics);
+
+	    }
+	    return mTracker;
+	  }
 }

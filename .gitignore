@@ -43,3 +43,5 @@ war/WEB-INF/appengine-generated/
 Vertretungsplan/assets/schulen/Test_*
 
 Vertretungsplan Backend/src/com/johan/vertretungsplan/backend/Settings.java
+
+*Thumbs.db

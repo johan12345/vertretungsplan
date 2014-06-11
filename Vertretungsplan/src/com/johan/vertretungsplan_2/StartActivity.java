@@ -48,6 +48,8 @@ import android.view.View;
 import org.holoeverywhere.preference.PreferenceManager;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
@@ -79,8 +81,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-
-		Log.d("Vertretungsplan", "onCreate");
 		super.onCreate(savedInstanceState);
 		appContext = getApplicationContext();
 
@@ -133,7 +133,17 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 			vertretungsplan = (Vertretungsplan) savedInstanceState.getParcelable("Vertretungsplan");
 		}
 
-		Log.d("Vertretungsplan", "/onCreate");
+		Tracker t = ((VertretungsplanApplication) getApplication()).getTracker();
+		try {
+			Schule school = Utils.getSelectedSchool(this);
+			t.send(new HitBuilders.AppViewBuilder()
+				.setCustomDimension(1, school.getName() + ", " + school.getCity())
+				.setCustomDimension(2, settings.getString("klasse", "unbekannt")).build());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 
 	}
 
