@@ -16,6 +16,9 @@
 
 package com.johan.vertretungsplan_2;
 
+import java.io.IOException;
+import java.util.List;
+
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.app.Fragment;
@@ -30,6 +33,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -49,9 +53,11 @@ import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
 import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan.background.VertretungsplanService;
+import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
+import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
@@ -81,9 +87,24 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		settings  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		if(!settings.contains("selected_school")) {
-			Intent intent = new Intent(this, SelectSchoolActivity.class);
-			startActivity(intent);
-			finish();
+			List<Schule> schools;
+			 try {
+			 	schools = Utils.getSchools(this);
+			 	if(schools.size() > 1) {
+			 		Intent intent = new Intent(this, SelectSchoolActivity.class);
+			 		startActivity(intent);
+			 		finish();
+			 	} else {
+			 		Schule selectedSchool = schools.get(0);
+			 		settings.edit().putString("selected_school", selectedSchool.getId()).commit();				
+			 		((VertretungsplanApplication) getApplication()).notifySchoolChanged();
+			 	}
+			 } catch (IOException e) {
+			 	e.printStackTrace();
+			 	Intent intent = new Intent(this, SelectSchoolActivity.class);
+				startActivity(intent);
+			 	finish();
+			 }
 		}
 		
 		vertretungFragment = new VertretungFragment();
@@ -319,12 +340,14 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					settings.edit().putBoolean("firstRun", false).commit();
-					whatsNewDialog.show();
+					if(Build.VERSION.SDK_INT != 16) //Bug in 4.1 that causes Dialog to crash
+						whatsNewDialog.show();
 				}       		
 			});
 			dialog.show();
 		} else {
-			whatsNewDialog.show();
+			if(Build.VERSION.SDK_INT != 16) //Bug in 4.1 that causes Dialog to crash
+				whatsNewDialog.show();
 		}
 	}
 

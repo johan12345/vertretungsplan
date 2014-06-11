@@ -39,10 +39,10 @@
         
         <activity android:excludeFromRecents="true" android:finishOnTaskLaunch="true" android:launchMode="singleInstance" android:logo="@drawable/ic_action_icon" android:name="org.acra.CrashReportDialog" android:theme="@style/Holo.Theme.Dialog.Light"/>
 
-        <service android:enabled="true" android:exported="true" android:name="com.johan.vertretungsplan.background.VertretungsplanService">
+        <service android:enabled="true" android:name="com.johan.vertretungsplan.background.VertretungsplanService">
         </service>
         
-        <service android:enabled="true" android:exported="true" android:name="com.johan.vertretungsplan.background.AutostartService">
+        <service android:enabled="true" android:name="com.johan.vertretungsplan.background.AutostartService">
         </service>
         <service android:name=".GCMIntentService"/>
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
@@ -55,6 +55,19 @@
                 <category android:name="com.johan.vertretungsplan_2"/>
             </intent-filter>
         </receiver>
+        
+        <receiver android:name="com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider"
+            android:enabled="@bool/api_v14" >
+		    <intent-filter>
+		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+		    </intent-filter>
+		    <meta-data android:name="android.appwidget.provider"
+		               android:resource="@xml/widget_info" />
+		</receiver>
+
+        <service android:name="com.johan.vertretungsplan.widget.VertretungsplanWidgetService"
+            android:enabled="@bool/api_v14"
+			android:permission="android.permission.BIND_REMOTEVIEWS" />
 </application>
 
 </manifest>

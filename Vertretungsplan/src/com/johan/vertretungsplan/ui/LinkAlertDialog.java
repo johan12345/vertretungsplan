@@ -21,6 +21,7 @@ import org.holoeverywhere.app.AlertDialog.Builder;
 import org.holoeverywhere.widget.TextView;
 
 import android.content.Context;
+import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
@@ -35,8 +36,12 @@ public class LinkAlertDialog {
 		int dpAsPixels = (int) (8*scale + 0.5f);
 		message.setPadding(dpAsPixels, dpAsPixels, dpAsPixels, dpAsPixels);
 		Spanned s = Html.fromHtml(text);
-		message.setText(s);
-		message.setMovementMethod(LinkMovementMethod.getInstance());
+		if(Build.VERSION.SDK_INT != 16) { //Bug in 4.1 that causes Dialog to crash
+			message.setText(s);
+			message.setMovementMethod(LinkMovementMethod.getInstance());
+		} else {
+			message.setText(s.toString());
+		}
 
 		return new AlertDialog.Builder(context)
 		.setTitle(title)

@@ -29,6 +29,7 @@ import com.johan.vertretungsplan.objects.AdditionalInfo;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 import com.johan.vertretungsplan_2.R;
 import com.johan.vertretungsplan_2.StartActivity;
 import com.johan.vertretungsplan_2.VertretungsplanApplication;
@@ -37,6 +38,8 @@ import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.media.RingtoneManager;
@@ -113,7 +116,9 @@ public class VertretungsplanService extends IntentService {
 					}
 				}
 				
-				if (settings.getBoolean("notification", true) && !settings.getBoolean("isInForeground", false)) {
+				if ((extras == null || extras.getBoolean(KEY_NOTIFICATION, true))
+						&& settings.getBoolean("notification", true)
+						&& !settings.getBoolean("isInForeground", false)) {
 					//Benachrichtigung anzeigen
 					String klasse = settings.getString("klasse", null);
 					String vAltJson = settings.getString("Vertretungsplan", null);
@@ -126,6 +131,10 @@ public class VertretungsplanService extends IntentService {
 				}
 				
 				settings.edit().putString("Vertretungsplan", gson.toJson(v)).commit();
+				
+				AppWidgetManager mgr=AppWidgetManager.getInstance(this);
+				int[] ids = mgr.getAppWidgetIds(new ComponentName(this, VertretungsplanWidgetProvider.class));
+				new VertretungsplanWidgetProvider().onUpdate(this, mgr, ids);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

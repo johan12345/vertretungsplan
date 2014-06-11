@@ -257,7 +257,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
 		.setSmallIcon(R.drawable.ic_notification)
 		.setContentTitle("Nachricht");
-		mBuilder.setContentText(message);
+		mBuilder.setContentText("Es gibt neue Änderungen auf dem Vertretungsplan");
 		if (!sound.equals("")) {
 			Uri soundUri = Uri.parse(sound);
 			mBuilder.setSound(soundUri);

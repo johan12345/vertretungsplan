@@ -16,6 +16,7 @@
 
 package com.johan.vertretungsplan.background;
 
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -27,26 +28,22 @@ import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.utils.Utils;
 
 import android.app.AlarmManager;
+import android.app.IntentService;
 import android.app.PendingIntent;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.os.IBinder;
 import android.util.Log;
 
-public class AutostartService extends Service {
+public class AutostartService extends IntentService {
+
 	public AutostartService() {
+		super("AutostartService");
 	}
 
 	@Override
-	public void onStart(Intent intent, int startid) {		
+	public void onHandleIntent(Intent intent) {		
 		//Toast.makeText(this, "AutostartService started", Toast.LENGTH_LONG).show();
 		setAlarms();
-	}
-	
-	@Override
-	public IBinder onBind(Intent intent) {
-	return null;
 	}
 	
 	public void setAlarms(){
@@ -87,124 +84,7 @@ public class AutostartService extends Service {
 
      		}
         
-        	if(settings.getString("syncPeriod", "30").equals("SCHLAU")) {
-        		Log.d("Vertretungsplan", "schlauer Alarm");
-        		AlarmManager[] alarmManager=new AlarmManager[24];
-        		ArrayList<PendingIntent> intentArray = new ArrayList<PendingIntent>();
-        		
-        		ArrayList<Long> zeiten = new ArrayList<Long>();
-        		
-        		// 7:20
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 20);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis()); 
-        		
-        		// 7:25
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 25);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis()); 
-        		
-        		// 7:30
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 30);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 7:35
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 35);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis()); 
-        		
-        		// 7:40
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 40);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 7:45
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 7);
-        		cal.set(Calendar.MINUTE, 45);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 9:35
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 9);
-        		cal.set(Calendar.MINUTE, 35);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 11:25
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 11);
-        		cal.set(Calendar.MINUTE, 25);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 13:05
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 12);
-        		cal.set(Calendar.MINUTE, 22);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());   
-        		
-        		// 14:30
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 14);
-        		cal.set(Calendar.MINUTE, 30);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 17:00
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-        		cal.set(Calendar.HOUR_OF_DAY, 17);
-        		cal.set(Calendar.MINUTE, 00);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		// 19:00
-        		cal=Calendar.getInstance();
-        		cal.setTimeInMillis(System.currentTimeMillis());
-                cal.clear();
-        		cal.set(Calendar.HOUR_OF_DAY, 19);
-        		cal.set(Calendar.MINUTE, 00);
-        		cal.set(Calendar.SECOND, 0);        		
-        		zeiten.add(cal.getTimeInMillis());  
-        		
-        		
-        		int f;
-        		for(f=0;f<zeiten.size();f++){
-        		   Intent intentSchlau = new Intent(AutostartService.this, VertretungsplanService.class);
-        		   PendingIntent pi=PendingIntent.getBroadcast(AutostartService.this, f,intentSchlau, 0);
-
-        		   alarmManager[f] = (AlarmManager) getSystemService(ALARM_SERVICE);
-        		   alarmManager[f].setRepeating(AlarmManager.RTC_WAKEUP,zeiten.get(f), AlarmManager.INTERVAL_DAY, pi);
-
-        		   intentArray.add(pi);
-
-        		}
-        		
-        	} else if (settings.getString("syncPeriod", "30").equals("30s")) {
+        	if (settings.getString("syncPeriod", "30").equals("30s")) {
         		Log.d("Vertretungsplan", "30s Alarm");
         		alarm.setRepeating(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis() + 30*1000, 30*1000, pintent); 
         	} else if (settings.getString("syncPeriod", "30").equals("15")) {
