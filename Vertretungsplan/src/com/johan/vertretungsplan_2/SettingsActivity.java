@@ -16,6 +16,8 @@
 
 package com.johan.vertretungsplan_2;
 
+import java.io.IOException;
+
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,7 +26,12 @@ import android.os.Bundle;
 import org.holoeverywhere.preference.PreferenceActivity;
 import org.holoeverywhere.preference.PreferenceManager;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 import com.johan.vertretungsplan.background.AutostartService;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 import android.support.v4.app.NavUtils;
@@ -91,6 +98,26 @@ public class SettingsActivity extends PreferenceActivity {
 	public void setAlarms(){
 		Intent autostartIntent = new Intent(getApplicationContext(), AutostartService.class);
 		getApplicationContext().startService(autostartIntent);
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		analyticsStart();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		analyticsStop();
+	}
+	
+	private void analyticsStart() {
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
+	}
+	
+	private void analyticsStop() {
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
 
 }

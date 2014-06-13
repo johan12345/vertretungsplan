@@ -19,18 +19,24 @@ package com.johan.vertretungsplan_2;
 import java.io.IOException;
 import java.util.List;
 
+import org.holoeverywhere.preference.CheckBoxPreference;
 import org.holoeverywhere.preference.Preference;
+import org.holoeverywhere.preference.Preference.OnPreferenceChangeListener;
 import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
 import org.holoeverywhere.preference.PreferenceCategory;
 import org.holoeverywhere.preference.PreferenceFragment;
+import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.PreferenceScreen;
+import org.holoeverywhere.preference.SharedPreferences;
 
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragment {
     @Override
@@ -45,6 +51,19 @@ public class SettingsFragment extends PreferenceFragment {
 			public boolean onPreferenceClick(Preference preference) {
 				Intent intent = new Intent(getActivity(), SelectSchoolActivity.class);
 				getActivity().startActivity(intent);
+				return true;
+			}
+        	
+        });
+        
+        CheckBoxPreference analyticsPref = (CheckBoxPreference) findPreference(R.id.analytics);
+        analyticsPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
+
+			@Override
+			public boolean onPreferenceChange(Preference preference,
+					Object newValue) {
+				Log.d("Vertretungsplan", "Analytics Opt-out");
+	            GoogleAnalytics.getInstance(getActivity().getApplicationContext()).setAppOptOut(!(boolean) newValue);
 				return true;
 			}
         	
@@ -73,7 +92,6 @@ public class SettingsFragment extends PreferenceFragment {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-        
+		}      
     }
 }

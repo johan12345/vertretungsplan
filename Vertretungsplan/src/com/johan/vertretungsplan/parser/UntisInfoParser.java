@@ -44,6 +44,7 @@ public class UntisInfoParser extends UntisCommonParser {
 	
 	private String baseUrl;
 	private JSONObject data;
+	private String navbarDoc;
 
 	public UntisInfoParser(Schule schule) {
 		super(schule);
@@ -54,12 +55,19 @@ public class UntisInfoParser extends UntisCommonParser {
 			e.printStackTrace();
 		}
 	}
+	
+	private String getNavbarDoc() throws JSONException, IOException {
+		if(navbarDoc == null) {
+			String navbarUrl = baseUrl + "/frames/navbar.htm";
+			navbarDoc = httpGet(navbarUrl, schule.getData().getString("encoding"));
+		}
+		return navbarDoc;
+	}
 
 	@Override
 	public Vertretungsplan getVertretungsplan()
 			throws IOException, JSONException {
-		String navbarUrl = baseUrl + "/frames/navbar.htm";
-		Document navbarDoc = Jsoup.parse(httpGet(navbarUrl, schule.getData().getString("encoding")));
+		Document navbarDoc = Jsoup.parse(getNavbarDoc().replace("&nbsp;", ""));
 		Element select = navbarDoc.select("select[name=week]").first();
 		
 		Vertretungsplan v = new Vertretungsplan();
@@ -102,8 +110,7 @@ public class UntisInfoParser extends UntisCommonParser {
 
 	@Override
 	public List<String> getAllClasses() throws JSONException, IOException {
-		String url = baseUrl + "/frames/navbar.htm";
-		String js = httpGet(url, schule.getData().getString("encoding"));
+		String js = getNavbarDoc();
 		Pattern pattern = Pattern.compile("var classes = (\\[[^\\]]*\\]);");
 		Matcher matcher = pattern.matcher(js);		
 		if(matcher.find()) {

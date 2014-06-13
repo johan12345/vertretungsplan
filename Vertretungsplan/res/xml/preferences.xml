@@ -1,13 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 	<Preference android:title="Schule wechseln" android:id="@+id/change_school" />
-	<PreferenceCategory android:title="Darstellung"
+	<PreferenceCategory android:title="Allgemein"
 		android:id="@+id/view_category">
 		<CheckBoxPreference android:id="@+id/farben"
 			android:key="farben" android:defaultValue="true"
 			android:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
 			android:summaryOn="Vertretungsplan mit Farben hinterlegen"
 			android:title="Farben" />
+		<CheckBoxPreference android:id="@+id/analytics"
+			android:key="analytics" android:defaultValue="true"
+			android:summaryOff="keine anonymen Nutzungsstatistiken senden"
+			android:summaryOn="Anonyme Nutzungsstatistiken über Google Analytics senden"
+			android:title="Google Analytics" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Automatische Aktualisierung"
 	    android:id="@+id/sync_category">

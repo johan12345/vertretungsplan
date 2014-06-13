@@ -48,6 +48,7 @@ import android.view.View;
 import org.holoeverywhere.preference.PreferenceManager;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
+import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
@@ -131,8 +132,23 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 			verbindungPruefenUndLaden();   
 		} else {
 			vertretungsplan = (Vertretungsplan) savedInstanceState.getParcelable("Vertretungsplan");
-		}
+		}		
+	}
 
+	@Override
+	public void onStart() {
+		super.onStart();
+		registerGCM();
+		analyticsStart();
+	}
+
+	@Override
+	public void onStop() {
+		super.onStop();
+		analyticsStop();
+	}
+	
+	private void analyticsStart() {
 		Tracker t = ((VertretungsplanApplication) getApplication()).getTracker();
 		try {
 			Schule school = Utils.getSelectedSchool(this);
@@ -143,16 +159,13 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-
-	}
-
-	@Override
-	public void onStart() {
-		super.onStart();
-		registerGCM();
+		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
 	
+	private void analyticsStop() {
+		GoogleAnalytics.getInstance(this).reportActivityStop(this);
+	}
+
 	private void registerGCM() {
 		GCMIntentService.register(this);
 	}

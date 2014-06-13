@@ -7,14 +7,17 @@ tools:ignore="TypographyDashes">
     <bool name="ga_autoActivityTracking">true</bool>
 
     <!-- The screen names that will appear in reports -->
+    <screenName name="com.johan.vertretungsplan_2.StartActivity">
+        Start
+    </screenName>
+    <screenName name="com.johan.vertretungsplan_2.SettingsActivity">
+        Einstellungen
+    </screenName>
     <screenName name="com.johan.vertretungsplan_2.VertretungFragment">
         Vertretung
     </screenName>
     <screenName name="com.johan.vertretungsplan_2.NachrichtenFragment">
         Nachrichten
-    </screenName>
-    <screenName name="com.johan.vertretungsplan_2.SettingsFragment">
-        Einstellungen
     </screenName>
     <string name="ga_trackingId">UA-39383511-5</string>
     <bool name="ga_anonymizeIp">true</bool>
