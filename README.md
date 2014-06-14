@@ -17,6 +17,7 @@ Importiere dann in Eclipse (ADT) folgende Projekte:
 * Crouton Library
 * Inscription Library
 * PagerSlidingTabStrip Library
+* Google Play Services
 
 Bei den letzten drei Projekten ist darauf zu achten, dass sie alle standardmäßig "library" heißen und darum nur eines zur Zeit in Eclipse importiert werden kann und danach umbenannt werden muss. Alternativ kann man die Projekte auch vorher in der ".project"-Datei umbenennen.
 
