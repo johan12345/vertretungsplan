@@ -10,9 +10,6 @@
 [submodule "libraries/pagerslidingtabstrip"]
 	path = libraries/pagerslidingtabstrip
 	url = https://github.com/astuetz/PagerSlidingTabStrip.git
-[submodule "libraries\\google-play-services"]
-	path = libraries\\google-play-services
-	url = https://github.com/koush/google-play-services_lib.git
-[submodule "libaries\\google-play-services"]
-	path = libaries\\google-play-services
+[submodule "libraries/google-play-services"]
+	path = libraries/google-play-services
 	url = https://github.com/koush/google-play-services_lib.git
