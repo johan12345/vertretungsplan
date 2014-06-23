@@ -267,7 +267,7 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 				if (activity.vertretungsplan != null) {	
 					Crouton crouton = Crouton.makeText(activity, "Offline", Style.INFO);
 					crouton.show();
-					activity.anzeigenAktualisieren();
+					activity.refreshFragments();
 				} else {
 					Crouton crouton = Crouton.makeText(activity, "keine Internetverbindung", Style.ALERT);
 					crouton.show();
@@ -277,17 +277,10 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		};
 	};
 
-
-	public void anzeigenAktualisieren() {
-		Log.d("Vertretungsplan", "anzeigenAktualisieren"); 
-		setVertretungsplan(vertretungsplan);
-	}
-
-	private void loadParsed(Vertretungsplan v) {
-		if (v != null) {
-			vertretungsplan = v;
-			vertretungFragment.aktualisieren(v);
-			nachrichtenFragment.aktualisieren(v);
+	private void refreshFragments() {
+		if (vertretungsplan != null) {
+			vertretungFragment.setVertretungsplan(vertretungsplan);
+			nachrichtenFragment.setVertretungsplan(vertretungsplan);
 		} else {
 			Crouton crouton = Crouton.makeText(this, "Konnte nicht auf den Vertretungsplan zugreifen", Style.ALERT);
 			crouton.show();
@@ -295,12 +288,7 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		setProgress(false);
 	}
 
-	private void reloadParsed() {
-		loadParsed(vertretungsplan);
-	}
-
 	public void setProgress(boolean show) {
-		Log.d("Vertretungsplan", "progress: " + show);
 		vertretungFragment.progress(show);
 		nachrichtenFragment.progress(show);
 	}
@@ -332,25 +320,10 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		Intent autostartIntent = new Intent(appContext, AutostartService.class);
 		appContext.startService(autostartIntent);
 	}
-	
-	@Override
-	public void onFragmentLoaded(Fragment fragment) {
-		if(fragment.equals(vertretungFragment)) {
-			vertretungFragmentLoaded = true;
-		} else if (fragment.equals(nachrichtenFragment)) {
-			nachrichtenFragmentLoaded = true;
-		}
-		if (nachrichtenFragmentLoaded && vertretungFragmentLoaded && vertretungsplan != null) {
-			reloadParsed();
-			setProgress(false);
-		}
-	}
 
-	public void setVertretungsplan(Vertretungsplan v) {
+	private void setVertretungsplan(Vertretungsplan v) {
 		vertretungsplan = v;
-		if (nachrichtenFragmentLoaded && vertretungFragmentLoaded) {
-			reloadParsed();
-		}
+		refreshFragments();
 	}
 
 	public void showDialogs() {

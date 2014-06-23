@@ -19,33 +19,29 @@ package com.johan.vertretungsplan_2;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import org.holoeverywhere.LayoutInflater;
+import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.ProgressBar;
+import org.holoeverywhere.widget.TextView;
+
 import android.content.Context;
 import android.os.Bundle;
-
-import org.holoeverywhere.LayoutInflater;
-
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.Fragment;
-import org.holoeverywhere.widget.ListView;
-import org.holoeverywhere.widget.ProgressBar;
-import org.holoeverywhere.widget.TextView;
-
 import com.johan.vertretungsplan.objects.AdditionalInfo;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.utils.Animations;
-import com.johan.vertretungsplan_2.R;
 
 
 public class NachrichtenFragment extends VertretungsplanFragment {
 	
 	public interface Callback {
-		public void onFragmentLoaded(Fragment fragment);
+
 	}
 	
 	private ListView list;
@@ -56,6 +52,8 @@ public class NachrichtenFragment extends VertretungsplanFragment {
 
     private Activity activity;
    	private NachrichtenAdapter listadapter = null;
+   	
+   	private Vertretungsplan v;
 	
 	public static final String EXTRA_TITLE = "Vertretungsplan";
 	public static final String PREFS_NAME = "VertretungsplanLS";
@@ -79,7 +77,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         progress(showProgress);
         ready = true;
-        mCallback.onFragmentLoaded(this);
+        refresh();
         super.onViewCreated(view, savedInstanceState);
     }
     
@@ -89,9 +87,13 @@ public class NachrichtenFragment extends VertretungsplanFragment {
         return bundle;
     }
     
-    public void aktualisieren(Vertretungsplan v) {
-    	if(ready) {
-    	
+    public void setVertretungsplan(Vertretungsplan v) {
+    	this.v = v;
+    	refresh();
+    }
+    
+    public void refresh() {
+    	if(ready && v != null) {    	
 	    	listadapter.clear(); 
 	    	
 	    	for(VertretungsplanTag tag:v.getTage()) {	    	

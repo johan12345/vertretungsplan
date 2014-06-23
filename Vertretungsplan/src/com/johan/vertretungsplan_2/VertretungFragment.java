@@ -21,42 +21,37 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.os.AsyncTask;
-import android.os.Bundle;
-
 import org.holoeverywhere.LayoutInflater;
-
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-
 import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.Fragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.widget.AdapterView;
+import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.LinearLayout;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.Spinner;
 import org.holoeverywhere.widget.TextView;
-import org.holoeverywhere.widget.AdapterView.OnItemSelectedListener;
 import org.json.JSONException;
+
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.utils.Animations;
-import com.johan.vertretungsplan_2.R;
 
 public class VertretungFragment extends VertretungsplanFragment {
 	
 	public interface Callback {
-		public void onFragmentLoaded(Fragment fragment);
 		public Vertretungsplan getVertretungsplan();
 		public void onClassSelected();
 	}
@@ -75,6 +70,8 @@ public class VertretungFragment extends VertretungsplanFragment {
     public static Context appContext;
     public static StartActivity startActivity;
     private VertretungAdapter listadapter = null;
+    
+    private Vertretungsplan v;
 	
 	public static final String EXTRA_TITLE = "Vertretungsplan";
 	public static final String PREFS_NAME = "VertretungsplanLS";
@@ -117,11 +114,7 @@ public class VertretungFragment extends VertretungsplanFragment {
 
 				// Commit the edits!
 				editor.commit();
-
-				if(mCallback.getVertretungsplan() != null) {
-					aktualisieren(mCallback.getVertretungsplan());
-				}
-				
+				refresh();
 				mCallback.onClassSelected();
 			}
 
@@ -133,8 +126,6 @@ public class VertretungFragment extends VertretungsplanFragment {
                
         ready = true;
         
-        mCallback.onFragmentLoaded(this);
-        
         super.onViewCreated(view, savedInstanceState);
     }
     
@@ -144,8 +135,13 @@ public class VertretungFragment extends VertretungsplanFragment {
         return bundle;
     }
     
-    public void aktualisieren(Vertretungsplan v) { 
-    	if(ready) {
+    public void setVertretungsplan(Vertretungsplan v) {
+    	this.v = v;
+    	refresh();
+    }
+    
+    public void refresh() { 
+    	if(ready && v != null) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
 	        
