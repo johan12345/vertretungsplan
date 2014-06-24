@@ -93,7 +93,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     }
     
     public void refresh() {
-    	if(ready && v != null) {    	
+    	if(ready && v != null && getView() != null) {    	
 	    	listadapter.clear(); 
 	    	
 	    	for(VertretungsplanTag tag:v.getTage()) {	    	

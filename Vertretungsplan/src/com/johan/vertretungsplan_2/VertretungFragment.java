@@ -141,7 +141,7 @@ public class VertretungFragment extends VertretungsplanFragment {
     }
     
     public void refresh() { 
-    	if(ready && v != null) {
+    	if(ready && v != null && getView() != null) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
 	        
