@@ -47,8 +47,9 @@ public abstract class BaseParser {
 	 * @return Der geparste {@link Vertretungsplan}
 	 * @throws IOException
 	 * @throws JSONException
+	 * @throws VersionException 
 	 */
-	public abstract Vertretungsplan getVertretungsplan() throws IOException, JSONException;
+	public abstract Vertretungsplan getVertretungsplan() throws IOException, JSONException, VersionException;
 	
 	/**
 	 * Gibt eine Liste aller verfügbaren Klassen zurück.
@@ -63,5 +64,10 @@ public abstract class BaseParser {
 	protected String httpGet(String url, String encoding) throws IOException {
 		Response response = new Request(url).getResource(encoding);
 		return response.getBody();
+	}
+	
+	
+	public class VersionException extends Exception {
+		
 	}
 }

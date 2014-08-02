@@ -26,6 +26,7 @@ import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
+import org.holoeverywhere.widget.Toast;
 import org.json.JSONException;
 
 import android.content.Context;
@@ -119,10 +120,14 @@ public class SelectSchoolActivity extends Activity {
 			return null;
 		}
 		
-		protected void onPostExecute(List<Schule> schools) {					
-			Collections.sort(schools, new AlphabeticalSchoolComparator());
-			SelectSchoolActivity.this.schools = schools;
-			lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools));
+		protected void onPostExecute(List<Schule> schools) {
+			if(schools != null) {
+				Collections.sort(schools, new AlphabeticalSchoolComparator());
+				SelectSchoolActivity.this.schools = schools;
+				lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools));
+			} else {
+				Toast.makeText(SelectSchoolActivity.this, "Zum wählen einer Schule wird eine Internetverbindung benötigt!", Toast.LENGTH_LONG).show();
+			}
 		}
 		
 	}

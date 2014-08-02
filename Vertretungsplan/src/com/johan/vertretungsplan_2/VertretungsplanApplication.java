@@ -21,7 +21,9 @@ import org.holoeverywhere.app.Application;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager.NameNotFoundException;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
@@ -38,6 +40,7 @@ public class VertretungsplanApplication extends Application {
 	private BackendConnectParser parser;
 	private Tracker mTracker;
 	private SharedPreferences settings;
+	private static Context context;
 
 	@Override
 	public void onCreate() {
@@ -45,7 +48,8 @@ public class VertretungsplanApplication extends Application {
 
 		// The following line triggers the initialization of ACRA
 		ACRA.init(this);
-		settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+		context = getApplicationContext();
+		settings = PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
 	public BackendConnectParser getParser() {
@@ -83,5 +87,14 @@ public class VertretungsplanApplication extends Application {
 
 	    }
 	    return mTracker;
-	  }
+	}
+	public static int getVersion() {
+		try {
+			return context.getPackageManager()
+				    .getPackageInfo(context.getPackageName(), 0).versionCode;
+		} catch (NameNotFoundException e) {
+			e.printStackTrace();
+			return -1;
+		}
+	}
 }

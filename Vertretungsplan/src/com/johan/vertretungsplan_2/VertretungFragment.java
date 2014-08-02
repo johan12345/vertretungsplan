@@ -43,6 +43,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
@@ -360,16 +362,19 @@ public class VertretungFragment extends VertretungsplanFragment {
 		
 		@Override
 		protected void onPostExecute(List<String> result) {
-			if(result != null) {
-				klasse = settings.getString("klasse", "");
-		        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, result));
-		        for(int i=0; i < klassen.getAdapter().getCount(); i++) {
-		        	  if(klassen.getAdapter().getItem(i).toString().equals(klasse)){
-		        	    klassen.setSelection(i);
-		        	    break;
-		        	  }
-		        }
-			}
+			if(result != null)
+				settings.edit().putString("klassen", new Gson().toJson(result)).commit();
+			else
+				result = new Gson().fromJson(settings.getString("klassen", null), new TypeToken<List<String>>(){}.getType());
+			
+			klasse = settings.getString("klasse", "");
+	        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, result));
+	        for(int i=0; i < klassen.getAdapter().getCount(); i++) {
+	        	  if(klassen.getAdapter().getItem(i).toString().equals(klasse)){
+	        	    klassen.setSelection(i);
+	        	    break;
+	        	  }
+	        }
 		}
     	
     }

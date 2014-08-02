@@ -12,11 +12,13 @@ import com.joejernst.http.Request;
 import com.joejernst.http.Response;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan_2.VertretungsplanApplication;
 
 public class BackendConnectParser extends BaseParser {
 	
 	private String schoolId;
 	private static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
+	private static final String VERSION = "v=" + VertretungsplanApplication.getVersion();
 	
 	public BackendConnectParser(Schule schule) {
 		super(schule);
@@ -30,9 +32,11 @@ public class BackendConnectParser extends BaseParser {
 
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
-			JSONException {
-		String url = BASE_URL + "vertretungsplan?school=" + schoolId;
+			JSONException, VersionException {
+		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&" + VERSION;
 		Response response = new Request(url).getResource("UTF-8");
+		if(response.getResponseCode() == 400)
+			throw new VersionException();
 		Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
 		return v;
 	}
@@ -40,7 +44,7 @@ public class BackendConnectParser extends BaseParser {
 	@Override
 	public List<String> getAllClasses() throws IOException, JSONException {
 		JSONArray classesJson;		
-		String url = BASE_URL + "classes?school=" + schoolId;
+		String url = BASE_URL + "classes?school=" + schoolId + "&" + VERSION;
 		classesJson = new JSONArray(httpGet(url, "UTF-8"));
 		List<String> classes = new ArrayList<String>();
 		for(int i = 0; i < classesJson.length(); i++) {
@@ -51,7 +55,7 @@ public class BackendConnectParser extends BaseParser {
 	
 	public static List<Schule> getAvailableSchools() throws IOException,
 			JSONException {
-		String url = BASE_URL + "schools";
+		String url = BASE_URL + "schools?" + VERSION;
 		Response response = new Request(url).getResource("UTF-8");
 		JSONArray array = new JSONArray(response.getBody());
 		List<Schule> schools = new ArrayList<Schule>();

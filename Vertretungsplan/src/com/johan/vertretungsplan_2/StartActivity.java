@@ -27,8 +27,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.content.res.Configuration;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -40,6 +40,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -53,6 +54,7 @@ import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
 
+import de.keyboardsurfer.android.widget.crouton.Configuration;
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
 
@@ -91,7 +93,7 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		DisplayMetrics metrics = new DisplayMetrics();
 		getWindowManager().getDefaultDisplay().getMetrics(metrics);
 		getResources().getConfiguration();
-		if (metrics.widthPixels / (metrics.densityDpi / 160f) >= 800 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+		if (metrics.widthPixels / (metrics.densityDpi / 160f) >= 800 && getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
 			tabs.setVisibility(View.GONE);
 		}
 		tabs.setOnPageChangeListener( adapter );   
@@ -212,7 +214,7 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		}
 	}
 
-	static class ResultHandler extends Handler {
+	private class ResultHandler extends Handler {
 		private StartActivity activity;
 		
 		public ResultHandler(StartActivity activity) {
@@ -220,13 +222,13 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		}
 		
 		public void handleMessage(Message message) {
-			if (message.arg1 == RESULT_OK) {
+			if (message.arg1 == VertretungsplanService.RESULT_OK) {
 				Log.d("Vertretungsplan", "RESULT OK");
 				Gson gson = new Gson();
 				activity.setVertretungsplan((Vertretungsplan) message.getData().getSerializable("Vertretungsplan"));
 				Log.d("Vertretungsplan", gson.toJson(activity.vertretungsplan));
 				activity.asyncRunning = false;
-			} else if (message.arg1 == Activity.RESULT_CANCELED) {
+			} else if (message.arg1 == VertretungsplanService.RESULT_ERROR) {
 				activity.asyncRunning = false;
 				Gson gson = new Gson();
 				activity.vertretungsplan = gson.fromJson(activity.settings.getString("Vertretungsplan", ""), Vertretungsplan.class);
@@ -238,6 +240,23 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 					Crouton crouton = Crouton.makeText(activity, "keine Internetverbindung", Style.ALERT);
 					crouton.show();
 				}
+			} else if (message.arg1 == VertretungsplanService.RESULT_VERSION_ERROR) {
+				Crouton crouton = Crouton.makeText(activity, "Bitte klicke hier, um die neueste Version der App zu installieren", Style.ALERT);
+				crouton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						final String appPackageName = StartActivity.this.getPackageName(); // getPackageName() from Context or Activity object
+						try {
+						    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+						} catch (android.content.ActivityNotFoundException anfe) {
+						    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
+						}
+					}
+					
+				});
+				crouton.setConfiguration(new Configuration.Builder().setDuration(Configuration.DURATION_INFINITE).build());
+				crouton.show();
 			}
 
 		};

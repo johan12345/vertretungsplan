@@ -16,12 +16,14 @@
 
 package com.johan.vertretungsplan.background;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.json.JSONException;
 
 import android.app.IntentService;
 import android.app.Notification;
@@ -49,6 +51,7 @@ import com.johan.vertretungsplan.objects.AdditionalInfo;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.parser.BaseParser.VersionException;
 import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 import com.johan.vertretungsplan_2.R;
 import com.johan.vertretungsplan_2.StartActivity;
@@ -59,6 +62,10 @@ public class VertretungsplanService extends IntentService {
 	static SharedPreferences settings;
 	static Bundle extras;
 	static Context context;
+	
+	public static int RESULT_OK = -1;
+	public static int RESULT_ERROR = 0;
+	public static int RESULT_VERSION_ERROR = 1;
 	
 	public static String KEY_NOTIFICATION = "notification";
 
@@ -101,12 +108,10 @@ public class VertretungsplanService extends IntentService {
 				Vertretungsplan v = parser.getVertretungsplan();
 	
 				// Sucessful finished
-				int result = Activity.RESULT_OK;	
+				int result = RESULT_OK;	
 	
-				if(extras != null) {
-					if(extras.get("MESSENGER") != null) {
-						nachrichtAnApp(extras, result, v);
-					}
+				if(extras != null && extras.get("MESSENGER") != null) {
+					nachrichtAnApp(extras, result, v);
 				}
 				
 				if ((extras == null || extras.getBoolean(KEY_NOTIFICATION, true))
@@ -128,8 +133,17 @@ public class VertretungsplanService extends IntentService {
 				AppWidgetManager mgr=AppWidgetManager.getInstance(this);
 				int[] ids = mgr.getAppWidgetIds(new ComponentName(this, VertretungsplanWidgetProvider.class));
 				new VertretungsplanWidgetProvider().onUpdate(this, mgr, ids);
-			} catch (Exception e) {
+			} catch (IOException | JSONException e) {
 				e.printStackTrace();
+				int result = RESULT_ERROR;
+				if(extras != null && extras.get("MESSENGER") != null) {
+					nachrichtAnApp(extras, result, null);
+				}
+			} catch (VersionException e) {
+				int result = RESULT_VERSION_ERROR;
+				if(extras != null && extras.get("MESSENGER") != null) {
+					nachrichtAnApp(extras, result, null);
+				}
 			}
 		}
 	}
@@ -216,7 +230,8 @@ public class VertretungsplanService extends IntentService {
 
 			msg.arg1 = result;
 			Bundle bundle = new Bundle();
-			bundle.putSerializable("Vertretungsplan", v);		  	      
+			if(v != null)
+				bundle.putSerializable("Vertretungsplan", v);		  	      
 			msg.setData(bundle);
 			try {
 				messenger.send(msg);

@@ -203,21 +203,27 @@ public class Request extends Message<Request> {
      * @throws IOException
      */
     private Response readResponse(String encoding) throws IOException {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), encoding));
+    	Response resp =  new Response()
+        .setResponseCode(connection.getResponseCode())
+        .setResponseMessage(connection.getResponseMessage())
+        .setHeaders(connection.getHeaderFields());      
+    	
+    	try {
+	        BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream(), encoding));
+	
+	        StringBuilder builder = new StringBuilder();
+	        String line;
+	
+	        while ((line = reader.readLine()) != null) {
+	            builder.append(line);
+	        }
+	        reader.close();
+	        resp.setBody(builder.toString());
+    	} catch (IOException e) {
+    		
+    	}
 
-        StringBuilder builder = new StringBuilder();
-        String line;
-
-        while ((line = reader.readLine()) != null) {
-            builder.append(line);
-        }
-        reader.close();
-
-        return new Response()
-                .setResponseCode(connection.getResponseCode())
-                .setResponseMessage(connection.getResponseMessage())
-                .setHeaders(connection.getHeaderFields())
-                .setBody(builder.toString());
+        return resp;
     }
     
     /**
