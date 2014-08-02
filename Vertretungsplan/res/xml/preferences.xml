@@ -16,20 +16,7 @@
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Automatische Aktualisierung"
 	    android:id="@+id/sync_category">
-		<CheckBoxPreference android:id="@+id/sync"
-			android:key="sync" android:defaultValue="true"
-			android:summaryOff="Nicht im Hintergrund abrufen"
-			android:summaryOn="Im Hintergrund abrufen und das Widget aktualisieren"
-			android:title="Automatisch aktualisieren" />
-		<!--<CheckBoxPreference android:dependency="sync" android:id="@+id/syncWifi" 
-			android:key="syncWifi" android:defaultValue="false" android:summaryOff="Über 
-			WLAN und mobile Daten (z.B. UMTS) abrufen" android:summaryOn="Nur über WLAN 
-			abrufen" android:title="Nur bei WLAN" /> -->
-		<ListPreference android:dependency="sync" android:id="@+id/syncPeriod"
-			android:key="syncPeriod" android:title="Häufigkeit"
-			android:dialogTitle="Häufigkeit auswählen:" android:entries="@array/syncPeriod_entries"
-			android:entryValues="@array/syncPeriod_values" android:defaultValue="30" />
-		<CheckBoxPreference android:dependency="sync"
+		<CheckBoxPreference
 			android:id="@+id/notification" android:key="notification"
 			android:defaultValue="true"
 			android:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"

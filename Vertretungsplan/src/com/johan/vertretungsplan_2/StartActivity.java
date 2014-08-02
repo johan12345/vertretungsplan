@@ -16,12 +16,9 @@
 
 package com.johan.vertretungsplan_2;
 
-import java.io.IOException;
-import java.util.List;
-
 import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.Fragment;
+import org.holoeverywhere.preference.PreferenceManager;
 
 import android.content.Context;
 import android.content.DialogInterface;
@@ -32,7 +29,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -45,8 +41,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import org.holoeverywhere.preference.PreferenceManager;
-
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
@@ -54,14 +48,10 @@ import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.inscription.ChangeLogDialog;
 import com.inscription.WhatsNewDialog;
-import com.johan.vertretungsplan.background.AutostartService;
 import com.johan.vertretungsplan.background.VertretungsplanService;
-import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
-import com.johan.vertretungsplan.utils.Utils;
-import com.johan.vertretungsplan_2.R;
 
 import de.keyboardsurfer.android.widget.crouton.Crouton;
 import de.keyboardsurfer.android.widget.crouton.Style;
@@ -76,9 +66,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 	private Boolean asyncRunning = false;
 	private SharedPreferences settings;
 	private PagerSlidingTabStrip tabs;
-	
-	private boolean vertretungFragmentLoaded;
-	private boolean nachrichtenFragmentLoaded;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -88,24 +75,9 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		settings  = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 
 		if(!settings.contains("selected_school")) {
-			List<Schule> schools;
-			 try {
-			 	schools = Utils.getSchools(this);
-			 	if(schools.size() > 1) {
-			 		Intent intent = new Intent(this, SelectSchoolActivity.class);
-			 		startActivity(intent);
-			 		finish();
-			 	} else {
-			 		Schule selectedSchool = schools.get(0);
-			 		settings.edit().putString("selected_school", selectedSchool.getId()).commit();				
-			 		((VertretungsplanApplication) getApplication()).notifySchoolChanged();
-			 	}
-			 } catch (IOException e) {
-			 	e.printStackTrace();
-			 	Intent intent = new Intent(this, SelectSchoolActivity.class);
-				startActivity(intent);
-			 	finish();
-			 }
+	 		Intent intent = new Intent(this, SelectSchoolActivity.class);
+	 		startActivity(intent);
+	 		finish();
 		}
 		
 		vertretungFragment = new VertretungFragment();
@@ -150,15 +122,9 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 	
 	private void analyticsStart() {
 		Tracker t = ((VertretungsplanApplication) getApplication()).getTracker();
-		try {
-			Schule school = Utils.getSelectedSchool(this);
-			t.send(new HitBuilders.AppViewBuilder()
-				.setCustomDimension(1, school.getName() + ", " + school.getCity())
-				.setCustomDimension(2, settings.getString("klasse", "unbekannt")).build());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		t.send(new HitBuilders.AppViewBuilder()
+			.setCustomDimension(1, settings.getString("selected_school", "unbekannt"))
+			.setCustomDimension(2, settings.getString("klasse", "unbekannt")).build());
 		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
 	
@@ -300,7 +266,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		SharedPreferences.Editor prefEditor = prefs.edit();
 		prefEditor.putBoolean("isInForeground",true);
 		prefEditor.commit();      
-		setAlarms();
 	}
 	@Override
 	public void onPause(){
@@ -314,11 +279,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 	@Override
 	public void onSaveInstanceState(Bundle out) {
 		super.onSaveInstanceState(out);
-	}
-
-	public void setAlarms(){
-		Intent autostartIntent = new Intent(appContext, AutostartService.class);
-		appContext.startService(autostartIntent);
 	}
 
 	private void setVertretungsplan(Vertretungsplan v) {

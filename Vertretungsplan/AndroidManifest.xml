@@ -2,7 +2,6 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.VIBRATE"/>
@@ -30,13 +29,6 @@
         <activity android:label="@string/app_name" android:name="com.johan.vertretungsplan_2.SelectSchoolActivity">
         </activity>
 
-        <receiver android:name="com.johan.vertretungsplan.background.OnBootReceiver">
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
-                <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
-            </intent-filter>
-        </receiver>
-
         <activity android:label="@string/title_activity_settings" android:logo="@drawable/ic_action_icon" android:name="com.johan.vertretungsplan_2.SettingsActivity" android:parentActivityName="com.johan.vertretungsplan_2.StartActivity">
             <meta-data android:name="android.support.PARENT_ACTIVITY" android:value="com.johan.vertretungsplan.StartActivity"/>
         </activity>
@@ -46,8 +38,6 @@
         <service android:enabled="true" android:name="com.johan.vertretungsplan.background.VertretungsplanService">
         </service>
         
-        <service android:enabled="true" android:name="com.johan.vertretungsplan.background.AutostartService">
-        </service>
         <service android:name=".GCMIntentService"/>
         <receiver android:name="com.google.android.gcm.GCMBroadcastReceiver" android:permission="com.google.android.c2dm.permission.SEND">
             <intent-filter>

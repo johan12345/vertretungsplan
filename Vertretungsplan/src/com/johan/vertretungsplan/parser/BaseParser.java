@@ -64,24 +64,4 @@ public abstract class BaseParser {
 		Response response = new Request(url).getResource(encoding);
 		return response.getBody();
 	}
-
-	/**
-	 * Erstelle einen neuen Parser für eine Schule.
-	 * Liefert automatisch eine passende Unterklasse.
-	 * @param schule die Schule, für die ein Parser erstellt werden soll
-	 * @return Eine Unterklasse von {@link BaseParser}, die zur übergebenen Schule passt
-	 */
-	public static BaseParser getInstance(Schule schule) {
-		BaseParser parser = null;
-		if(schule != null) {
-			if (schule.getApi().equals("untis-monitor")) {
-				parser = new UntisMonitorParser(schule);
-			} else if (schule.getApi().equals("untis-info")) {
-				parser = new UntisInfoParser(schule);
-			} else if (schule.getApi().equals("backend-connect")) {
-				parser = new BackendConnectParser(schule);
-			} //else if ... (andere Parser)
-		}
-		return parser;
-	}
 }

@@ -15,42 +15,50 @@ import com.johan.vertretungsplan.objects.Vertretungsplan;
 
 public class BackendConnectParser extends BaseParser {
 	
-	private Schule schule;
+	private String schoolId;
 	private static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
 	
 	public BackendConnectParser(Schule schule) {
 		super(schule);
-		this.schule = schule;
+		this.schoolId = schule.getId();
+	}
+	
+	public BackendConnectParser(String schoolId) {
+		super(null);
+		this.schoolId = schoolId;
 	}
 
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException {
-		String url = BASE_URL + "vertretungsplan?school=" + schule.getId();
-		try {
-			Response response = new Request(url).getResource("UTF-8");
-			Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
-			return v;
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return null;
+		String url = BASE_URL + "vertretungsplan?school=" + schoolId;
+		Response response = new Request(url).getResource("UTF-8");
+		Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
+		return v;
 	}
 
 	@Override
 	public List<String> getAllClasses() throws IOException, JSONException {
-		JSONArray classesJson;
-		if(schule.getData().has("classes")) {
-			classesJson = schule.getData().getJSONArray("classes");
-		} else {
-			String url = BASE_URL + "classes?school=" + schule.getId();
-			classesJson = new JSONArray(httpGet(url, "UTF-8"));
-		}
+		JSONArray classesJson;		
+		String url = BASE_URL + "classes?school=" + schoolId;
+		classesJson = new JSONArray(httpGet(url, "UTF-8"));
 		List<String> classes = new ArrayList<String>();
 		for(int i = 0; i < classesJson.length(); i++) {
 			classes.add(classesJson.getString(i));
 		}
 		return classes;
+	}
+	
+	public static List<Schule> getAvailableSchools() throws IOException,
+			JSONException {
+		String url = BASE_URL + "schools";
+		Response response = new Request(url).getResource("UTF-8");
+		JSONArray array = new JSONArray(response.getBody());
+		List<Schule> schools = new ArrayList<Schule>();
+		for(int i = 0; i < array.length(); i++) {
+			schools.add(Schule.fromServerJSON(array.getJSONObject(i)));
+		}
+		return schools;
 	}
 
 }

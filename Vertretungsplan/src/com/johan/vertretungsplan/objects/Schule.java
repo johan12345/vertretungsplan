@@ -31,6 +31,8 @@ public class Schule {
 	private List<String> additionalInfos;
 	private JSONObject data;
 	private boolean usesPush;
+	private int userCount;
+	private int[] geo;
 	
 	public static Schule fromJSON(String id, JSONObject json) throws JSONException {
 		Schule schule = new Schule();
@@ -52,6 +54,21 @@ public class Schule {
 		schule.setData(json.getJSONObject("data"));
 		return schule;
 	}
+	
+	public static Schule fromServerJSON(JSONObject json) throws JSONException {
+		Schule schule = new Schule();
+		schule.setId(json.getString("id"));
+		schule.setCity(json.getString("city"));
+		schule.setName(json.getString("name"));
+		schule.setUserCount(json.getInt("user_count"));
+		if(json.has("geo")) {
+			JSONArray geoArray = json.getJSONArray("geo");
+			int[] geo = new int[]{geoArray.getInt(0), geoArray.getInt(1)};
+			schule.setGeo(geo);
+		}
+		return schule;
+	}
+	
 	/**
 	 * @return the id
 	 */
@@ -129,5 +146,19 @@ public class Schule {
 	}
 	public void setUsesPush(boolean usesPush) {
 		this.usesPush = usesPush;
+	}
+	public int getUserCount() {
+		return userCount;
+	}
+	public void setUserCount(int userCount) {
+		this.userCount = userCount;
+	}
+
+	public int[] getGeo() {
+		return geo;
+	}
+
+	public void setGeo(int[] geo) {
+		this.geo = geo;
 	}
 }

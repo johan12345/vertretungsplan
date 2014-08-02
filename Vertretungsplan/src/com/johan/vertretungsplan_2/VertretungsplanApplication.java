@@ -15,22 +15,17 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 package com.johan.vertretungsplan_2;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.holoeverywhere.app.Application;
+import org.holoeverywhere.preference.PreferenceManager;
+import org.holoeverywhere.preference.SharedPreferences;
 
 import android.content.Intent;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
-import com.johan.vertretungsplan.additionalinfo.BaseAdditionalInfoParser;
-import com.johan.vertretungsplan.objects.Schule;
-import com.johan.vertretungsplan.parser.BaseParser;
-import com.johan.vertretungsplan.utils.Utils;
+import com.johan.vertretungsplan.parser.BackendConnectParser;
 
 @ReportsCrashes(formKey = "", mailTo = "johan.forstner+app@gmail.com", 
 mode = org.acra.ReportingInteractionMode.DIALOG,
@@ -40,9 +35,9 @@ resDialogText = R.string.crash_dialog_text,
 resDialogCommentPrompt = R.string.crash_dialog_comment_prompt)
 public class VertretungsplanApplication extends Application {
 
-	private BaseParser parser;
-	private List<BaseAdditionalInfoParser> additionalInfoParsers;
+	private BackendConnectParser parser;
 	private Tracker mTracker;
+	private SharedPreferences settings;
 
 	@Override
 	public void onCreate() {
@@ -50,67 +45,28 @@ public class VertretungsplanApplication extends Application {
 
 		// The following line triggers the initialization of ACRA
 		ACRA.init(this);
+		settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 	}
 
-	public BaseParser getParser() {
+	public BackendConnectParser getParser() {
 		if(parser != null)
 			return parser;
 		else {
-			try {
-				notifySchoolChanged();
-				if(parser == null) {
-					List<Schule> schools = Utils.getSchools(this);
-					if(schools.size() > 1)
-						startSelectSchoolActivity();
-					parser = BaseParser.getInstance(schools.get(0));
-					return parser;
-				} else {
-					return parser;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
-			}
-		}
-	}
-	
-	public List<BaseAdditionalInfoParser> getAdditionalInfoParsers() {
-		if(additionalInfoParsers != null) {
-			return additionalInfoParsers;
-		} else {
-			try {
-				notifySchoolChanged();
-				if(additionalInfoParsers == null) {
-					List<Schule> schools = Utils.getSchools(this);
-					if(schools.size() > 1)
-						startSelectSchoolActivity();
-					additionalInfoParsers = new ArrayList<BaseAdditionalInfoParser>();
-					for (String infoType:schools.get(0).getAdditionalInfos()) {
-						additionalInfoParsers.add(BaseAdditionalInfoParser.getInstance(infoType));
-					}
-					return additionalInfoParsers;
-				} else {
-					return additionalInfoParsers;
-				}
-			} catch (IOException e) {
-				e.printStackTrace();
-				return null;
+			notifySchoolChanged();
+			if(parser == null) {					
+				startSelectSchoolActivity();
+				parser = null;
+				return parser;
+			} else {
+				return parser;
 			}
 		}
 	}
 
 	public void notifySchoolChanged() {
-		try {
-			Schule schule = Utils.getSelectedSchool(this);
-			if(schule != null) {
-				parser = BaseParser.getInstance(schule);
-				additionalInfoParsers = new ArrayList<BaseAdditionalInfoParser>();
-				for (String infoType:schule.getAdditionalInfos()) {
-					additionalInfoParsers.add(BaseAdditionalInfoParser.getInstance(infoType));
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		String schoolId = settings.getString("selected_school", null);
+		if(schoolId != null) {
+			parser = new BackendConnectParser(schoolId);
 		}
 	}
 	

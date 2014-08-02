@@ -26,19 +26,20 @@ import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
 import org.holoeverywhere.widget.TextView;
-
-import com.johan.vertretungsplan.comparators.AlphabeticalSchoolComparator;
-import com.johan.vertretungsplan.objects.Schule;
-import com.johan.vertretungsplan.utils.Utils;
-import com.johan.vertretungsplan_2.R;
+import org.json.JSONException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+
+import com.johan.vertretungsplan.comparators.AlphabeticalSchoolComparator;
+import com.johan.vertretungsplan.objects.Schule;
+import com.johan.vertretungsplan.parser.BackendConnectParser;
 
 public class SelectSchoolActivity extends Activity {
 	
@@ -52,13 +53,9 @@ public class SelectSchoolActivity extends Activity {
 		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		lstSchools = (ListView) findViewById(R.id.listSchools);
-		try {
-			schools = Utils.getSchools(this);			
-			Collections.sort(schools, new AlphabeticalSchoolComparator());
-			lstSchools.setAdapter(new SchoolsAdapter(this, schools));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		
+		new LoadSchoolsTask().execute();
+
 		OnItemClickListener listener = new OnItemClickListener() {
 
 			@Override
@@ -75,11 +72,6 @@ public class SelectSchoolActivity extends Activity {
 			
 		};
 		lstSchools.setOnItemClickListener(listener);
-		
-		
-		if (schools.size() == 1) {
-			listener.onItemClick(lstSchools, null, 0, 0);
-		}
 	}
 	
 	private class SchoolsAdapter extends ArrayAdapter<Schule> {
@@ -111,6 +103,26 @@ public class SelectSchoolActivity extends Activity {
 			schoolCity.setText(school.getCity());
 			
 			return view;
+		}
+		
+	}
+	
+	private class LoadSchoolsTask extends AsyncTask <Void, Void, List<Schule>> {
+
+		@Override
+		protected List<Schule> doInBackground(Void... arg0) {
+			try {
+				return BackendConnectParser.getAvailableSchools();
+			} catch (IOException | JSONException e) {
+				e.printStackTrace();
+			}
+			return null;
+		}
+		
+		protected void onPostExecute(List<Schule> schools) {					
+			Collections.sort(schools, new AlphabeticalSchoolComparator());
+			SelectSchoolActivity.this.schools = schools;
+			lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools));
 		}
 		
 	}

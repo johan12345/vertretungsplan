@@ -23,17 +23,6 @@ import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 
-import com.google.gson.Gson;
-import com.johan.vertretungsplan.additionalinfo.BaseAdditionalInfoParser;
-import com.johan.vertretungsplan.objects.AdditionalInfo;
-import com.johan.vertretungsplan.objects.Vertretungsplan;
-import com.johan.vertretungsplan.objects.VertretungsplanTag;
-import com.johan.vertretungsplan.parser.BaseParser;
-import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
-import com.johan.vertretungsplan_2.R;
-import com.johan.vertretungsplan_2.StartActivity;
-import com.johan.vertretungsplan_2.VertretungsplanApplication;
-
 import android.app.IntentService;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -54,6 +43,16 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
 import android.widget.RemoteViews;
+
+import com.google.gson.Gson;
+import com.johan.vertretungsplan.objects.AdditionalInfo;
+import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.objects.VertretungsplanTag;
+import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
+import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan_2.StartActivity;
+import com.johan.vertretungsplan_2.VertretungsplanApplication;
 
 public class VertretungsplanService extends IntentService {
 	public static String UPDATE_ACTION = "UPDATE";
@@ -97,15 +96,9 @@ public class VertretungsplanService extends IntentService {
 			
 			try {
 				BaseParser parser = ((VertretungsplanApplication) getApplication()).getParser();
-				List<BaseAdditionalInfoParser> additionalInfoParsers = ((VertretungsplanApplication) getApplication()).getAdditionalInfoParsers();
 				
 				//Vertretungsplan-Objekt erzeugen
 				Vertretungsplan v = parser.getVertretungsplan();
-				
-				//Zusätzliche Informationen hinzufügen
-				for(BaseAdditionalInfoParser additionalInfoParser:additionalInfoParsers) {
-					v.getAdditionalInfos().add(additionalInfoParser.getAdditionalInfo());
-				}
 	
 				// Sucessful finished
 				int result = Activity.RESULT_OK;	
