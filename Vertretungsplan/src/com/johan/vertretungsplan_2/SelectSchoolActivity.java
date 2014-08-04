@@ -25,6 +25,7 @@ import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.ListView;
+import org.holoeverywhere.widget.ProgressBar;
 import org.holoeverywhere.widget.TextView;
 import org.holoeverywhere.widget.Toast;
 import org.json.JSONException;
@@ -46,6 +47,7 @@ public class SelectSchoolActivity extends Activity {
 	
 	ListView lstSchools;
 	List<Schule> schools;
+	ProgressBar progress;
 	
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -54,6 +56,7 @@ public class SelectSchoolActivity extends Activity {
 		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 		
 		lstSchools = (ListView) findViewById(R.id.listSchools);
+		progress = (ProgressBar) findViewById(R.id.progress);
 		
 		new LoadSchoolsTask().execute();
 
@@ -109,6 +112,11 @@ public class SelectSchoolActivity extends Activity {
 	}
 	
 	private class LoadSchoolsTask extends AsyncTask <Void, Void, List<Schule>> {
+		
+		@Override
+		protected void onPreExecute() {
+			progress.setVisibility(View.VISIBLE);
+		}
 
 		@Override
 		protected List<Schule> doInBackground(Void... arg0) {
@@ -120,7 +128,9 @@ public class SelectSchoolActivity extends Activity {
 			return null;
 		}
 		
+		@Override
 		protected void onPostExecute(List<Schule> schools) {
+			progress.setVisibility(View.GONE);
 			if(schools != null) {
 				Collections.sort(schools, new AlphabeticalSchoolComparator());
 				SelectSchoolActivity.this.schools = schools;

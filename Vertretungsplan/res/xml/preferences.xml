@@ -14,7 +14,7 @@
 			android:summaryOn="Anonyme Nutzungsstatistiken über Google Analytics senden"
 			android:title="Google Analytics" />
 	</PreferenceCategory>
-	<PreferenceCategory android:title="Automatische Aktualisierung"
+	<PreferenceCategory android:title="Benachrichtigung"
 	    android:id="@+id/sync_category">
 		<CheckBoxPreference
 			android:id="@+id/notification" android:key="notification"

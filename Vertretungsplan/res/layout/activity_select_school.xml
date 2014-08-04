@@ -9,23 +9,36 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcome"
         android:fontFamily="roboto-light"
+        android:text="@string/welcome"
         android:textSize="28sp" />
-    
+
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/select_your_school"
         android:fontFamily="roboto-light"
+        android:text="@string/select_your_school"
         android:textSize="16sp" />
 
-    <ListView
-        android:id="@+id/listSchools"
+    <FrameLayout
+        android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="8dp" >
-    </ListView>
+
+        <ListView
+            android:id="@+id/listSchools"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" >
+        </ListView>
+
+        <ProgressBar
+            android:id="@+id/progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+    </FrameLayout>
 
 </LinearLayout>
