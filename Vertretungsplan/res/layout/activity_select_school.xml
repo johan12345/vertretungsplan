@@ -20,17 +20,44 @@
         android:fontFamily="roboto-light"
         android:text="@string/select_your_school"
         android:textSize="16sp" />
+    
+    <LinearLayout
+        android:id="@+id/llLocate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/list_selector_holo_light"
+        android:clickable="true"
+        android:focusable="true"
+        android:padding="16dp"
+        android:layout_marginTop="8dp" >
+
+        <ImageView
+            android:id="@+id/ivLocationIcon"
+            android:layout_width="wrap_content"
+            android:contentDescription="@string/geolocate"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_location_found" />
+
+        <TextView
+            android:id="@+id/tvLocateString"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="8dp"
+            android:layout_weight="1"
+            android:text="@string/geolocate" />
+    </LinearLayout>
 
     <FrameLayout
         android:id="@+id/frame"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="8dp" >
+        android:layout_height="0dp"
+        android:layout_weight="1" >
 
         <ListView
             android:id="@+id/listSchools"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:layout_height="match_parent" >
         </ListView>
 
         <ProgressBar
@@ -38,7 +65,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
+    </FrameLayout>
 
+    <FrameLayout
+        android:id="@+id/suggestSchool"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp" >
+
+        <TextView
+            android:id="@+id/tvSuggestSchool"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/actionbar_color"
+            android:padding="8dp"
+            android:text="@string/suggest_school"
+            android:textColor="@android:color/white" />
     </FrameLayout>
 
 </LinearLayout>

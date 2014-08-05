@@ -47,8 +47,6 @@ import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
-import com.inscription.ChangeLogDialog;
-import com.inscription.WhatsNewDialog;
 import com.johan.vertretungsplan.background.VertretungsplanService;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
@@ -171,13 +169,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 
 			final Context context = this;
 			AlertDialog dialog = LinkAlertDialog.create(this, "Info", msg)
-					.setNegativeButton("Changelog", new DialogInterface.OnClickListener() {
-						public void onClick(DialogInterface dialog, int id) {
-							//Launch change log dialog
-							ChangeLogDialog _ChangelogDialog = new ChangeLogDialog(context); 
-							_ChangelogDialog.show();  
-						}
-					})
 					.setPositiveButton("OK", null)
 					.create();		
 			dialog.show();	
@@ -307,7 +298,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 
 	public void showDialogs() {
 		boolean firstRun = settings.getBoolean("firstRun", true);
-		final WhatsNewDialog whatsNewDialog = new WhatsNewDialog(this);
 		if(firstRun) {
 			String license = getResources().getString(R.string.license_dialog);
 			AlertDialog dialog = LinkAlertDialog.create(this, "Lizenzbedingungen", license).setPositiveButton("Akzeptieren", null).create();
@@ -315,14 +305,9 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 				@Override
 				public void onDismiss(DialogInterface dialog) {
 					settings.edit().putBoolean("firstRun", false).commit();
-					if(Build.VERSION.SDK_INT != 16) //Bug in 4.1 that causes Dialog to crash
-						whatsNewDialog.show();
 				}       		
 			});
 			dialog.show();
-		} else {
-			if(Build.VERSION.SDK_INT != 16) //Bug in 4.1 that causes Dialog to crash
-				whatsNewDialog.show();
 		}
 	}
 

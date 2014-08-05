@@ -104,6 +104,8 @@ public class VertretungsplanService extends IntentService {
 			try {
 				BaseParser parser = ((VertretungsplanApplication) getApplication()).getParser();
 				
+				if (parser == null) return;
+				
 				//Vertretungsplan-Objekt erzeugen
 				Vertretungsplan v = parser.getVertretungsplan();
 	

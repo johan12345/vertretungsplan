@@ -16,8 +16,26 @@
 
 package com.johan.vertretungsplan.utils;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
+
 public class Utils {
 	public static boolean isEqual(Object o1, Object o2) {
 		return o1 == o2 || (o1 != null && o1.equals(o2));
 	}
+	
+	public static void email(Context context, String to, String subject, String body) {    
+	    Intent send = new Intent(Intent.ACTION_SENDTO);
+		String uriText = "mailto:"
+				+ Uri.encode(to)
+				+ "?subject=" + Uri.encode(subject)
+				+ "&body=" + Uri.encode(body);
+		Uri uri = Uri.parse(uriText);
+
+		send.setData(uri);
+		context.startActivity(Intent.createChooser(send,"E-Mail senden"));
+	}
+	
+	
 }

@@ -21,4 +21,13 @@
         android:layout_below="@+id/school_city"
         android:text="TextView" />
 
+    <TextView
+        android:id="@+id/school_distance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:text="Small Text"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
 </RelativeLayout>

@@ -33,6 +33,7 @@ public class Schule {
 	private boolean usesPush;
 	private int userCount;
 	private double[] geo;
+	private double distance;
 	
 	public static Schule fromJSON(String id, JSONObject json) throws JSONException {
 		Schule schule = new Schule();
@@ -165,5 +166,13 @@ public class Schule {
 
 	public void setGeo(double[] geo) {
 		this.geo = geo;
+	}
+
+	public double getDistance() {
+		return distance;
+	}
+
+	public void setDistance(double distance) {
+		this.distance = distance;
 	}
 }

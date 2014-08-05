@@ -72,5 +72,10 @@
     
     <string name="no_info">Keine Informationen</string>
     <string name="notification_text">Es gibt Änderungen auf dem Vertretungsplan!</string>
+    
+    <string name="suggest_school">Deine Schule wird nicht unterstützt? Schlage sie vor!</string>
+    <string name="geolocate">Schulen in der Nähe finden</string>
+    <string name="geolocate_progress">Position wird gesucht...</string>
+    <string name="alphabetic_list">Alphabetische Liste anzeigen</string>
 
 </resources>

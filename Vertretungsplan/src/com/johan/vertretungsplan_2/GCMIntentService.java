@@ -189,7 +189,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 			info.klasse = json.getString("klasse");
 			info.schoolId = json.getString("schoolId");
 			return info;	
-		} catch (FileNotFoundException e) {
+		} catch (FileNotFoundException | NullPointerException e) {
 			return null;
 		}
 	}
