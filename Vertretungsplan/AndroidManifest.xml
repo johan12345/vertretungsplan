@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.VIBRATE"/>
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="19"/>
+    <uses-sdk android:minSdkVersion="9" android:targetSdkVersion="19"/>
 
     <permission android:name="com.johan.vertretungsplan_2.permission.C2D_MESSAGE" android:protectionLevel="signature"/>
 
