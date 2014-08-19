@@ -67,33 +67,47 @@ public class Vertretung implements Serializable {
 	 * (ohne die Art und die Stunde).
 	 */
 	public String toString() {
-		String string;
-		if(type.equals("anderer Raum")) {
-			string = subject + " in " + room;
-		} else if (type.equals("Entfall")) {
-			string = subject;
-		} else if (type.equals("EVA")) {
-			string = subject;
-		} else if (type.equals("Vertretung")) {
-			string = subject + " statt " + previousSubject + " in " + room;
-		} else if (type.equals("Sondereins.")) {
-			string = subject + " in " + room;
-		} else if (type.equals("Verlegung")) {
-			string = subject + " statt " + previousSubject + " in " + room;	
-		} else if (type.equals("Tausch")) {
-			string = subject + " statt " + previousSubject + " in " + room;
-		} else if (type.equals("Statt-Vertretung")) {
-			string = subject + " statt " + previousSubject + " in " + room;
-		} else if (type.equals("Zusammenlegung")) {
-			string = subject + " in " + room;
-		} else  {
-			string = subject + " statt " + previousSubject + " in " + room;
+		String string = "";
+		if (containsInformation(subject)) {
+			string += subject;
+			if (containsInformation(teacher))
+				string += " (" + teacher + ")";
+		}
+		if (containsInformation(previousSubject) && 
+				!(previousSubject.equals(subject) &&
+						(previousTeacher != null &&
+						previousTeacher.equals(teacher) ||
+						(previousTeacher == null && teacher == null)))) {
+			if (containsInformation(subject))
+				string += " statt " + previousSubject;
+			else
+				string += previousSubject;
+			if (containsInformation(previousTeacher))
+				string += " (" + previousTeacher + ")";
+		}
+		if (containsInformation(room))
+			string += " in " + room;
+		if (containsInformation(previousRoom)
+				&& !previousRoom.equals(room)) {
+			if (containsInformation(room))
+				string += " statt " + previousRoom;
+			else
+				string += " in " + previousRoom;
 		}
 		
-		if (!desc.equals("")) {
-			string = string + " - " + desc;
+		if (containsInformation(desc)) {
+			if (!string.equals(""))
+				string += " - ";
+			string += desc;
 		}
 		return string;
+	}
+	
+	private boolean containsInformation(String string) {
+		if (string != null) {
+			String s = string.replaceAll("\\s","");
+			return !(s.equals("") || s.equals("---"));
+		} else return false;
 	}
 
 	/**
