@@ -361,7 +361,10 @@ public class VertretungFragment extends VertretungsplanFragment {
 		}
 		
 		@Override
-		protected void onPostExecute(List<String> result) {
+		protected void onPostExecute(List<String> result) {			
+			if (getActivity() == null)
+				return;
+			
 			if(result != null)
 				settings.edit().putString("klassen", new Gson().toJson(result)).commit();
 			else
