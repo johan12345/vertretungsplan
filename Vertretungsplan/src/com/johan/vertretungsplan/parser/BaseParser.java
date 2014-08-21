@@ -27,9 +27,9 @@ import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 
 /**
- * Ein Parser für einen Vertretungsplan.
- * Er erhält Informationen aus der JSON-Datei für eine Schule und liefert
- * den abgerufenen und geparsten Vertretungsplan zurück.
+ * Ein Parser für einen Vertretungsplan. Er erhält Informationen aus der
+ * JSON-Datei für eine Schule und liefert den abgerufenen und geparsten
+ * Vertretungsplan zurück.
  */
 public abstract class BaseParser {
 	/**
@@ -40,34 +40,43 @@ public abstract class BaseParser {
 	public BaseParser(Schule schule) {
 		this.schule = schule;
 	}
-	
+
 	/**
-	 * Ruft den Vertretungsplan ab und parst ihn.
-	 * Wird immer asynchron ausgeführt.
+	 * Ruft den Vertretungsplan ab und parst ihn. Wird immer asynchron
+	 * ausgeführt.
+	 * 
 	 * @return Der geparste {@link Vertretungsplan}
 	 * @throws IOException
 	 * @throws JSONException
-	 * @throws VersionException 
+	 * @throws VersionException
 	 */
-	public abstract Vertretungsplan getVertretungsplan() throws IOException, JSONException, VersionException;
-	
+	public abstract Vertretungsplan getVertretungsplan() throws IOException,
+			JSONException, VersionException, UnauthorizedException;
+
 	/**
-	 * Gibt eine Liste aller verfügbaren Klassen zurück.
-	 * Wird immer asynchron ausgeführt.
-	 * @return Eine Liste aller verfügbaren Klassen für diese Schule
-	 *  (auch die, die nicht aktuell vom Vertretungsplan betroffen sind)
+	 * Gibt eine Liste aller verfügbaren Klassen zurück. Wird immer asynchron
+	 * ausgeführt.
+	 * 
+	 * @return Eine Liste aller verfügbaren Klassen für diese Schule (auch die,
+	 *         die nicht aktuell vom Vertretungsplan betroffen sind)
 	 * @throws IOException
 	 * @throws JSONException
 	 */
-	public abstract List<String> getAllClasses() throws IOException, JSONException;
-	
+	public abstract List<String> getAllClasses() throws IOException,
+			JSONException;
+
 	protected String httpGet(String url, String encoding) throws IOException {
 		Response response = new Request(url).getResource(encoding);
 		return response.getBody();
 	}
-	
-	
+
+	@SuppressWarnings("serial")
 	public class VersionException extends Exception {
-		
+
+	}
+
+	@SuppressWarnings("serial")
+	public class UnauthorizedException extends Exception {
+
 	}
 }

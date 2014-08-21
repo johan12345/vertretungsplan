@@ -93,7 +93,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 	@Override
 	public void onError(Context context, String errorId) {
 
-		
 	}
 
 	/**
@@ -104,10 +103,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 		Intent intent2 = new Intent(this, VertretungsplanService.class);
 		intent2.putExtra(VertretungsplanService.KEY_NOTIFICATION, false);
 		startService(intent2);
-		
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		if(settings.getBoolean("notification", true) && !intent.getStringExtra("message").equals("NO_NOTIFICATION"))
-			sendNotificationIntent(context, intent.getStringExtra("message"), true, false);
+
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		if (settings.getBoolean("notification", true)
+				&& !intent.getStringExtra("message").equals("NO_NOTIFICATION"))
+			sendNotificationIntent(context, intent.getStringExtra("message"),
+					true, false);
 	}
 
 	/**
@@ -122,16 +124,16 @@ public class GCMIntentService extends GCMBaseIntentService {
 		boolean alreadyRegisteredWithEndpointServer = false;
 
 		try {
-			
-			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-			
-			String deviceInfo = URLEncoder
-						.encode(android.os.Build.MANUFACTURER
-								+ " "
-								+ android.os.Build.PRODUCT,
-								"UTF-8");
+
+			SharedPreferences settings = PreferenceManager
+					.getDefaultSharedPreferences(context);
+
+			String deviceInfo = URLEncoder.encode(android.os.Build.MANUFACTURER
+					+ " " + android.os.Build.PRODUCT, "UTF-8");
 			String klasse = settings.getString("klasse", "");
 			String schoolId = settings.getString("selected_school", "");
+			String login = settings.getString("login", "");
+			String password = settings.getString("password", "");
 
 			/*
 			 * Using cloud endpoints, see if the device has already been
@@ -152,11 +154,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 				 * product information over to the backend. Then, we'll be
 				 * registered.
 				 */
-				insertDeviceInfo(deviceInfo, klasse, schoolId, registration);
+				insertDeviceInfo(deviceInfo, klasse, schoolId, login, password,
+						registration);
 			}
 		} catch (IOException | JSONException e) {
 			Log.e(GCMIntentService.class.getName(),
-					"Exception received when attempting to register with server", e);
+					"Exception received when attempting to register with server",
+					e);
 
 			Log.d("Vertretungsplan",
 					"1) Registration with Google Cloud Messaging...SUCCEEDED!\n\n"
@@ -168,32 +172,37 @@ public class GCMIntentService extends GCMBaseIntentService {
 			return;
 		}
 	}
-	
-	private void insertDeviceInfo(String deviceInfo, String klasse, String schoolId, String registration) throws IOException {
-		String url = BASE_URL + "register?subId=" + registration + "&klasse=" + klasse
-				+ "&school=" + schoolId + "&deviceInfo=" + deviceInfo;
+
+	private void insertDeviceInfo(String deviceInfo, String klasse,
+			String schoolId, String login, String password, String registration)
+			throws IOException {
+		String url = BASE_URL + "register?subId=" + registration + "&klasse="
+				+ klasse + "&school=" + schoolId + "&deviceInfo=" + deviceInfo
+				+ "&login=" + URLEncoder.encode(login, "UTF-8") + "&password="
+				+ URLEncoder.encode(password, "UTF-8");
 		Response response = new Request(url).getResource("UTF-8");
-		if(response.getResponseCode() == 200) {
+		if (response.getResponseCode() == 200) {
 			Log.d("GCM", "inserted device info");
-		}		
+		}
 	}
 
-	private DeviceInfo getDeviceInfo(String registration) throws IOException, JSONException {
+	private DeviceInfo getDeviceInfo(String registration) throws IOException,
+			JSONException {
 		String url = BASE_URL + "getregistration?subId=" + registration;
 		try {
-			Response response = new Request(url).getResource("UTF-8");	
+			Response response = new Request(url).getResource("UTF-8");
 			JSONObject json = new JSONObject(response.getBody());
 			DeviceInfo info = new DeviceInfo();
 			info.subId = json.getString("_id");
 			info.deviceInfo = json.getString("deviceInfo");
 			info.klasse = json.getString("klasse");
 			info.schoolId = json.getString("schoolId");
-			return info;	
+			return info;
 		} catch (FileNotFoundException | NullPointerException e) {
 			return null;
 		}
 	}
-	
+
 	private DeviceInfo removeDeviceInfo(String registration) throws IOException {
 		String url = BASE_URL + "removeregistration?subId=" + registration;
 		new Request(url).getResource("UTF-8");
@@ -223,7 +232,8 @@ public class GCMIntentService extends GCMBaseIntentService {
 				removeDeviceInfo(registrationId);
 			} catch (IOException e) {
 				Log.e(GCMIntentService.class.getName(),
-						"Exception received when attempting to unregister with server", e);
+						"Exception received when attempting to unregister with server",
+						e);
 				return;
 			}
 		}
@@ -249,25 +259,29 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 */
 	private void sendNotificationIntent(Context context, String message,
 			boolean isError, boolean isRegistrationMessage) {
-		//App wird nicht angezeigt
-		SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(context);
-		String sound = settings.getString("ringtone", RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
+		// App wird nicht angezeigt
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		String sound = settings.getString("ringtone", RingtoneManager
+				.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION).toString());
 
-		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context)
-		.setSmallIcon(R.drawable.ic_notification)
-		.setContentTitle("Nachricht");
+		NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+				context).setSmallIcon(R.drawable.ic_notification)
+				.setContentTitle("Nachricht");
 		mBuilder.setContentText("Es gibt neue Änderungen auf dem Vertretungsplan");
 		if (!sound.equals("")) {
 			Uri soundUri = Uri.parse(sound);
 			mBuilder.setSound(soundUri);
 		}
-		mBuilder.setDefaults(Notification.DEFAULT_VIBRATE|Notification.DEFAULT_LIGHTS);
+		mBuilder.setDefaults(Notification.DEFAULT_VIBRATE
+				| Notification.DEFAULT_LIGHTS);
 		mBuilder.setOnlyAlertOnce(true);
 		mBuilder.setAutoCancel(true);
 		// Creates an explicit intent for an Activity in your app
 		Intent resultIntent = new Intent(context, StartActivity.class);
 
-		// The stack builder object will contain an artificial back stack for the
+		// The stack builder object will contain an artificial back stack for
+		// the
 		// started Activity.
 		// This ensures that navigating backward from the Activity leads out of
 		// your application to the Home screen.
@@ -276,13 +290,11 @@ public class GCMIntentService extends GCMBaseIntentService {
 		stackBuilder.addParentStack(StartActivity.class);
 		// Adds the Intent that starts the Activity to the top of the stack
 		stackBuilder.addNextIntent(resultIntent);
-		PendingIntent resultPendingIntent =
-				stackBuilder.getPendingIntent(
-						0,
-						PendingIntent.FLAG_UPDATE_CURRENT
-						);
+		PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(0,
+				PendingIntent.FLAG_UPDATE_CURRENT);
 		mBuilder.setContentIntent(resultPendingIntent);
-		NotificationManager mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager mNotificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
 		// mId allows you to update the notification later on.
 		int mId = 1;
 		mNotificationManager.notify(mId, mBuilder.build());

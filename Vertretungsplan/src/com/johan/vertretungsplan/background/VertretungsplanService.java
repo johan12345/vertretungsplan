@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
 import org.json.JSONException;
@@ -51,6 +50,7 @@ import com.johan.vertretungsplan.objects.AdditionalInfo;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
 import com.johan.vertretungsplan.parser.BaseParser;
+import com.johan.vertretungsplan.parser.BaseParser.UnauthorizedException;
 import com.johan.vertretungsplan.parser.BaseParser.VersionException;
 import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 import com.johan.vertretungsplan_2.R;
@@ -63,11 +63,12 @@ public class VertretungsplanService extends IntentService {
 	static Bundle extras;
 	static Context context;
 	
-	public static int RESULT_OK = -1;
-	public static int RESULT_ERROR = 0;
-	public static int RESULT_VERSION_ERROR = 1;
+	public static final int RESULT_OK = -1;
+	public static final int RESULT_ERROR = 0;
+	public static final int RESULT_VERSION_ERROR = 1;
+	public static final int RESULT_UNAUTHORIZED_ERROR = 2;
 	
-	public static String KEY_NOTIFICATION = "notification";
+	public static final String KEY_NOTIFICATION = "notification";
 
 	public VertretungsplanService() {
 		super("VertretungsplanService");
@@ -143,6 +144,11 @@ public class VertretungsplanService extends IntentService {
 				}
 			} catch (VersionException e) {
 				int result = RESULT_VERSION_ERROR;
+				if(extras != null && extras.get("MESSENGER") != null) {
+					nachrichtAnApp(extras, result, null);
+				}
+			} catch (UnauthorizedException e) {
+				int result = RESULT_UNAUTHORIZED_ERROR;
 				if(extras != null && extras.get("MESSENGER") != null) {
 					nachrichtAnApp(extras, result, null);
 				}

@@ -25,9 +25,19 @@
         android:id="@+id/school_distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/school_name"
+        android:layout_alignBottom="@+id/school_name"
         android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
         android:text="Small Text"
         android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/school_secure"
+        android:layout_marginLeft="4dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/school_name"
+        android:layout_toRightOf="@+id/school_name"
+        android:src="@drawable/ic_action_secure" />
 
 </RelativeLayout>

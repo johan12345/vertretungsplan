@@ -60,5 +60,11 @@
     <string name="geolocate">Schulen in der Nähe finden</string>
     <string name="geolocate_progress">Position wird gesucht...</string>
     <string name="alphabetic_list">Alphabetische Liste anzeigen</string>
+    
+    <string name="username">Benutzername/Kennung</string>
+    <string name="password">Passwort</string>
+    <string name="login">Gib die Benutzerdaten ein, mit denen du dich auch online beim Vertretungsplan deiner Schule einloggst.</string>
+    <string name="signin">Einloggen</string>
+    <string name="cancel">Abbrechen</string>
 
 </resources>

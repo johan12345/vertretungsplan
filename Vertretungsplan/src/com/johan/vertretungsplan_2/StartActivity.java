@@ -16,7 +16,6 @@
 
 package com.johan.vertretungsplan_2;
 
-import org.holoeverywhere.app.Activity;
 import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.PreferenceManager;
 
@@ -29,7 +28,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.Color;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -243,6 +241,20 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 						} catch (android.content.ActivityNotFoundException anfe) {
 						    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + appPackageName)));
 						}
+					}
+					
+				});
+				crouton.setConfiguration(new Configuration.Builder().setDuration(Configuration.DURATION_INFINITE).build());
+				crouton.show();
+			} else if (message.arg1 == VertretungsplanService.RESULT_UNAUTHORIZED_ERROR) {
+				Crouton crouton = Crouton.makeText(activity, "Benutzerdaten sind falsch. Bitte klicke hier, um dich erneut einzuloggen.", Style.ALERT);
+				crouton.setOnClickListener(new OnClickListener() {
+
+					@Override
+					public void onClick(View arg0) {
+						Intent intent = new Intent(StartActivity.this, SelectSchoolActivity.class);
+				 		startActivity(intent);
+				 		finish();
 					}
 					
 				});

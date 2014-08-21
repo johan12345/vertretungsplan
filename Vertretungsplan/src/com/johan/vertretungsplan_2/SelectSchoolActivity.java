@@ -16,16 +16,17 @@
 package com.johan.vertretungsplan_2;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
-import java.text.DecimalFormatSymbols;
 import java.util.Collections;
 import java.util.List;
-import java.util.Locale;
 
 import org.holoeverywhere.LayoutInflater;
 import org.holoeverywhere.app.Activity;
+import org.holoeverywhere.app.DialogFragment;
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
+import org.holoeverywhere.preference.SharedPreferences.Editor;
 import org.holoeverywhere.widget.ArrayAdapter;
 import org.holoeverywhere.widget.FrameLayout;
 import org.holoeverywhere.widget.LinearLayout;
@@ -51,14 +52,17 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
+import com.joejernst.http.Request;
 import com.johan.vertretungsplan.comparators.AlphabeticalSchoolComparator;
 import com.johan.vertretungsplan.comparators.DistanceSchoolComparator;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.parser.BackendConnectParser;
 import com.johan.vertretungsplan.utils.Utils;
+import com.johan.vertretungsplan_2.LoginDialogFragment.LoginDialogListener;
 
-public class SelectSchoolActivity extends Activity {
-	
+public class SelectSchoolActivity extends Activity implements
+		LoginDialogListener {
+
 	private ListView lstSchools;
 	private List<Schule> schools;
 	private ProgressBar progress;
@@ -69,11 +73,13 @@ public class SelectSchoolActivity extends Activity {
 	private boolean loaded;
 	private boolean visible;
 	private Status status = Status.LIST;
-	
+	private LoginDialogFragment dialog;
+	private Schule selectedSchool;
+
 	private enum Status {
 		GEO, LOADING, LIST
 	}
-	
+
 	@Override
 	protected void onPause() {
 		visible = false;
@@ -85,39 +91,43 @@ public class SelectSchoolActivity extends Activity {
 		visible = true;
 		super.onResume();
 	}
-	
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_select_school);
-		
-		final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
-		
+
+		final SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getApplicationContext());
+
 		lstSchools = (ListView) findViewById(R.id.listSchools);
 		progress = (ProgressBar) findViewById(R.id.progress);
 		suggestSchool = (FrameLayout) findViewById(R.id.suggestSchool);
 		locate = (LinearLayout) findViewById(R.id.llLocate);
 		tvLocateString = (TextView) findViewById(R.id.tvLocateString);
 		ivLocationIcon = (ImageView) findViewById(R.id.ivLocationIcon);
-		
+
 		new LoadSchoolsTask().execute();
 
 		OnItemClickListener listener = new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-					long arg3) {
-				Schule selectedSchool = schools.get(position);
-				settings.edit().putString("selected_school", selectedSchool.getId()).commit();
-				
-				((VertretungsplanApplication) getApplication()).notifySchoolChanged();
-				
-				Intent intent = new Intent(SelectSchoolActivity.this, StartActivity.class);
-				startActivity(intent);
+			public void onItemClick(AdapterView<?> arg0, View arg1,
+					int position, long arg3) {
+				selectedSchool = schools.get(position);
+				settings.edit()
+						.putString("selected_school", selectedSchool.getId())
+						.commit();
+				if (selectedSchool.requiresLogin()) {
+					dialog = new LoginDialogFragment();
+					dialog.show(getSupportFragmentManager());
+				} else {
+					launchApp();
+				}
 			}
-			
+
 		};
 		lstSchools.setOnItemClickListener(listener);
-		
+
 		suggestSchool.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -127,38 +137,51 @@ public class SelectSchoolActivity extends Activity {
 						"Vertretungsplan App",
 						"Schule: \nOrt: \nAdresse des Online-Vertretungsplans:");
 			}
-			
+
 		});
-		
+
 		locate.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				if(loaded) {
+				if (loaded) {
 					if (status == Status.GEO) {
 						status = Status.LIST;
 						tvLocateString.setText(R.string.geolocate);
-						ivLocationIcon.setImageResource(R.drawable.ic_action_location_found);
+						ivLocationIcon
+								.setImageResource(R.drawable.ic_action_location_found);
 						showList();
 					} else if (status == Status.LIST) {
 						status = Status.LOADING;
 						tvLocateString.setText(R.string.geolocate_progress);
-						ivLocationIcon.setImageResource(R.drawable.ic_action_location_found);
+						ivLocationIcon
+								.setImageResource(R.drawable.ic_action_location_found);
 						showListGeo();
 					}
 				} else {
-					Toast.makeText(SelectSchoolActivity.this, "Bitte warten, bis die Liste geladen ist...", Toast.LENGTH_LONG).show();
+					Toast.makeText(SelectSchoolActivity.this,
+							"Bitte warten, bis die Liste geladen ist...",
+							Toast.LENGTH_LONG).show();
 				}
 			}
-			
+
 		});
 	}
-	
+
+	protected void launchApp() {
+		((VertretungsplanApplication) getApplication()).notifySchoolChanged();
+
+		Intent intent = new Intent(SelectSchoolActivity.this,
+				StartActivity.class);
+		startActivity(intent);
+	}
+
 	private void showList() {
 		Collections.sort(schools, new AlphabeticalSchoolComparator());
-		lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools, false));
+		lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this,
+				schools, false));
 	}
-	
+
 	private void showListGeo() {
 		final LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
@@ -186,71 +209,89 @@ public class SelectSchoolActivity extends Activity {
 
 					@Override
 					public void onLocationChanged(Location location) {
-						if(!visible) return;
+						if (!visible)
+							return;
 						if (location != null) {
 							double lat = location.getLatitude();
 							double lon = location.getLongitude();
-							for(Schule school:schools) {
+							for (Schule school : schools) {
 								float[] result = new float[1];
-								Location.distanceBetween(lat, lon, school.getGeo()[0], school.getGeo()[1], result);
+								Location.distanceBetween(lat, lon,
+										school.getGeo()[0], school.getGeo()[1],
+										result);
 								school.setDistance(result[0]);
-								Log.d("vertretungsplan", school.getName() + ": " + school.getDistance());
+								Log.d("vertretungsplan", school.getName()
+										+ ": " + school.getDistance());
 							}
-							Collections.sort(schools, new DistanceSchoolComparator());
-							lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools, true));
+							Collections.sort(schools,
+									new DistanceSchoolComparator());
+							lstSchools.setAdapter(new SchoolsAdapter(
+									SelectSchoolActivity.this, schools, true));
 						}
 						tvLocateString.setText(R.string.alphabetic_list);
-						ivLocationIcon.setImageResource(R.drawable.ic_action_view_as_list);
+						ivLocationIcon
+								.setImageResource(R.drawable.ic_action_view_as_list);
 						status = Status.GEO;
 					}
-			});
+				});
 	}
-	
+
 	private class SchoolsAdapter extends ArrayAdapter<Schule> {
-		
+
 		private Context context;
 		private boolean distance;
 
-		public SchoolsAdapter(Context context, List<Schule> objects, boolean distance) {
+		public SchoolsAdapter(Context context, List<Schule> objects,
+				boolean distance) {
 			super(context, R.layout.listitem_school, objects);
 			this.context = context;
 			this.distance = distance;
 		}
-		
+
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			View view;
-			if(convertView != null)
+			if (convertView != null)
 				view = convertView;
 			else {
 				LayoutInflater inflater = (LayoutInflater) context
-				        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-				view = inflater.inflate(R.layout.listitem_school, parent, false);
+						.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				view = inflater
+						.inflate(R.layout.listitem_school, parent, false);
 			}
-			
+
 			Schule school = getItem(position);
-			
-			TextView schoolName = (TextView) view.findViewById(R.id.school_name);
-			TextView schoolCity = (TextView) view.findViewById(R.id.school_city);
-			TextView schoolDistance = (TextView) view.findViewById(R.id.school_distance);
-			
+
+			TextView schoolName = (TextView) view
+					.findViewById(R.id.school_name);
+			TextView schoolCity = (TextView) view
+					.findViewById(R.id.school_city);
+			TextView schoolDistance = (TextView) view
+					.findViewById(R.id.school_distance);
+			ImageView schoolSecure = (ImageView) view
+					.findViewById(R.id.school_secure);
+
 			schoolName.setText(school.getName());
 			schoolCity.setText(school.getCity());
-			if(distance) {
+			schoolSecure.setVisibility(school.requiresLogin() ? View.VISIBLE
+					: View.GONE);
+			if (distance) {
 				DecimalFormat format = new DecimalFormat("0.0");
 				schoolDistance.setVisibility(View.VISIBLE);
-				schoolDistance.setText(format.format(school.getDistance() / 1000) + " km");
+				schoolDistance
+						.setText(format.format(school.getDistance() / 1000)
+								+ " km");
 			} else {
 				schoolDistance.setVisibility(View.GONE);
 			}
-			
+
 			return view;
 		}
-		
+
 	}
-	
-	private class LoadSchoolsTask extends AsyncTask <Void, Void, List<Schule>> {
-		
+
+	private class LoadSchoolsTask extends AsyncTask<Void, Void, List<Schule>> {
+
 		@Override
 		protected void onPreExecute() {
 			progress.setVisibility(View.VISIBLE);
@@ -265,19 +306,81 @@ public class SelectSchoolActivity extends Activity {
 			}
 			return null;
 		}
-		
+
 		@Override
-		protected void onPostExecute(List<Schule> schools) {			
+		protected void onPostExecute(List<Schule> schools) {
 			progress.setVisibility(View.GONE);
-			if(schools != null) {
+			if (schools != null) {
 				Collections.sort(schools, new AlphabeticalSchoolComparator());
 				SelectSchoolActivity.this.schools = schools;
-				lstSchools.setAdapter(new SchoolsAdapter(SelectSchoolActivity.this, schools, false));
+				lstSchools.setAdapter(new SchoolsAdapter(
+						SelectSchoolActivity.this, schools, false));
 				loaded = true;
 			} else {
-				Toast.makeText(SelectSchoolActivity.this, "Zum wählen einer Schule wird eine Internetverbindung benötigt!", Toast.LENGTH_LONG).show();
+				Toast.makeText(
+						SelectSchoolActivity.this,
+						"Zum wählen einer Schule wird eine Internetverbindung benötigt!",
+						Toast.LENGTH_LONG).show();
 			}
 		}
-		
+
+	}
+
+	private class LoginTask extends AsyncTask<String, Void, Boolean> {
+
+		@Override
+		protected void onPreExecute() {
+			dialog.progress(true);
+		}
+
+		@Override
+		protected Boolean doInBackground(String... args) {
+			try {
+				String school = URLEncoder.encode(args[0], "UTF-8");
+				String login = URLEncoder.encode(args[1], "UTF-8");
+				String password = URLEncoder.encode(args[2], "UTF-8");
+				int responseCode = new Request(BackendConnectParser.BASE_URL
+						+ "login?schoolId=" + school + "&login=" + login
+						+ "&password=" + password).getResource()
+						.getResponseCode();
+				if (responseCode == 202) // Accepted
+					return true;
+				else if (responseCode == 401) // Unautorized
+					return false;
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return false;
+		}
+
+		@Override
+		protected void onPostExecute(Boolean result) {
+			dialog.progress(false);
+			if (result) {
+				dialog.dismiss();
+				launchApp();
+			} else {
+				Toast.makeText(SelectSchoolActivity.this,
+						"Benutzerdaten sind falsch", Toast.LENGTH_LONG).show();
+			}
+		}
+
+	}
+
+	@Override
+	public void onLogin(String login, String password) {
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		Editor edit = prefs.edit();
+		edit.putString("login", login);
+		edit.putString("password", password);
+		edit.commit();
+		new LoginTask().execute(selectedSchool.getId(), login, password);
+	}
+
+	@Override
+	public void onCancel() {
+		// TODO Auto-generated method stub
+
 	}
 }
