@@ -19,6 +19,7 @@ package com.johan.vertretungsplan_2;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.TreeSet;
 
 import org.holoeverywhere.LayoutInflater;
@@ -45,6 +46,7 @@ import android.widget.BaseAdapter;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.johan.vertretungsplan.objects.KlassenVertretungsplan;
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
@@ -151,17 +153,26 @@ public class VertretungFragment extends VertretungsplanFragment {
 
 	        for (VertretungsplanTag tag:v.getTage()) {
 		    	listadapter.addSeparatorItem(tag.getDatum());
-		        if (tag.getKlassen().get(klasse) != null) {
-			        if (tag.getKlassen().get(klasse).getVertretung().size() > 0) {
-				        for (Vertretung item:tag.getKlassen().get(klasse).getVertretung()) {
+		    	if (klasse.equals("Alle")) {
+		    		for (Entry<String, KlassenVertretungsplan> entry:tag.getKlassen().entrySet()) {
+		    			listadapter.addSeparatorItem(entry.getKey());
+				        for (Vertretung item:entry.getValue().getVertretung()) {
 				        	listadapter.addItem(item);
+				        }
+		    		}
+		    	} else {
+			        if (tag.getKlassen().get(klasse) != null) {
+				        if (tag.getKlassen().get(klasse).getVertretung().size() > 0) {
+					        for (Vertretung item:tag.getKlassen().get(klasse).getVertretung()) {
+					        	listadapter.addItem(item);
+					        }
+				        } else {
+				        	listadapter.addTextItem(getResources().getString(R.string.no_info));
 				        }
 			        } else {
 			        	listadapter.addTextItem(getResources().getString(R.string.no_info));
 			        }
-		        } else {
-		        	listadapter.addTextItem(getResources().getString(R.string.no_info));
-		        }
+		    	}
 	        }
     	}
     }
@@ -369,6 +380,8 @@ public class VertretungFragment extends VertretungsplanFragment {
 				settings.edit().putString("klassen", new Gson().toJson(result)).commit();
 			else
 				result = new Gson().fromJson(settings.getString("klassen", null), new TypeToken<List<String>>(){}.getType());
+			
+			result.add(0, "Alle");
 			
 			klasse = settings.getString("klasse", "");
 	        klassen.setAdapter(new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_dropdown_item, result));
