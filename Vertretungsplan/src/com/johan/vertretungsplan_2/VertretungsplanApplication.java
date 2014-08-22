@@ -25,6 +25,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;
 import com.johan.vertretungsplan.parser.BackendConnectParser;
@@ -70,7 +71,7 @@ public class VertretungsplanApplication extends Application {
 	public void notifySchoolChanged() {
 		String schoolId = settings.getString("selected_school", null);
 		if(schoolId != null) {
-			parser = new BackendConnectParser(schoolId);
+			parser = new BackendConnectParser(schoolId, GCMRegistrar.getRegistrationId(context));
 		}
 	}
 	

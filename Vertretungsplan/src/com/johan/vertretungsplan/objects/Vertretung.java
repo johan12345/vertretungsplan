@@ -72,7 +72,8 @@ public class Vertretung implements Serializable {
 			string += subject;
 			if (containsInformation(teacher))
 				string += " (" + teacher + ")";
-		}
+		} else if (containsInformation(teacher))
+			string += teacher;
 		if (containsInformation(previousSubject) && 
 				!(previousSubject.equals(subject) &&
 						(previousTeacher != null &&
@@ -84,6 +85,11 @@ public class Vertretung implements Serializable {
 				string += previousSubject;
 			if (containsInformation(previousTeacher))
 				string += " (" + previousTeacher + ")";
+		} else if (!containsInformation(previousSubject) && containsInformation(previousTeacher)) {
+			if (containsInformation(subject) || containsInformation(teacher))
+				string += " statt " + previousTeacher;
+			else
+				string += previousTeacher;
 		}
 		if (containsInformation(room))
 			string += " in " + room;

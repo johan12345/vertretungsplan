@@ -20,21 +20,24 @@ public class BackendConnectParser extends BaseParser {
 	public static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
 	public static final String VERSION = "v="
 			+ VertretungsplanApplication.getVersion();
+	private String regId;
 
-	public BackendConnectParser(Schule schule) {
+	public BackendConnectParser(Schule schule, String regId) {
 		super(schule);
 		this.schoolId = schule.getId();
+		this.regId = regId;
 	}
 
-	public BackendConnectParser(String schoolId) {
+	public BackendConnectParser(String schoolId, String regId) {
 		super(null);
 		this.schoolId = schoolId;
+		this.regId = regId;
 	}
 
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException, VersionException, UnauthorizedException {
-		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&" + VERSION;
+		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&regId=" + regId + "&" + VERSION;
 		Response response = new Request(url).getResource("UTF-8");
 		if(response.getResponseCode() == 400)
 			throw new VersionException();
