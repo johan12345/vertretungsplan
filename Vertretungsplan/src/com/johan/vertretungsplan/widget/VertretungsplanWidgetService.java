@@ -2,6 +2,7 @@ package com.johan.vertretungsplan.widget;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.holoeverywhere.preference.PreferenceManager;
 import org.holoeverywhere.preference.SharedPreferences;
@@ -16,6 +17,7 @@ import android.widget.RemoteViewsService;
 
 import com.google.gson.Gson;
 import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan.objects.KlassenVertretungsplan;
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
 import com.johan.vertretungsplan.objects.VertretungsplanTag;
@@ -56,16 +58,25 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
 			if(v != null) {
 				for (VertretungsplanTag tag:v.getTage()) {
 					items.add(tag.getDatum());
-					if (tag.getKlassen().get(klasse) != null) {
-						if (tag.getKlassen().get(klasse).getVertretung().size() > 0) {
-							for (Vertretung item:tag.getKlassen().get(klasse).getVertretung()) {
-								items.add(item);
+					if ("Alle".equals(klasse)) {
+						for (Entry<String, KlassenVertretungsplan> entry:tag.getKlassen().entrySet()) {
+			    			items.add(entry.getKey());
+					        for (Vertretung item:entry.getValue().getVertretung()) {
+					        	items.add(item);
+					        }
+			    		}
+					} else {
+						if (tag.getKlassen().get(klasse) != null) {
+							if (tag.getKlassen().get(klasse).getVertretung().size() > 0) {
+								for (Vertretung item:tag.getKlassen().get(klasse).getVertretung()) {
+									items.add(item);
+								}
+							} else {
+								items.add(getResources().getString(R.string.no_info));
 							}
 						} else {
 							items.add(getResources().getString(R.string.no_info));
 						}
-					} else {
-						items.add(getResources().getString(R.string.no_info));
 					}
 				}
 			} else {

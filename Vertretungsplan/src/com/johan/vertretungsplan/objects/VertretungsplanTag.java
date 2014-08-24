@@ -19,6 +19,7 @@ package com.johan.vertretungsplan.objects;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
@@ -34,7 +35,7 @@ public class VertretungsplanTag implements Serializable {
 	private static final long serialVersionUID = -1883217951533073077L;
 	private String datum;
 	private String stand;
-	private HashMap<String, KlassenVertretungsplan> klassen = new HashMap<String, KlassenVertretungsplan>();
+	private LinkedHashMap<String, KlassenVertretungsplan> klassen = new LinkedHashMap<String, KlassenVertretungsplan>();
 	private List<String> nachrichten = new ArrayList<String>();
 	
 	/**
@@ -64,13 +65,13 @@ public class VertretungsplanTag implements Serializable {
 	/**
 	 * @return the klassen
 	 */
-	public HashMap<String, KlassenVertretungsplan> getKlassen() {
+	public LinkedHashMap<String, KlassenVertretungsplan> getKlassen() {
 		return klassen;
 	}
 	/**
 	 * @param klassen the klassen to set
 	 */
-	public void setKlassen(HashMap<String, KlassenVertretungsplan> klassen) {
+	public void setKlassen(LinkedHashMap<String, KlassenVertretungsplan> klassen) {
 		this.klassen = klassen;
 	}
 	/**

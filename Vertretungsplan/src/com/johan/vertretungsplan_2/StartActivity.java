@@ -134,7 +134,6 @@ public class StartActivity extends TabSwipeActivity implements VertretungFragmen
 		GCMIntentService.register(this);
 	}
 
-
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		MenuInflater inflater = getMenuInflater();

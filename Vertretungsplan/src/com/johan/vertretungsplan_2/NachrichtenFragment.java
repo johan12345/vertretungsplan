@@ -188,7 +188,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
                         holder.text.setText((CharSequence) mData.get(position));
                         break;
                     case TYPE_SEPARATOR:
-                        convertView = mInflater.inflate(R.layout.separator, null);
+                        convertView = mInflater.inflate(R.layout.separator_bold, null);
                         holder.textView = (TextView)convertView.findViewById(R.id.textSeparator);
                         holder.textView.setText((CharSequence) mData.get(position));
                         break;

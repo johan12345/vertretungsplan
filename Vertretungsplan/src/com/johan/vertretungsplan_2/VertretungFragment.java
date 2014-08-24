@@ -145,15 +145,15 @@ public class VertretungFragment extends VertretungsplanFragment {
     }
     
     public void refresh() { 
-    	if(ready && v != null && getView() != null) {
+    	if(ready && v != null && v.getTage().size() > 0 && getView() != null) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
 	        
 		    klasse = (String) klassen.getSelectedItem();
 
 	        for (VertretungsplanTag tag:v.getTage()) {
-		    	listadapter.addSeparatorItem(tag.getDatum());
-		    	if (klasse.equals("Alle")) {
+		    	listadapter.addBoldItem(tag.getDatum());
+		    	if ("Alle".equals(klasse)) {
 		    		for (Entry<String, KlassenVertretungsplan> entry:tag.getKlassen().entrySet()) {
 		    			listadapter.addSeparatorItem(entry.getKey());
 				        for (Vertretung item:entry.getValue().getVertretung()) {
@@ -194,12 +194,14 @@ public class VertretungFragment extends VertretungsplanFragment {
         private static final int TYPE_ITEM = 0;
         private static final int TYPE_SEPARATOR = 1;
         private static final int TYPE_TEXT = 2;
-        private static final int TYPE_MAX_COUNT = TYPE_TEXT + 1;
+        private static final int TYPE_BOLD = 3;
+        private static final int TYPE_MAX_COUNT = TYPE_BOLD + 1;
  
         private ArrayList<Object> mData = new ArrayList<Object>();
         private LayoutInflater mInflater;
  
         private TreeSet<Object> mSeparatorsSet = new TreeSet<Object>();
+        private TreeSet<Object> mBoldSet = new TreeSet<Object>();
         private TreeSet<Object> mTextsSet = new TreeSet<Object>();
  
         public VertretungAdapter(Context context) {
@@ -208,6 +210,13 @@ public class VertretungFragment extends VertretungsplanFragment {
  
         public void addItem(final Vertretung item) {
             mData.add(item);
+            notifyDataSetChanged();
+        }
+        
+        public void addBoldItem(final String item) {
+            mData.add(item);
+            // save separator position
+            mBoldSet.add(mData.size() - 1);
             notifyDataSetChanged();
         }
  
@@ -227,7 +236,14 @@ public class VertretungFragment extends VertretungsplanFragment {
  
         @Override
         public int getItemViewType(int position) {
-        	return mSeparatorsSet.contains(position) ? TYPE_SEPARATOR : (mTextsSet.contains(position) ? TYPE_TEXT : TYPE_ITEM);
+        	if (mSeparatorsSet.contains(position))
+        		return TYPE_SEPARATOR;
+        	else if (mBoldSet.contains(position))
+        		return TYPE_BOLD;
+        	else if (mTextsSet.contains(position))
+        		return TYPE_TEXT;
+        	else
+        		return TYPE_ITEM;
         }
  
         @Override
@@ -284,6 +300,11 @@ public class VertretungFragment extends VertretungsplanFragment {
                         holder.textView = (TextView)convertView.findViewById(R.id.textSeparator);
                         holder.textView.setText((CharSequence) mData.get(position));
                         break;
+                    case TYPE_BOLD:
+                        convertView = mInflater.inflate(R.layout.separator_bold, null);
+                        holder.textView = (TextView)convertView.findViewById(R.id.textSeparator);
+                        holder.textView.setText((CharSequence) mData.get(position));
+                        break;
                     case TYPE_TEXT:
                     	convertView = mInflater.inflate(R.layout.text, null);
                         holder.text = (TextView)convertView.findViewById(R.id.text);
@@ -325,12 +346,10 @@ public class VertretungFragment extends VertretungsplanFragment {
                 case TYPE_TEXT:
                     holder.text = (TextView)convertView.findViewById(R.id.text);
                     holder.text.setText((CharSequence) mData.get(position));
-                    
-//                    if (farben) {
-//                    	holder.layout = (LinearLayout)convertView.findViewById(R.id.layout);
-//                    	holder.layout.setBackgroundColor(Color.parseColor("#4099CC00"));
-//                    }
                     break;
+                case TYPE_BOLD:
+                	holder.textView.setText((CharSequence) mData.get(position));
+                	break;
             }
             convertView.setTag(holder);
             }
@@ -341,6 +360,7 @@ public class VertretungFragment extends VertretungsplanFragment {
         	mData.clear();
         	mSeparatorsSet.clear();
         	mTextsSet.clear();
+        	mBoldSet.clear();
         	notifyDataSetChanged();
         }
  

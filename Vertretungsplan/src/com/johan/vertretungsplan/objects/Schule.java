@@ -35,6 +35,7 @@ public class Schule {
 	private double[] geo;
 	private double distance;
 	private boolean requiresLogin;
+	private String login;
 	
 	public static Schule fromJSON(String id, JSONObject json) throws JSONException {
 		Schule schule = new Schule();
@@ -69,6 +70,7 @@ public class Schule {
 		schule.setName(json.getString("name"));
 		schule.setUserCount(json.getInt("user_count"));
 		schule.setRequiresLogin(json.getBoolean("requiresLogin"));
+		schule.setLogin(json.optString("login", null));
 		if(json.has("geo")) {
 			JSONArray geoArray = json.getJSONArray("geo");
 			double[] geo = new double[]{geoArray.getDouble(0), geoArray.getDouble(1)};
@@ -190,5 +192,19 @@ public class Schule {
 	 */
 	public void setRequiresLogin(boolean requiresLogin) {
 		this.requiresLogin = requiresLogin;
+	}
+
+	/**
+	 * @return the login
+	 */
+	public String getLogin() {
+		return login;
+	}
+
+	/**
+	 * @param login the login to set
+	 */
+	public void setLogin(String login) {
+		this.login = login;
 	}
 }

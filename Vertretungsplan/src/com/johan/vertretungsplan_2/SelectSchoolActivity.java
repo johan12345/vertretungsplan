@@ -118,7 +118,7 @@ public class SelectSchoolActivity extends Activity implements
 						.putString("selected_school", selectedSchool.getId())
 						.commit();
 				if (selectedSchool.requiresLogin()) {
-					dialog = new LoginDialogFragment();
+					dialog = new LoginDialogFragment(selectedSchool.getLogin());
 					dialog.show(getSupportFragmentManager());
 				} else {
 					launchApp();

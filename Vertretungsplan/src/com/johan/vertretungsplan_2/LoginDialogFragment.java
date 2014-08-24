@@ -22,6 +22,15 @@ public class LoginDialogFragment extends DialogFragment {
 
 	private LoginDialogListener mListener;
 	private View view;
+	private String fixedLogin;
+	
+	public LoginDialogFragment(String fixedLogin) {
+		this.fixedLogin = fixedLogin;
+	}
+	
+	public LoginDialogFragment() {
+		fixedLogin = null;
+	}
 
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -32,6 +41,12 @@ public class LoginDialogFragment extends DialogFragment {
 		// Inflate and set the layout for the dialog
 		// Pass null as the parent view because its going in the dialog layout
 		view = inflater.inflate(R.layout.dialog_signin, null);
+		if (fixedLogin != null) {
+			EditText login = (EditText) view.findViewById(R.id.username);
+			login.setText(fixedLogin);
+			login.setEnabled(false);
+		}
+		
 		builder.setView(view)
 				// Add action buttons
 				.setPositiveButton(R.string.signin,

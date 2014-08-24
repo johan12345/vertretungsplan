@@ -51,6 +51,7 @@ public class VertretungsplanApplication extends Application {
 		ACRA.init(this);
 		context = getApplicationContext();
 		settings = PreferenceManager.getDefaultSharedPreferences(context);
+		GCMIntentService.register(this);
 	}
 
 	public BackendConnectParser getParser() {
