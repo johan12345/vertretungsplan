@@ -41,7 +41,7 @@ import com.johan.vertretungsplan.utils.Animations;
 public class NachrichtenFragment extends VertretungsplanFragment {
 	
 	public interface Callback {
-
+		public Vertretungsplan getVertretungsplan();
 	}
 	
 	private ListView list;
@@ -77,7 +77,9 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         progress(showProgress);
         ready = true;
-        refresh();
+        if (mCallback.getVertretungsplan() != null)
+        	setVertretungsplan(mCallback.getVertretungsplan());
+        
         super.onViewCreated(view, savedInstanceState);
     }
     
@@ -93,6 +95,7 @@ public class NachrichtenFragment extends VertretungsplanFragment {
     }
     
     public void refresh() {
+    	progress(false);
     	if(ready && v != null && getView() != null) {    	
 	    	listadapter.clear(); 
 	    	

@@ -86,7 +86,6 @@ public class VertretungFragment extends VertretungsplanFragment {
 
 		appContext = getActivity().getApplicationContext();
 		startActivity = (StartActivity) getActivity();
-        
 		
 		// Restore preferences
         settings = PreferenceManager.getDefaultSharedPreferences(appContext);
@@ -127,6 +126,9 @@ public class VertretungFragment extends VertretungsplanFragment {
 			}
 
 		});
+        
+        if (mCallback.getVertretungsplan() != null)
+        	setVertretungsplan(mCallback.getVertretungsplan());
                
         ready = true;
         
@@ -145,6 +147,7 @@ public class VertretungFragment extends VertretungsplanFragment {
     }
     
     public void refresh() { 
+    	progress(false);
     	if(ready && v != null && v.getTage().size() > 0 && getView() != null) {
 	    	txtStand.setText(v.getTage().get(0).getStand());
 	        listadapter.clear();
