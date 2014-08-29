@@ -18,6 +18,7 @@ package com.johan.vertretungsplan_2;
 
 import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.PreferenceManager;
+
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
@@ -45,6 +46,7 @@ import com.google.android.gms.analytics.HitBuilders;
 import com.google.android.gms.analytics.Tracker;
 import com.google.gson.Gson;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
+import com.johan.vertretungsplan.parser.BackendConnectParser;
 import com.johan.vertretungsplan.parser.BaseParser;
 import com.johan.vertretungsplan.parser.BaseParser.UnauthorizedException;
 import com.johan.vertretungsplan.parser.BaseParser.VersionException;
@@ -199,6 +201,14 @@ public class StartActivity extends TabSwipeActivity implements
 
 			startActivity(Intent.createChooser(emailIntent, "E-Mail senden..."));
 			break;
+
+		case R.id.menu_website:
+			Intent websiteIntent = new Intent(
+					android.content.Intent.ACTION_VIEW);
+			websiteIntent.setData(Uri.parse(BackendConnectParser.BASE_URL
+					+ "website/" + settings.getString("selected_school", "")));
+			startActivity(websiteIntent);
+			break;
 		}
 		return true;
 	}
@@ -277,6 +287,11 @@ public class StartActivity extends TabSwipeActivity implements
 	@Override
 	public void onClassSelected() {
 		registerGCM();
+		AppWidgetManager mgr = AppWidgetManager.getInstance(StartActivity.this);
+		int[] ids = mgr.getAppWidgetIds(new ComponentName(StartActivity.this,
+				VertretungsplanWidgetProvider.class));
+		new VertretungsplanWidgetProvider().onUpdate(StartActivity.this, mgr,
+				ids);
 	}
 
 	private class GetVertretungsplanTask extends AsyncTask<Void, Void, Object> {

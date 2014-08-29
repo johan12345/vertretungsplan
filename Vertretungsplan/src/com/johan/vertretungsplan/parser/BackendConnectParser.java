@@ -7,6 +7,8 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.util.Log;
+
 import com.google.gson.Gson;
 import com.joejernst.http.Request;
 import com.joejernst.http.Response;
@@ -37,6 +39,7 @@ public class BackendConnectParser extends BaseParser {
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException, VersionException, UnauthorizedException {
+		Log.d("vertretungsplan", schoolId);
 		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&regId=" + regId + "&" + VERSION;
 		Response response = new Request(url).getResource("UTF-8");
 		if(response.getResponseCode() == 400)
