@@ -25,11 +25,12 @@ import android.os.Build;
 import android.text.Html;
 import android.text.Spanned;
 import android.text.method.LinkMovementMethod;
+import android.widget.ScrollView;
 
 public class LinkAlertDialog {
 
-	public static Builder create (final Context context, String title, String text) {
-		final TextView message = new TextView(context);
+	public static Builder create (Context context, String title, String text) {
+		TextView message = new TextView(context);
 		message.setTextAppearance(context, android.R.style.TextAppearance_Medium);
 
 		float scale = context.getResources().getDisplayMetrics().density;
@@ -42,10 +43,13 @@ public class LinkAlertDialog {
 		} else {
 			message.setText(s.toString());
 		}
+		
+		ScrollView scroll = new ScrollView(context);
+		scroll.addView(message);
 
 		return new AlertDialog.Builder(context)
 		.setTitle(title)
 		.setCancelable(true)
-		.setView(message);
+		.setView(scroll);
 	}
 }
