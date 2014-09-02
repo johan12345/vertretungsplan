@@ -382,6 +382,9 @@ public class VertretungFragment extends VertretungsplanFragment {
     	
 		@Override
 		protected List<String> doInBackground(Void... params) {
+			if (getActivity() == null)
+				return null;
+			
 			BaseParser parser = ((VertretungsplanApplication) VertretungFragment.this.getActivity().getApplication()).getParser();
 			try {
 				List<String> klassen = parser.getAllClasses();
