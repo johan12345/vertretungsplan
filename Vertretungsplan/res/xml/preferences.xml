@@ -13,6 +13,11 @@
 			android:summaryOff="keine anonymen Nutzungsstatistiken senden"
 			android:summaryOn="Anonyme Nutzungsstatistiken über Google Analytics senden"
 			android:title="Google Analytics" />
+		<CheckBoxPreference android:id="@+id/news_widget"
+			android:key="news_widget" android:defaultValue="true"
+			android:summaryOff="Nachrichten nicht im Widget anzeigen"
+			android:summaryOn="Nachrichten im Widget anzeigen"
+			android:title="Nachrichten im Widget" />
 	</PreferenceCategory>
 	<PreferenceCategory android:title="Benachrichtigung"
 	    android:id="@+id/sync_category">

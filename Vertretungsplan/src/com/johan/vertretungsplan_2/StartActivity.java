@@ -106,7 +106,6 @@ public class StartActivity extends TabSwipeActivity implements
 		showDialogs();
 
 		if (savedInstanceState == null) {
-			Log.d("vertretungsplan", "state == null");
 			new GetVertretungsplanTask().execute();
 		} else {
 			Log.d("vertretungsplan", "load");
@@ -334,6 +333,10 @@ public class StartActivity extends TabSwipeActivity implements
 		protected void onPostExecute(Object result) {
 			asyncRunning = false;
 			setProgress(false);
+			if (result != null)
+				Log.d("vertretungsplan", result.toString());
+			else
+				Log.d("vertretungsplan", "result == null");
 			if (result instanceof UnauthorizedException) {
 				Crouton crouton = Crouton
 						.makeText(

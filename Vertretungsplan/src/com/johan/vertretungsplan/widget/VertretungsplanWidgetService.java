@@ -17,6 +17,7 @@ import android.widget.RemoteViewsService;
 
 import com.google.gson.Gson;
 import com.johan.vertretungsplan_2.R;
+import com.johan.vertretungsplan.objects.AdditionalInfo;
 import com.johan.vertretungsplan.objects.KlassenVertretungsplan;
 import com.johan.vertretungsplan.objects.Vertretung;
 import com.johan.vertretungsplan.objects.Vertretungsplan;
@@ -57,10 +58,10 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
 			items = new ArrayList<Object>();
 			if(v != null) {
 				for (VertretungsplanTag tag:v.getTage()) {
-					items.add(tag.getDatum());
+					items.add(new Separator(tag.getDatum()));
 					if ("Alle".equals(klasse)) {
 						for (Entry<String, KlassenVertretungsplan> entry:tag.getKlassen().entrySet()) {
-			    			items.add(entry.getKey());
+			    			items.add(new Separator(entry.getKey()));
 					        for (Vertretung item:entry.getValue().getVertretung()) {
 					        	items.add(item);
 					        }
@@ -79,8 +80,31 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
 						}
 					}
 				}
+				if (prefs.getBoolean("news_widget", true)) {
+					for (VertretungsplanTag tag:v.getTage()) {
+						if (tag.getNachrichten().size() > 0) {
+							items.add(new Separator("Nachrichten " + tag.getDatum()));
+							for (String nachricht:tag.getNachrichten()) {
+								items.add(nachricht);
+							}
+						}
+					}
+					if (v.getAdditionalInfos().size() > 0) {
+						items.add(new Separator("Nachrichten"));
+						for (AdditionalInfo info:v.getAdditionalInfos()) {
+							items.add(info);
+						}
+					}
+				}
 			} else {
 				items.add("noch keine Daten gespeichert");
+			}
+		}
+		
+		private class Separator {
+			public String text;
+			public Separator(String text) {
+				this.text = text;
 			}
 		}
 
@@ -102,16 +126,26 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
 		@Override
 		public RemoteViews getViewAt(int position) {
 			RemoteViews rv = null;
-			if(items.get(position) instanceof Vertretung) {			
-				Vertretung vtr = (Vertretung) items.get(position);
+			Object item = items.get(position);
+			if(item instanceof Vertretung) {			
+				Vertretung vtr = (Vertretung) item;
 				// Construct a remote views item based on the app widget item XML file, 
 				// and set the text based on the position.
 				rv = new RemoteViews(context.getPackageName(), R.layout.listitem_vertretung_widget);
 				rv.setTextViewText(R.id.stunde, vtr.getLesson());
 				rv.setTextViewText(R.id.art, vtr.getType());
 				rv.setTextViewText(R.id.text, vtr.toString());
-			} else {
-				String text = (String) items.get(position);
+			} else if (item instanceof String) {
+				String text = (String) item;
+				rv = new RemoteViews(context.getPackageName(), R.layout.listitem_text_widget);
+				rv.setTextViewText(R.id.text, text);
+			} else if (item instanceof AdditionalInfo) {
+				AdditionalInfo info = (AdditionalInfo) item;
+				rv = new RemoteViews(context.getPackageName(), R.layout.listitem_additionalinfo_widget);
+				rv.setTextViewText(R.id.title, info.getTitle());
+				rv.setTextViewText(R.id.text, info.getText());
+			} else if (item instanceof Separator) {
+				String text = ((Separator) item).text;
 				rv = new RemoteViews(context.getPackageName(), R.layout.listitem_separator_widget);
 				rv.setTextViewText(R.id.textSeparator, text);
 			}
@@ -122,7 +156,7 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
 
 		@Override
 		public int getViewTypeCount() {
-			return 2;
+			return 4;
 		}
 
 		@Override

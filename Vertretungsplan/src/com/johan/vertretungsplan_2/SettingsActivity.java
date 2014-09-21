@@ -20,6 +20,8 @@ import org.holoeverywhere.preference.PreferenceActivity;
 import org.holoeverywhere.preference.PreferenceManager;
 
 import android.annotation.SuppressLint;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NavUtils;
@@ -27,6 +29,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
+import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 
 public class SettingsActivity extends PreferenceActivity {
 
@@ -37,8 +40,7 @@ public class SettingsActivity extends PreferenceActivity {
 
 		// Display the fragment as the main content.
 		getSupportFragmentManager().beginTransaction()
-		.replace(android.R.id.content, new SettingsFragment())
-		.commit();
+				.replace(android.R.id.content, new SettingsFragment()).commit();
 
 		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
@@ -68,22 +70,30 @@ public class SettingsActivity extends PreferenceActivity {
 	}
 
 	@Override
-	public void onResume(){
+	public void onResume() {
 		super.onResume();
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor prefEditor = prefs.edit();
-		prefEditor.putBoolean("isInForeground",true);
-		prefEditor.commit();      
+		prefEditor.putBoolean("isInForeground", true);
+		prefEditor.commit();
 	}
+
 	@Override
-	public void onPause(){
+	public void onPause() {
 		super.onPause();
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
 		SharedPreferences.Editor prefEditor = prefs.edit();
 		prefEditor.putBoolean("isInForeground", false);
 		prefEditor.commit();
+
+		AppWidgetManager mgr = AppWidgetManager.getInstance(this);
+		int[] ids = mgr.getAppWidgetIds(new ComponentName(this,
+				VertretungsplanWidgetProvider.class));
+		new VertretungsplanWidgetProvider().onUpdate(this, mgr, ids);
 	}
-	
+
 	@Override
 	public void onStart() {
 		super.onStart();
@@ -95,11 +105,11 @@ public class SettingsActivity extends PreferenceActivity {
 		super.onStop();
 		analyticsStop();
 	}
-	
+
 	private void analyticsStart() {
 		GoogleAnalytics.getInstance(this).reportActivityStart(this);
 	}
-	
+
 	private void analyticsStop() {
 		GoogleAnalytics.getInstance(this).reportActivityStop(this);
 	}
