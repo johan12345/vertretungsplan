@@ -79,7 +79,7 @@ public class Vertretung implements Serializable {
 						(previousTeacher != null &&
 						previousTeacher.equals(teacher) ||
 						(previousTeacher == null && teacher == null)))) {
-			if (containsInformation(subject))
+			if (containsInformation(subject) || containsInformation(teacher))
 				string += " statt " + previousSubject;
 			else
 				string += previousSubject;
