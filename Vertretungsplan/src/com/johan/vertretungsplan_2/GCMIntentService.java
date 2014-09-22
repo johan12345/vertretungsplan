@@ -176,9 +176,12 @@ public class GCMIntentService extends GCMBaseIntentService {
 	private void insertDeviceInfo(String deviceInfo, String klasse,
 			String schoolId, String login, String password, String registration)
 			throws IOException {
-		String url = BASE_URL + "register?subId=" + registration + "&klasse="
-				+ klasse + "&school=" + schoolId + "&deviceInfo=" + deviceInfo
-				+ "&login=" + URLEncoder.encode(login, "UTF-8") + "&password="
+		String url = BASE_URL + "register?subId="
+				+ URLEncoder.encode(registration, "UTF-8") + "&klasse="
+				+ URLEncoder.encode(klasse, "UTF-8") + "&school="
+				+ URLEncoder.encode(schoolId, "UTF-8") + "&deviceInfo="
+				+ URLEncoder.encode(deviceInfo, "UTF-8") + "&login="
+				+ URLEncoder.encode(login, "UTF-8") + "&password="
 				+ URLEncoder.encode(password, "UTF-8");
 		Response response = new Request(url).getResource("UTF-8");
 		if (response.getResponseCode() == 200) {
