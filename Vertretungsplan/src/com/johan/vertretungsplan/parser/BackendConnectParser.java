@@ -1,6 +1,7 @@
 package com.johan.vertretungsplan.parser;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +20,7 @@ import com.johan.vertretungsplan_2.VertretungsplanApplication;
 public class BackendConnectParser extends BaseParser {
 
 	private String schoolId;
-	public static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
+	public static final String BASE_URL = "https://jufo-gg.de/vertretungsplan-tomcat/";
 	public static final String VERSION = "v="
 			+ VertretungsplanApplication.getVersion();
 	private String regId;
@@ -40,7 +41,7 @@ public class BackendConnectParser extends BaseParser {
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException, VersionException, UnauthorizedException {
 		Log.d("vertretungsplan", schoolId);
-		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&regId=" + regId + "&" + VERSION;
+		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&regId=" + URLEncoder.encode(regId, "UTF-8") + "&" + VERSION;
 		Response response = new Request(url).getResource("UTF-8");
 		if(response.getResponseCode() == 400)
 			throw new VersionException();
@@ -65,8 +66,7 @@ public class BackendConnectParser extends BaseParser {
 	public static List<Schule> getAvailableSchools() throws IOException,
 			JSONException {
 		String url = BASE_URL + "schools?" + VERSION;
-		Response response = new Request(url).getResource("UTF-8");
-		JSONArray array = new JSONArray(response.getBody());
+		JSONArray array = new JSONArray(httpGet(url, "UTF-8"));
 		List<Schule> schools = new ArrayList<Schule>();
 		for (int i = 0; i < array.length(); i++) {
 			schools.add(Schule.fromServerJSON(array.getJSONObject(i)));

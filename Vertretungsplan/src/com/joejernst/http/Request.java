@@ -10,9 +10,15 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.security.KeyStore;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLSocketFactory;
+
+import com.johan.vertretungsplan_2.VertretungsplanApplication;
 
 /*
  * Copyright 2012 Joe J. Ernst
@@ -196,6 +202,13 @@ public class Request extends Message<Request> {
 
         return readResponse(encoding);
     }
+    
+    private void handleSSL() {
+    	if (connection.getURL().getProtocol().equals("https")) {
+    		HttpsURLConnection conn = (HttpsURLConnection) connection;
+    		conn.setSSLSocketFactory(VertretungsplanApplication.sslFactory);
+    	}
+    }
 
     /**
      * A private method that handles reading the Responses from the server.
@@ -203,6 +216,8 @@ public class Request extends Message<Request> {
      * @throws IOException
      */
     private Response readResponse(String encoding) throws IOException {
+    	handleSSL();
+    	
     	Response resp =  new Response()
         .setResponseCode(connection.getResponseCode())
         .setResponseMessage(connection.getResponseMessage())

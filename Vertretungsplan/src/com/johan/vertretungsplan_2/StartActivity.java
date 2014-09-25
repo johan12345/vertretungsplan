@@ -204,7 +204,7 @@ public class StartActivity extends TabSwipeActivity implements
 		case R.id.menu_website:
 			Intent websiteIntent = new Intent(
 					android.content.Intent.ACTION_VIEW);
-			websiteIntent.setData(Uri.parse(BackendConnectParser.BASE_URL
+			websiteIntent.setData(Uri.parse(BackendConnectParser.BASE_URL.replace("https", "http")
 					+ "website/" + settings.getString("selected_school", "")));
 			startActivity(websiteIntent);
 			break;
@@ -388,6 +388,8 @@ public class StartActivity extends TabSwipeActivity implements
 						.setDuration(Configuration.DURATION_INFINITE).build());
 				crouton.show();
 			} else if (result instanceof Exception || result == null) {
+				if (result instanceof Exception)
+					((Exception) result).printStackTrace();
 				Gson gson = new Gson();
 				StartActivity.this.vertretungsplan = gson.fromJson(
 						StartActivity.this.settings.getString(

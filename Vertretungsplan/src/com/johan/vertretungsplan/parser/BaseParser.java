@@ -65,7 +65,7 @@ public abstract class BaseParser {
 	public abstract List<String> getAllClasses() throws IOException,
 			JSONException;
 
-	protected String httpGet(String url, String encoding) throws IOException {
+	protected static String httpGet(String url, String encoding) throws IOException {
 		Response response = new Request(url).getResource(encoding);
 		return response.getBody();
 	}

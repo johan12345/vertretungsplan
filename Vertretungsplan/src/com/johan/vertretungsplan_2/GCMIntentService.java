@@ -53,7 +53,7 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 * information.
 	 */
 	protected static final String PROJECT_NUMBER = "133323756868";
-	private static final String BASE_URL = "https://vertretungsplan-johan98.rhcloud.com/";
+	private static final String BASE_URL = "https://jufo-gg.de/vertretungsplan-tomcat/";
 
 	/**
 	 * Register the device for GCM.

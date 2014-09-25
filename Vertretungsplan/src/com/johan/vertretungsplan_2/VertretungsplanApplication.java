@@ -15,6 +15,18 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 package com.johan.vertretungsplan_2;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManagerFactory;
+
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
 import org.holoeverywhere.app.Application;
@@ -41,7 +53,8 @@ public class VertretungsplanApplication extends Application {
 	private BackendConnectParser parser;
 	private Tracker mTracker;
 	private SharedPreferences settings;
-	private static Context context;
+	public static Context context;
+	public static SSLSocketFactory sslFactory;
 
 	@Override
 	public void onCreate() {
@@ -52,6 +65,36 @@ public class VertretungsplanApplication extends Application {
 		context = getApplicationContext();
 		settings = PreferenceManager.getDefaultSharedPreferences(context);
 		GCMIntentService.register(this);
+		
+		try {
+			KeyStore trustStore = KeyStore.getInstance("BKS");
+
+			final InputStream in = context.getResources()
+					.openRawResource(R.raw.server);
+			try {
+				trustStore.load(in,
+						"Vertretungsplan".toCharArray());
+			} finally {
+				in.close();
+			}
+	
+			TrustManagerFactory tmf = 
+					  TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+					tmf.init(trustStore);
+			SSLContext ctx = SSLContext.getInstance("TLS");
+			ctx.init(null, tmf.getTrustManagers(), null);
+			sslFactory = ctx.getSocketFactory();
+		} catch (KeyStoreException e) {
+			e.printStackTrace();
+		} catch (KeyManagementException e) {
+			e.printStackTrace();
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (CertificateException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public BackendConnectParser getParser() {
