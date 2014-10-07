@@ -37,7 +37,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
-            android:text="Alle Angaben ohne Gewähr. App ©2014 Johan v. Forstner"
+            android:text="Alle Angaben ohne Gewähr."
             android:textSize="12sp"
             android:fontFamily="roboto-condensed"/>
 
