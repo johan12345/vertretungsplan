@@ -32,20 +32,6 @@
         Einige Grafiken wurden mit dem <a href="http://romannurik.github.io/AndroidAssetStudio/index.html">Android Asset Studio</a> von Roman Nurik erstellt.]]>
     </string>
     
-    <string name="license_dialog"><![CDATA[
-        <p>Dieses Programm ist Freie Software: Sie können es unter den Bedingungen
-	    der GNU General Public License, wie von der Free Software Foundation,
-	    Version 3 der Lizenz oder (nach Ihrer Wahl) jeder neueren
-	    veröffentlichten Version, weiterverbreiten und/oder modifizieren.</p>
-	
-	    <p>Dieses Programm wird in der Hoffnung, dass es nützlich sein wird, aber
-	    <b>ohne jede Gewährleistung</b>, bereitgestellt; sogar ohne die implizite
-	    Gewährleistung der <b>Marktfähigkeit</b> oder <b>Eignung für einen bestimmten Zweck</b>.
-	    Siehe die GNU General Public License für weitere Details.</p>
-	    
-	    <p>Eine Kopie der GNU General Public License lässt sich unter <a href="http://www.gnu.org/licenses/"> http://www.gnu.org/licenses/</a> aufrufen.</p>]]>
-    </string>
-    
     <string name="crash_dialog_title">Oh nein! Es ist etwas schiefgegangen.</string>
     <string name="crash_dialog_text">Die Vertretungsplan-App ist abgestürzt. Bitte sende mir einen Fehlerbericht per E-Mail, damit ich das Problem beheben kann. Wähle bitte, nachdem du auf "OK" getippt hast, deine E-Mail-App aus, um den Bericht zu senden.</string>
     <string name="crash_dialog_comment_prompt">Besonders hilfreich wäre es, wenn du im Kommentarfeld unten erklären würdest, was du gerade in der App gemacht hast oder ob der Fehler bei der Hintergrundaktualisierung aufgetreten ist.</string>

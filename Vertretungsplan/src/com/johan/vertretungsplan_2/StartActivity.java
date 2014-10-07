@@ -54,6 +54,7 @@ import com.johan.vertretungsplan.parser.BaseParser.UnauthorizedException;
 import com.johan.vertretungsplan.parser.BaseParser.VersionException;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
+import com.johan.vertretungsplan.ui.WebViewAlertDialog;
 import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -276,16 +277,15 @@ public class StartActivity extends TabSwipeActivity implements
 	}
 
 	public void showDialogs() {
-		boolean firstRun = settings.getBoolean("firstRun", true);
+		boolean firstRun = settings.getBoolean("privacy", true);
 		if (firstRun) {
-			String license = getResources().getString(R.string.license_dialog);
-			AlertDialog dialog = LinkAlertDialog
-					.create(this, "Lizenzbedingungen", license)
+			AlertDialog dialog = WebViewAlertDialog
+					.create(this, "http://hamilton.rami.io/web/datenschutz.html")
 					.setPositiveButton("Akzeptieren", null).create();
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override
 				public void onDismiss(DialogInterface dialog) {
-					settings.edit().putBoolean("firstRun", false).commit();
+					settings.edit().putBoolean("privacy", false).commit();
 				}
 			});
 			dialog.show();
