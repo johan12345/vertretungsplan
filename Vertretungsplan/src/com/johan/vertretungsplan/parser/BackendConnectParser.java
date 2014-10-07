@@ -20,7 +20,7 @@ import com.johan.vertretungsplan_2.VertretungsplanApplication;
 public class BackendConnectParser extends BaseParser {
 
 	private String schoolId;
-	public static final String BASE_URL = "https://jufo-gg.de/vertretungsplan-tomcat/";
+	public static final String BASE_URL = "https://hamilton.rami.io/";
 	public static final String VERSION = "v="
 			+ VertretungsplanApplication.getVersion();
 	private String regId;
