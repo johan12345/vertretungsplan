@@ -20,11 +20,13 @@ import org.holoeverywhere.app.AlertDialog;
 import org.holoeverywhere.preference.PreferenceManager;
 
 import android.appwidget.AppWidgetManager;
+import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnDismissListener;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -106,7 +108,19 @@ public class StartActivity extends TabSwipeActivity implements
 		showDialogs();
 
 		if (savedInstanceState == null) {
-			new GetVertretungsplanTask().execute();
+			if (settings.getString("regId", null) != null)
+				new GetVertretungsplanTask().execute();
+			else {
+				setProgress(true);
+				// wait for GCM registration
+				registerReceiver(new BroadcastReceiver() {
+					@Override
+					public void onReceive(Context context, Intent intent) {
+						unregisterReceiver(this);
+						new GetVertretungsplanTask().execute();
+					}				
+				}, new IntentFilter("com.johan.vertretungsplan.registered"));
+			}
 		} else {
 			Log.d("vertretungsplan", "load");
 			vertretungsplan = new Gson().fromJson(

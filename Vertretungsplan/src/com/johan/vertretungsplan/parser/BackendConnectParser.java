@@ -10,6 +10,7 @@ import org.json.JSONException;
 
 import android.util.Log;
 
+import com.google.android.gcm.GCMRegistrar;
 import com.google.gson.Gson;
 import com.joejernst.http.Request;
 import com.joejernst.http.Response;
@@ -23,32 +24,35 @@ public class BackendConnectParser extends BaseParser {
 	public static final String BASE_URL = "https://hamilton.rami.io/";
 	public static final String VERSION = "v="
 			+ VertretungsplanApplication.getVersion();
-	private String regId;
 
-	public BackendConnectParser(Schule schule, String regId) {
+	public BackendConnectParser(Schule schule) {
 		super(schule);
 		this.schoolId = schule.getId();
-		this.regId = regId;
 	}
 
-	public BackendConnectParser(String schoolId, String regId) {
+	public BackendConnectParser(String schoolId) {
 		super(null);
 		this.schoolId = schoolId;
-		this.regId = regId;
 	}
 
 	@Override
 	public Vertretungsplan getVertretungsplan() throws IOException,
 			JSONException, VersionException, UnauthorizedException {
+		String regId = GCMRegistrar.getRegistrationId(VertretungsplanApplication.context);
 		Log.d("vertretungsplan", schoolId);
 		String url = BASE_URL + "vertretungsplan?school=" + schoolId + "&regId=" + URLEncoder.encode(regId, "UTF-8") + "&" + VERSION;
+		Log.d("vertretungsplan", url);
 		Response response = new Request(url).getResource("UTF-8");
 		if(response.getResponseCode() == 400)
 			throw new VersionException();
 		else if (response.getResponseCode() == 401)
 			throw new UnauthorizedException();
-		Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
-		return v;
+		else if (response.getResponseCode() == 200) {
+			Vertretungsplan v = new Gson().fromJson(response.getBody(), Vertretungsplan.class);
+			return v;
+		} else {
+			throw new IOException("response: " + response.getResponseCode());
+		}
 	}
 
 	@Override

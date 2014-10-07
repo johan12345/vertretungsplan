@@ -187,6 +187,13 @@ public class GCMIntentService extends GCMBaseIntentService {
 		if (response.getResponseCode() == 200) {
 			Log.d("GCM", "inserted device info");
 		}
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		settings.edit().putString("regId", registration).commit();
+		
+		Intent intent = new Intent();
+		intent.setAction("com.johan.vertretungsplan.registered");
+		sendBroadcast(intent); 
 	}
 
 	private DeviceInfo getDeviceInfo(String registration) throws IOException,

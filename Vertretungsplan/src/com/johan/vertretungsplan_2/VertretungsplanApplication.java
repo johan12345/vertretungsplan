@@ -115,7 +115,7 @@ public class VertretungsplanApplication extends Application {
 	public void notifySchoolChanged() {
 		String schoolId = settings.getString("selected_school", null);
 		if(schoolId != null) {
-			parser = new BackendConnectParser(schoolId, GCMRegistrar.getRegistrationId(context));
+			parser = new BackendConnectParser(schoolId);
 		}
 	}
 	
