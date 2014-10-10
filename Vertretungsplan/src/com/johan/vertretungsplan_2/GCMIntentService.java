@@ -91,8 +91,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 	 *            an error message
 	 */
 	@Override
-	public void onError(Context context, String errorId) {
-
+	public void onError(Context context, String errorId) {		
+		Intent intent = new Intent();
+		intent.setAction("com.johan.vertretungsplan.registered");
+		sendBroadcast(intent); 
 	}
 
 	/**
@@ -171,6 +173,10 @@ public class GCMIntentService extends GCMBaseIntentService {
 							+ "by setting LOCAL_ANDROID_RUN to 'true' in CloudEndpointUtils.java.");
 			return;
 		}
+		
+		Intent intent = new Intent();
+		intent.setAction("com.johan.vertretungsplan.registered");
+		sendBroadcast(intent); 
 	}
 
 	private void insertDeviceInfo(String deviceInfo, String klasse,
@@ -190,10 +196,6 @@ public class GCMIntentService extends GCMBaseIntentService {
 		SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(this);
 		settings.edit().putString("regId", registration).commit();
-		
-		Intent intent = new Intent();
-		intent.setAction("com.johan.vertretungsplan.registered");
-		sendBroadcast(intent); 
 	}
 
 	private DeviceInfo getDeviceInfo(String registration) throws IOException,

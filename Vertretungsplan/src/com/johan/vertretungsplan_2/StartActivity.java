@@ -109,19 +109,15 @@ public class StartActivity extends TabSwipeActivity implements
 		showDialogs();
 
 		if (savedInstanceState == null) {
-			if (settings.getString("regId", null) != null)
-				new GetVertretungsplanTask().execute();
-			else {
-				setProgress(true);
-				// wait for GCM registration
-				registerReceiver(new BroadcastReceiver() {
-					@Override
-					public void onReceive(Context context, Intent intent) {
-						unregisterReceiver(this);
-						new GetVertretungsplanTask().execute();
-					}				
-				}, new IntentFilter("com.johan.vertretungsplan.registered"));
-			}
+			setProgress(true);
+			// wait for GCM registration
+			registerReceiver(new BroadcastReceiver() {
+				@Override
+				public void onReceive(Context context, Intent intent) {
+					unregisterReceiver(this);
+					new GetVertretungsplanTask().execute();
+				}				
+			}, new IntentFilter("com.johan.vertretungsplan.registered"));
 		} else {
 			Log.d("vertretungsplan", "load");
 			vertretungsplan = new Gson().fromJson(
