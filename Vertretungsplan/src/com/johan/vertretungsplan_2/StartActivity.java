@@ -116,7 +116,7 @@ public class StartActivity extends TabSwipeActivity implements
 				public void onReceive(Context context, Intent intent) {
 					unregisterReceiver(this);
 					new GetVertretungsplanTask().execute();
-				}				
+				}
 			}, new IntentFilter("com.johan.vertretungsplan.registered"));
 		} else {
 			Log.d("vertretungsplan", "load");
@@ -215,8 +215,10 @@ public class StartActivity extends TabSwipeActivity implements
 		case R.id.menu_website:
 			Intent websiteIntent = new Intent(
 					android.content.Intent.ACTION_VIEW);
-			websiteIntent.setData(Uri.parse(BackendConnectParser.BASE_URL.replace("https", "http")
-					+ "website/" + settings.getString("selected_school", "")));
+			websiteIntent.setData(Uri.parse(BackendConnectParser.BASE_URL
+					.replace("https", "http")
+					+ "website/"
+					+ settings.getString("selected_school", "")));
 			startActivity(websiteIntent);
 			break;
 		}
@@ -270,13 +272,17 @@ public class StartActivity extends TabSwipeActivity implements
 	private void setVertretungsplan(Vertretungsplan v) {
 		vertretungsplan = v;
 		refreshFragments();
+		if (v != null)
+			getSupportActionBar().setSubtitle(
+					v.getCity() + " \u00B7 " + v.getSchoolName());
 	}
 
 	public void showDialogs() {
 		boolean firstRun = settings.getBoolean("privacy", true);
 		if (firstRun) {
 			AlertDialog dialog = WebViewAlertDialog
-					.create(this, "http://hamilton.rami.io/web/datenschutz.html")
+					.create(this,
+							"http://hamilton.rami.io/web/datenschutz.html")
 					.setPositiveButton("Akzeptieren", null).create();
 			dialog.setOnDismissListener(new OnDismissListener() {
 				@Override

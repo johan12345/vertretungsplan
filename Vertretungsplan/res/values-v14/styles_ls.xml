@@ -39,9 +39,14 @@
         <item name="android:backgroundSplit">@drawable/ab_bottom_solid_ls</item>
         <item name="android:progressBarStyle">@style/ProgressBar.Ls</item>
         <item name="android:titleTextStyle">@style/TitleTextStyle</item>
+        <item name="android:subtitleTextStyle">@style/SubtitleTextStyle</item>
     </style>
     
     <style name="TitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+    	<item name="android:textColor">@android:color/white</item>
+	</style>
+	
+    <style name="SubtitleTextStyle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Subtitle">
     	<item name="android:textColor">@android:color/white</item>
 	</style>
 

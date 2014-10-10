@@ -30,6 +30,8 @@ public class Vertretungsplan implements Serializable {
 	private static final long serialVersionUID = -1753326921591151152L;
 	private List<VertretungsplanTag> tage;
 	private List<AdditionalInfo> additionalInfos;
+	private String schoolName;
+	private String city;
 	
 	public Vertretungsplan() {
 		additionalInfos = new ArrayList<AdditionalInfo>();
@@ -61,6 +63,34 @@ public class Vertretungsplan implements Serializable {
 	 */
 	public void setAdditionalInfos(List<AdditionalInfo> additionalInfos) {
 		this.additionalInfos = additionalInfos;
+	}
+
+	/**
+	 * @return the schoolName
+	 */
+	public String getSchoolName() {
+		return schoolName;
+	}
+
+	/**
+	 * @param schoolName the schoolName to set
+	 */
+	public void setSchoolName(String schoolName) {
+		this.schoolName = schoolName;
+	}
+
+	/**
+	 * @return the city
+	 */
+	public String getCity() {
+		return city;
+	}
+
+	/**
+	 * @param city the city to set
+	 */
+	public void setCity(String city) {
+		this.city = city;
 	}
 
 }
