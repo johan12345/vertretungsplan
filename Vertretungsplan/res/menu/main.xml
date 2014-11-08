@@ -1,32 +1,33 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
 
         
     <item
         android:id="@+id/menu_settings"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/menu_settings"/>
     
     <item
         android:id="@+id/menu_info"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/menu_info"/>
     
     <item android:id="@+id/menu_refresh"
           android:icon="@drawable/ic_action_refresh"
           android:title="@string/menu_refresh"
-          android:showAsAction="ifRoom" />
+          app:showAsAction="ifRoom" />
     
     <item android:id="@+id/menu_website"
           android:icon="@drawable/ic_action_web_site"
           android:title="@string/menu_link"
-          android:showAsAction="ifRoom" />
+          app:showAsAction="ifRoom" />
     
     <item
         android:id="@+id/menu_mail"
         android:orderInCategory="100"
-        android:showAsAction="never"
+        app:showAsAction="never"
         android:title="@string/menu_mail"/>
 
 </menu>

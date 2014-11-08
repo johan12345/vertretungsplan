@@ -16,8 +16,16 @@
 
 package com.johan.vertretungsplan_2;
 
-import org.holoeverywhere.app.Fragment;
+import com.johan.vertretungsplan.utils.FontUtils;
 
-public class VertretungsplanFragment extends Fragment {
-	
+import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.View;
+
+public class VertretungsplanFragment extends Fragment {	
+	@Override
+	public void onViewCreated(View view, Bundle savedInstanceState) {
+		super.onViewCreated(view, savedInstanceState);
+		FontUtils.setRobotoFont(getActivity(), view);
+	}
 }

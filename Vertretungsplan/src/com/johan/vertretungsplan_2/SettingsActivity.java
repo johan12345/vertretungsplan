@@ -15,23 +15,21 @@
     along with this program.  If not, see [http://www.gnu.org/licenses/]. */
 
 package com.johan.vertretungsplan_2;
-
-import org.holoeverywhere.preference.PreferenceActivity;
-import org.holoeverywhere.preference.PreferenceManager;
-
 import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 
-public class SettingsActivity extends PreferenceActivity {
+public class SettingsActivity extends ActionBarActivity {
 
 	@SuppressLint("NewApi")
 	@Override

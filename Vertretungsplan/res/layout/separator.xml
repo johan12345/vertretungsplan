@@ -11,7 +11,8 @@
             android:layout_marginLeft="8dp"
             android:text="text"
             android:textSize="18sp"
-            android:fontFamily="roboto-light"
+            android:fontFamily="sans-serif-light"
+            android:tag="roboto-light"
             android:visibility="visible" />
 
 </LinearLayout>

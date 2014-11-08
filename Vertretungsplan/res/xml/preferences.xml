@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-	<Preference android:title="Schule wechseln" android:id="@+id/change_school" />
+	<Preference android:title="Schule wechseln" android:key="change_school" android:id="@+id/change_school" />
 	<PreferenceCategory android:title="Allgemein"
 		android:id="@+id/view_category">
 		<CheckBoxPreference android:id="@+id/farben"

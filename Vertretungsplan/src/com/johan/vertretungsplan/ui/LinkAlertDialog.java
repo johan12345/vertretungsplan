@@ -16,9 +16,9 @@
 
 package com.johan.vertretungsplan.ui;
 
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.AlertDialog.Builder;
-import org.holoeverywhere.widget.TextView;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.widget.TextView;
 
 import android.content.Context;
 import android.os.Build;

@@ -19,6 +19,7 @@
         android:layout_marginLeft="8dp"
         android:visibility="visible"
         android:fontFamily="sans-serif-light"
+        android:tag="roboto-light"
         android:textColor="?android:attr/textColorPrimary" />
 
     <LinearLayout
@@ -35,6 +36,7 @@
             android:layout_marginTop="4dp"
             android:text="Sondereins."
             android:fontFamily="sans-serif-condensed"
+            android:tag="roboto-condensed"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary" />
 
@@ -45,6 +47,7 @@
             android:layout_gravity="bottom"
             android:text="Fix schwyz quäkt Jürgen blöd"
             android:fontFamily="sans-serif-condensed"
+            android:tag="roboto-condensed"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorPrimary" />
     </LinearLayout>

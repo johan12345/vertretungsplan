@@ -21,46 +21,46 @@ import java.text.DecimalFormat;
 import java.util.Collections;
 import java.util.List;
 
-import org.holoeverywhere.LayoutInflater;
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.DialogFragment;
-import org.holoeverywhere.preference.PreferenceManager;
-import org.holoeverywhere.preference.SharedPreferences;
-import org.holoeverywhere.preference.SharedPreferences.Editor;
-import org.holoeverywhere.widget.ArrayAdapter;
-import org.holoeverywhere.widget.FrameLayout;
-import org.holoeverywhere.widget.LinearLayout;
-import org.holoeverywhere.widget.ListView;
-import org.holoeverywhere.widget.ProgressBar;
-import org.holoeverywhere.widget.TextView;
-import org.holoeverywhere.widget.Toast;
 import org.json.JSONException;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ArrayAdapter;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.joejernst.http.Request;
 import com.johan.vertretungsplan.comparators.AlphabeticalSchoolComparator;
 import com.johan.vertretungsplan.comparators.DistanceSchoolComparator;
 import com.johan.vertretungsplan.objects.Schule;
 import com.johan.vertretungsplan.parser.BackendConnectParser;
+import com.johan.vertretungsplan.utils.FontUtils;
 import com.johan.vertretungsplan.utils.Utils;
 import com.johan.vertretungsplan_2.LoginDialogFragment.LoginDialogListener;
 
-public class SelectSchoolActivity extends Activity implements
+public class SelectSchoolActivity extends ActionBarActivity implements
 		LoginDialogListener {
 
 	private ListView lstSchools;
@@ -119,7 +119,7 @@ public class SelectSchoolActivity extends Activity implements
 						.commit();
 				if (selectedSchool.requiresLogin()) {
 					dialog = new LoginDialogFragment(selectedSchool.getLogin());
-					dialog.show(getSupportFragmentManager());
+					dialog.show(getSupportFragmentManager(), "login");
 				} else {
 					launchApp();
 				}
@@ -166,6 +166,7 @@ public class SelectSchoolActivity extends Activity implements
 			}
 
 		});
+		FontUtils.setRobotoFont(this, findViewById(android.R.id.content));
 	}
 
 	protected void launchApp() {

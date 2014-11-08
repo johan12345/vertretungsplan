@@ -16,9 +16,7 @@
 
 package com.johan.vertretungsplan_2;
 
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.preference.PreferenceManager;
-
+import android.app.AlertDialog;
 import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -30,17 +28,18 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ProgressBar;
 
 import com.astuetz.viewpager.extensions.PagerSlidingTabStrip;
 import com.google.android.gms.analytics.GoogleAnalytics;
@@ -55,6 +54,8 @@ import com.johan.vertretungsplan.parser.BaseParser.VersionException;
 import com.johan.vertretungsplan.ui.LinkAlertDialog;
 import com.johan.vertretungsplan.ui.TabSwipeActivity;
 import com.johan.vertretungsplan.ui.WebViewAlertDialog;
+import com.johan.vertretungsplan.utils.Animations;
+import com.johan.vertretungsplan.utils.FontUtils;
 import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 
 import de.keyboardsurfer.android.widget.crouton.Configuration;
@@ -72,11 +73,16 @@ public class StartActivity extends TabSwipeActivity implements
 	private Boolean asyncRunning = false;
 	private SharedPreferences settings;
 	private PagerSlidingTabStrip tabs;
+	private View content;
+	private ProgressBar pBar;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		appContext = getApplicationContext();
+
+		Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+		setSupportActionBar(toolbar);
 
 		settings = PreferenceManager
 				.getDefaultSharedPreferences(getApplicationContext());
@@ -86,24 +92,24 @@ public class StartActivity extends TabSwipeActivity implements
 			startActivity(intent);
 			finish();
 		}
+		if (!isTablet()) {
+			vertretungFragment = new VertretungFragment();
+			nachrichtenFragment = new NachrichtenFragment();
 
-		vertretungFragment = new VertretungFragment();
-		nachrichtenFragment = new NachrichtenFragment();
+			addTab("Vertretungsplan", vertretungFragment);
+			addTab("Nachrichten", nachrichtenFragment);
 
-		addTab("Vertretungsplan", vertretungFragment);
-		addTab("Nachrichten", nachrichtenFragment);
-
-		tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
-		tabs.setViewPager(mViewPager);
-		DisplayMetrics metrics = new DisplayMetrics();
-		getWindowManager().getDefaultDisplay().getMetrics(metrics);
-		getResources().getConfiguration();
-		if (metrics.widthPixels / (metrics.densityDpi / 160f) >= 800
-				&& getResources().getConfiguration().orientation == android.content.res.Configuration.ORIENTATION_LANDSCAPE) {
-			tabs.setVisibility(View.GONE);
+			tabs = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+			tabs.setViewPager(mViewPager);
+			tabs.setOnPageChangeListener(adapter);
+		} else {
+			vertretungFragment = (VertretungFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.vertretung_fragment);
+			nachrichtenFragment = (NachrichtenFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.nachrichten_fragment);
 		}
-		tabs.setOnPageChangeListener(adapter);
-		tabs.setIndicatorColor(Color.rgb(51, 139, 255));
+		content = findViewById(R.id.content);
+		pBar = (ProgressBar) findViewById(R.id.progressBar);
 
 		// Launch license dialog
 		showDialogs();
@@ -124,6 +130,8 @@ public class StartActivity extends TabSwipeActivity implements
 					savedInstanceState.getString("vertretungsplan"),
 					Vertretungsplan.class);
 		}
+		
+		FontUtils.setRobotoFont(this, findViewById(android.R.id.content));
 	}
 
 	@Override
@@ -239,8 +247,10 @@ public class StartActivity extends TabSwipeActivity implements
 	}
 
 	public void setProgress(boolean show) {
-		vertretungFragment.progress(show);
-		nachrichtenFragment.progress(show);
+		if (show)
+			Animations.crossfade(content, pBar);
+		else
+			Animations.crossfade(pBar, content);
 	}
 
 	@Override

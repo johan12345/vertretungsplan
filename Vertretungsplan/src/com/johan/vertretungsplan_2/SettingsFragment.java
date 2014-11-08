@@ -16,16 +16,16 @@
 
 package com.johan.vertretungsplan_2;
 
-import org.holoeverywhere.preference.CheckBoxPreference;
-import org.holoeverywhere.preference.Preference;
-import org.holoeverywhere.preference.Preference.OnPreferenceChangeListener;
-import org.holoeverywhere.preference.Preference.OnPreferenceClickListener;
-import org.holoeverywhere.preference.PreferenceFragment;
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.johan.vertretungsplan_2.R;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference.OnPreferenceClickListener;
+import android.support.v4.preference.PreferenceFragment;
 import android.util.Log;
 
 public class SettingsFragment extends PreferenceFragment {
@@ -33,8 +33,8 @@ public class SettingsFragment extends PreferenceFragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         addPreferencesFromResource(R.xml.preferences);
-        
-        Preference changeSchoolPref = findPreference(R.id.change_school);
+
+        Preference changeSchoolPref = findPreference("change_school");
         changeSchoolPref.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 
 			@Override
@@ -46,7 +46,7 @@ public class SettingsFragment extends PreferenceFragment {
         	
         });
         
-        CheckBoxPreference analyticsPref = (CheckBoxPreference) findPreference(R.id.analytics);
+        CheckBoxPreference analyticsPref = (CheckBoxPreference) findPreference("analytics");
         analyticsPref.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 
 			@Override

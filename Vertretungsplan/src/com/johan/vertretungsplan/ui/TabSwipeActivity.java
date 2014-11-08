@@ -19,23 +19,24 @@ package com.johan.vertretungsplan.ui;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.holoeverywhere.app.Activity;
-import org.holoeverywhere.app.Fragment;
-import org.holoeverywhere.widget.ViewPager;
-
 import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Parcelable;
 
 
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
+import android.support.v7.app.ActionBarActivity;
 import android.util.DisplayMetrics;
+
 import com.johan.vertretungsplan_2.R;
   
-public abstract class TabSwipeActivity extends Activity {
+public abstract class TabSwipeActivity extends ActionBarActivity {
   
     protected ViewPager mViewPager;
     public TabsAdapter adapter;
+    private boolean isTablet = false;
   
     @Override
     protected void onCreate(Bundle savedInstanceState) {   	  
@@ -46,20 +47,27 @@ public abstract class TabSwipeActivity extends Activity {
          */
         mViewPager = (ViewPager) findViewById(R.id.pager);
         
-        if (savedInstanceState == null) {
-        	adapter = new TabsAdapter( this, mViewPager );
-        } else {
-        	Parcelable adapterState = savedInstanceState.getParcelable("TabsAdapter");
-        	adapter = new TabsAdapter( this, mViewPager );
-        	adapter.restoreState(adapterState, this.getClassLoader());
-        }
+        if (mViewPager != null) {
         
-        mViewPager.setAdapter( adapter );   
+	        if (savedInstanceState == null) {
+	        	adapter = new TabsAdapter( this, mViewPager );
+	        } else {
+	        	Parcelable adapterState = savedInstanceState.getParcelable("TabsAdapter");
+	        	adapter = new TabsAdapter( this, mViewPager );
+	        	adapter.restoreState(adapterState, this.getClassLoader());
+	        }
+	        
+	        mViewPager.setAdapter( adapter );   
+        } else {
+        	// This is a tablet
+        	isTablet = true;
+        }
     }
     
     @Override
     protected void onSaveInstanceState(Bundle state) {
-    	state.putParcelable("TabsAdapter", adapter.saveState());
+    	if (!isTablet())
+    		state.putParcelable("TabsAdapter", adapter.saveState());
     	super.onSaveInstanceState(state);
     }
   
@@ -89,7 +97,7 @@ public abstract class TabSwipeActivity extends Activity {
          * @param fm
          * @param fragments
          */
-        public TabsAdapter(Activity activity, ViewPager pager) {
+        public TabsAdapter(ActionBarActivity activity, ViewPager pager) {
             super(activity.getSupportFragmentManager());
         }
 
@@ -140,4 +148,11 @@ public abstract class TabSwipeActivity extends Activity {
         }
 
     }
+
+/**
+ * @return the isTablet
+ */
+protected boolean isTablet() {
+	return isTablet;
+}
 }

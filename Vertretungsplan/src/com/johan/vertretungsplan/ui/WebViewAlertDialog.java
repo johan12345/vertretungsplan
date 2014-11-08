@@ -16,8 +16,8 @@
 
 package com.johan.vertretungsplan.ui;
 
-import org.holoeverywhere.app.AlertDialog;
-import org.holoeverywhere.app.AlertDialog.Builder;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
 import android.content.Context;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;

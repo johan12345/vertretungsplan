@@ -12,7 +12,7 @@
         android:layout_marginLeft="8dp"
         android:layout_marginRight="8dp"
         android:text="@string/login"
-        android:fontFamily="sans-serif-light"
+        android:tag="roboto-light"
         android:textSize="18sp" />
 
     <FrameLayout
@@ -52,7 +52,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:ems="10"
-                android:fontFamily="sans-serif"
                 android:hint="@string/password"
                 android:inputType="textPassword" />
         </LinearLayout>

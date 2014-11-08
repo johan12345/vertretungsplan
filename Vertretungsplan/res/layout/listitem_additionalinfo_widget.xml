@@ -14,6 +14,7 @@
             android:layout_marginLeft="8dp"
             android:text="title"
             android:fontFamily="sans-serif-condensed"
+            android:tag="roboto-condensed"
             android:visibility="visible"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary" />
@@ -25,6 +26,7 @@
             android:layout_marginLeft="8dp"
             android:text="text"
             android:fontFamily="sans-serif-condensed"
+            android:tag="roboto-condensed"
             android:visibility="visible"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="?android:attr/textColorPrimary" />

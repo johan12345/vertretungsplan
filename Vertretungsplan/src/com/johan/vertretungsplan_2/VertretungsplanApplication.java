@@ -29,13 +29,13 @@ import javax.net.ssl.TrustManagerFactory;
 
 import org.acra.ACRA;
 import org.acra.annotation.ReportsCrashes;
-import org.holoeverywhere.app.Application;
-import org.holoeverywhere.preference.PreferenceManager;
-import org.holoeverywhere.preference.SharedPreferences;
 
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.preference.PreferenceManager;
 
 import com.google.android.gms.analytics.GoogleAnalytics;
 import com.google.android.gms.analytics.Tracker;

@@ -9,7 +9,8 @@
         android:id="@+id/textView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="roboto-light"
+        android:fontFamily="sans-serif-light"
+        android:tag="roboto-light"
         android:text="@string/welcome"
         android:textSize="28sp" />
 
@@ -17,7 +18,8 @@
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:fontFamily="roboto-light"
+        android:fontFamily="sans-serif-light"
+        android:tag="roboto-light"
         android:text="@string/select_your_school"
         android:textSize="16sp" />
     
@@ -25,7 +27,6 @@
         android:id="@+id/llLocate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/list_selector_holo_light"
         android:clickable="true"
         android:focusable="true"
         android:padding="16dp"
@@ -77,7 +78,7 @@
             android:id="@+id/tvSuggestSchool"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/actionbar_color"
+            android:background="@color/material_blue_500"
             android:padding="8dp"
             android:text="@string/suggest_school"
             android:textColor="@android:color/white" />
