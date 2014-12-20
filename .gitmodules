@@ -1,18 +1,3 @@
-[submodule "libraries/HoloEverywhere"]
-	path = libraries/HoloEverywhere
-	url = https://github.com/Prototik/HoloEverywhere.git
-[submodule "libraries/crouton"]
-	path = libraries/crouton
-	url = https://github.com/keyboardsurfer/Crouton.git
-[submodule "libraries/inscription"]
-	path = libraries/inscription
-	url = https://github.com/MartinvanZ/Inscription.git
-[submodule "libraries/pagerslidingtabstrip"]
-	path = libraries/pagerslidingtabstrip
-	url = https://github.com/astuetz/PagerSlidingTabStrip.git
-[submodule "libraries/google-play-services"]
-	path = libraries/google-play-services
-	url = https://github.com/koush/google-play-services_lib.git
-[submodule "libraries/support-preferencefragment"]
-	path = libraries/support-preferencefragment
+[submodule "Vertretungsplan/support-preferencefragment"]
+	path = Vertretungsplan/support-preferencefragment
 	url = https://github.com/kolavar/android-support-v4-preferencefragment.git
