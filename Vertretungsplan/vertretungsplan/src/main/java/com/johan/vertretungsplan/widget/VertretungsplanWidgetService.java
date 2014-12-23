@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.text.Html;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -130,12 +131,12 @@ public class VertretungsplanWidgetService extends RemoteViewsService {
             } else if (item instanceof String) {
                 String text = (String) item;
                 rv = new RemoteViews(context.getPackageName(), R.layout.listitem_text_widget);
-                rv.setTextViewText(R.id.text, text);
+                rv.setTextViewText(R.id.text, Html.fromHtml(text));
             } else if (item instanceof AdditionalInfo) {
                 AdditionalInfo info = (AdditionalInfo) item;
                 rv = new RemoteViews(context.getPackageName(), R.layout.listitem_additionalinfo_widget);
-                rv.setTextViewText(R.id.title, info.getTitle());
-                rv.setTextViewText(R.id.text, info.getText());
+                rv.setTextViewText(R.id.title, Html.fromHtml(info.getTitle()));
+                rv.setTextViewText(R.id.text, Html.fromHtml(info.getText()));
             } else if (item instanceof Separator) {
                 String text = ((Separator) item).text;
                 rv = new RemoteViews(context.getPackageName(), R.layout.listitem_separator_widget);

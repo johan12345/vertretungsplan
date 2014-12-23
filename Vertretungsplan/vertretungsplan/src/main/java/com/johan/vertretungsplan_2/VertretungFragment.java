@@ -338,7 +338,7 @@ public class VertretungFragment extends VertretungsplanFragment {
                                         .get(position)).getColor()));
                         holder.stunde.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
                         holder.art.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
-                        holder.text.setTextColor(getResources().getColor(android.R.color.secondary_text_dark));
+                        holder.text.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
                     } else {
                         ((CardView) convertView).setCardBackgroundColor(Color.WHITE);
                         holder.stunde.setTextColor(getResources().getColor(android.R.color.primary_text_light));
