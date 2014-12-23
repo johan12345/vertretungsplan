@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#BBFFFFFF"
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/textSeparator"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
+        android:fontFamily="sans-serif-condensed"
+        android:tag="roboto-condensed"
+        android:text="text"
+        android:textAllCaps="true"
+        android:textColor="?android:attr/textColorPrimaryInverse"
+        android:textSize="18sp"
+        android:visibility="visible" />
+
+</LinearLayout>

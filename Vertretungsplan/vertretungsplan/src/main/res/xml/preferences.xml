@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <Preference
+        android:id="@+id/change_school"
+        android:key="change_school"
+        android:title="Schule wechseln" />
+    <PreferenceCategory
+        android:id="@+id/view_category"
+        android:title="Allgemein">
+        <CheckBoxPreference
+            android:id="@+id/farben"
+            android:defaultValue="true"
+            android:key="farben"
+            android:summaryOff="Vertretungsplan nicht mit Farben hinterlegen"
+            android:summaryOn="Vertretungsplan mit Farben hinterlegen"
+            android:title="Farben" />
+        <CheckBoxPreference
+            android:id="@+id/analytics"
+            android:defaultValue="true"
+            android:key="analytics"
+            android:summaryOff="keine anonymen Nutzungsstatistiken senden"
+            android:summaryOn="Anonyme Nutzungsstatistiken über Google Analytics senden"
+            android:title="Google Analytics" />
+        <CheckBoxPreference
+            android:id="@+id/news_widget"
+            android:defaultValue="true"
+            android:key="news_widget"
+            android:summaryOff="Nachrichten nicht im Widget anzeigen"
+            android:summaryOn="Nachrichten im Widget anzeigen"
+            android:title="Nachrichten im Widget" />
+    </PreferenceCategory>
+    <PreferenceCategory
+        android:id="@+id/sync_category"
+        android:title="Benachrichtigung">
+        <CheckBoxPreference
+            android:id="@+id/notification"
+            android:defaultValue="true"
+            android:key="notification"
+            android:summaryOff="keine Benachrichtigungen bei Änderungen des Vertretungsplans"
+            android:summaryOn="Benachrichtigung, wenn der Vertretungsplan geändert wurde"
+            android:title="Benachrichtigung" />
+        <RingtonePreference
+            android:id="@+id/ringtone"
+            android:defaultValue="content://settings/system/notification_sound"
+            android:dependency="notification"
+            android:key="ringtone"
+            android:ringtoneType="notification"
+            android:showDefault="true"
+            android:showSilent="true"
+            android:title="Benachrichtigungston" />
+    </PreferenceCategory>
+</PreferenceScreen>
