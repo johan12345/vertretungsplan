@@ -26,8 +26,8 @@ android {
         }
         ls {
             applicationId "com.johan.vertretungsplan"
-            versionCode 38
-            versionName "3.0"
+            versionCode 39
+            versionName "3.0.1"
             buildConfigField "String", "FIXED_SCHOOL", "\"Schleswig_Lornsenschule\""
         }
     }
