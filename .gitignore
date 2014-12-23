@@ -8,3 +8,6 @@
 /Vertretungsplan/supportpreferencefragment/build
 /Vertretungsplan/pagersliding/build
 Thumbs.db
+.DS_Store
+.apk
+manifest-merger-*-release-report.txt
