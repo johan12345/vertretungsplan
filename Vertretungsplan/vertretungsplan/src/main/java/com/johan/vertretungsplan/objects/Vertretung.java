@@ -17,12 +17,24 @@
 package com.johan.vertretungsplan.objects;
 
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Vertretung implements Serializable {
     /**
      *
      */
     private static final long serialVersionUID = 8029479872726949613L;
+    private static final String RED = "#F44336";
+    private static final String BLUE = "#2196F3";
+    private static final String YELLOW = "#FFA000";
+    private static final String PURPLE = "#4CAF50";
+    private static final String GREEN = "#4CAF50";
+    private static final String[] RED_VALUES = {"Entfall", "EVA", "Entf.", "Fällt aus!", "Fällt aus", "entfällt"};
+    private static final String[] BLUE_VALUES = {"Vertretung", "Sondereins.", "Statt-Vertretung", "Veranst.", "Betreuung"};
+    private static final String[] YELLOW_VALUES = {"Tausch", "Verlegung", "Zusammenlegung", "Unterricht geändert"};
+    private static final String[] GREEN_VALUES = {"Raum", "KLA", "Raum-Vtr.", "Raumtausch"};
     private String lesson;
     private String type;
     private String subject;
@@ -33,6 +45,10 @@ public class Vertretung implements Serializable {
     private String previousRoom;
     private String desc;
 
+    private static Set<String> makeSet(String[] values) {
+        return new HashSet<String>(Arrays.asList(values));
+    }
+
     /**
      * Erzeugt eine Farbe für die Vertretung
      *
@@ -40,27 +56,16 @@ public class Vertretung implements Serializable {
      * bei unbekannten Vertretungsarten lila.
      */
     public String getColor() {
-        String farbe;
-        if (type.equals("Entfall")) {
-            farbe = "#F44336"; //Rot
-        } else if (type.equals("EVA")) {
-            farbe = "#F44336"; //Rot
-        } else if (type.equals("Vertretung")) {
-            farbe = "#2196F3"; //Blau
-        } else if (type.equals("Sondereins.")) {
-            farbe = "#2196F3"; //Blau
-        } else if (type.equals("Verlegung")) {
-            farbe = "#FFC107"; //Gelb
-        } else if (type.equals("Tausch")) {
-            farbe = "#FFC107"; //Gelb
-        } else if (type.equals("Statt-Vertretung")) {
-            farbe = "#2196F3"; //Blau
-        } else if (type.equals("Zusammenlegung")) {
-            farbe = "#4CAF50"; //Lila
-        } else {
-            farbe = "#673AB7"; //Lila
-        }
-        return farbe;
+        if (makeSet(RED_VALUES).contains(type))
+            return RED;
+        else if (makeSet(BLUE_VALUES).contains(type))
+            return BLUE;
+        else if (makeSet(YELLOW_VALUES).contains(type))
+            return YELLOW;
+        else if (makeSet(GREEN_VALUES).contains(type))
+            return GREEN;
+        else
+            return PURPLE;
     }
 
     /**
