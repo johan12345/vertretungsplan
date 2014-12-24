@@ -130,6 +130,8 @@ public class StartActivity extends TabSwipeActivity implements
             vertretungsplan = new Gson().fromJson(
                     savedInstanceState.getString("vertretungsplan"),
                     Vertretungsplan.class);
+            if (vertretungsplan != null)
+                setVertretungsplan(vertretungsplan);
         }
 
         FontUtils.setRobotoFont(this, findViewById(android.R.id.content));
