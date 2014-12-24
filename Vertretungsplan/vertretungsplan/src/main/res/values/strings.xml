@@ -52,5 +52,7 @@
     <string name="login">Gib die Benutzerdaten ein, mit denen du dich auch online beim Vertretungsplan deiner Schule einloggst.</string>
     <string name="signin">Einloggen</string>
     <string name="cancel">Abbrechen</string>
+    <string name="vertretung">Vertretung</string>
+    <string name="nachrichten">Nachrichten</string>
 
 </resources>

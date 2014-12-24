@@ -50,21 +50,60 @@
                 android:layout_weight="1"
                 android:orientation="horizontal">
 
-                <fragment
-                    android:id="@+id/vertretung_fragment"
-                    android:name="com.johan.vertretungsplan_2.VertretungFragment"
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtVertretung"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="roboto-slab-light"
+                        android:tag="roboto-slab-light"
+                        android:text="@string/vertretung"
+                        android:textSize="24sp" />
+
+                    <fragment
+                        android:id="@+id/vertretung_fragment"
+                        android:name="com.johan.vertretungsplan_2.VertretungFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
                     tools:layout="@layout/fragment_vertretung" />
 
-                <fragment
-                    android:id="@+id/nachrichten_fragment"
-                    android:name="com.johan.vertretungsplan_2.NachrichtenFragment"
+                </LinearLayout>
+
+                <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    tools:layout="@layout/fragment_nachrichten" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtNachrichten"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="16dp"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="roboto-slab-light"
+                        android:tag="roboto-slab-light"
+                        android:text="@string/nachrichten"
+                        android:textSize="24sp" />
+
+                    <fragment
+                        android:id="@+id/nachrichten_fragment"
+                        android:name="com.johan.vertretungsplan_2.NachrichtenFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="0dp"
+                        android:layout_weight="1"
+                        tools:layout="@layout/fragment_nachrichten" />
+                </LinearLayout>
             </LinearLayout>
 
             <TextView
