@@ -95,7 +95,7 @@ public class StartActivity extends TabSwipeActivity implements
                 startActivity(intent);
                 finish();
             } else {
-                settings.edit().putString("selected_school", BuildConfig.FIXED_SCHOOL);
+                settings.edit().putString("selected_school", BuildConfig.FIXED_SCHOOL).commit();
             }
         }
         if (!isTablet()) {
@@ -387,7 +387,7 @@ public class StartActivity extends TabSwipeActivity implements
                 Log.d("vertretungsplan", result.toString());
             else
                 Log.d("vertretungsplan", "result == null");
-            if (result instanceof UnauthorizedException) {
+            if (result instanceof UnauthorizedException && BuildConfig.FIXED_SCHOOL == null) {
                 Crouton crouton = Crouton
                         .makeText(
                                 StartActivity.this,
