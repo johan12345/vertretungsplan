@@ -169,8 +169,8 @@ public class VertretungFragment extends VertretungsplanFragment {
                     }
                 }
             }
+            list.startLayoutAnimation();
         }
-        list.startLayoutAnimation();
     }
 
     @Override

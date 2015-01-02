@@ -84,7 +84,12 @@ public class StartActivity extends TabSwipeActivity implements
         appContext = getApplicationContext();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        try {
+            setSupportActionBar(toolbar);
+        } catch (Throwable e) {
+            // Bug auf Samsung- und Wiko-Geräten
+            // https://code.google.com/p/android/issues/detail?id=78377
+        }
 
         settings = PreferenceManager
                 .getDefaultSharedPreferences(getApplicationContext());

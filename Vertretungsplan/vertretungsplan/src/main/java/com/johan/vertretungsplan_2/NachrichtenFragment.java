@@ -96,8 +96,8 @@ public class NachrichtenFragment extends VertretungsplanFragment {
                 listadapter.addSeparatorItem(info.getTitle());
                 listadapter.addItem(info.getText());
             }
+            list.startLayoutAnimation();
         }
-        list.startLayoutAnimation();
     }
 
     @Override
