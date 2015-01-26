@@ -187,6 +187,8 @@ public class SelectSchoolActivity extends ActionBarActivity implements
 
         if (provider == null) {
             Log.d("vertretungsplan", "provider==null");
+            tvLocateString.setText(R.string.geolocate_disabled);
+            status = Status.LIST;
             return;
         }
         locationManager.requestLocationUpdates(provider, 0, 0,

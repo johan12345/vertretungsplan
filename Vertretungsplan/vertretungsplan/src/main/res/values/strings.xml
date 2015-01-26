@@ -45,6 +45,7 @@
     <string name="suggest_school">Deine Schule wird nicht unterstützt? Schlage sie vor!</string>
     <string name="geolocate">Schulen in der Nähe finden</string>
     <string name="geolocate_progress">Position wird gesucht...</string>
+    <string name="geolocate_disabled">Standort deaktiviert</string>
     <string name="alphabetic_list">Alphabetische Liste anzeigen</string>
 
     <string name="username">Benutzername/Kennung</string>
