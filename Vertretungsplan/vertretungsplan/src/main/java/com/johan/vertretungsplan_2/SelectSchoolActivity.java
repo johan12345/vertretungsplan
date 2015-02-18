@@ -237,13 +237,6 @@ public class SelectSchoolActivity extends ActionBarActivity implements
 
     @Override
     public void onLogin(String login, String password) {
-        SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(this);
-        Editor edit = prefs.edit();
-        edit.putString("login", login);
-        edit.putString("password", password);
-        edit.putString("selected_school", selectedSchool.getId());
-        edit.commit();
         new LoginTask().execute(selectedSchool.getId(), login, password);
     }
 
@@ -350,6 +343,10 @@ public class SelectSchoolActivity extends ActionBarActivity implements
 
     private class LoginTask extends AsyncTask<String, Void, Boolean> {
 
+        private String school;
+        private String login;
+        private String password;
+
         @Override
         protected void onPreExecute() {
             dialog.progress(true);
@@ -358,9 +355,9 @@ public class SelectSchoolActivity extends ActionBarActivity implements
         @Override
         protected Boolean doInBackground(String... args) {
             try {
-                String school = URLEncoder.encode(args[0], "UTF-8");
-                String login = URLEncoder.encode(args[1], "UTF-8");
-                String password = URLEncoder.encode(args[2], "UTF-8");
+                school = URLEncoder.encode(args[0], "UTF-8");
+                login = URLEncoder.encode(args[1], "UTF-8");
+                password = URLEncoder.encode(args[2], "UTF-8");
                 int responseCode = new Request(BackendConnectParser.BASE_URL
                         + "login?schoolId=" + school + "&login=" + login
                         + "&password=" + password).getResource()
@@ -381,6 +378,14 @@ public class SelectSchoolActivity extends ActionBarActivity implements
             if (result) {
                 dialog.dismiss();
                 launchApp();
+
+                SharedPreferences prefs = PreferenceManager
+                        .getDefaultSharedPreferences(SelectSchoolActivity.this);
+                Editor edit = prefs.edit();
+                edit.putString("login", login);
+                edit.putString("password", password);
+                edit.putString("selected_school", selectedSchool.getId());
+                edit.commit();
             } else {
                 Toast.makeText(SelectSchoolActivity.this,
                         "Benutzerdaten sind falsch", Toast.LENGTH_LONG).show();
