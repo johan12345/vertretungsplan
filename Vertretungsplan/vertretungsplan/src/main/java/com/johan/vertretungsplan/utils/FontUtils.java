@@ -9,7 +9,6 @@ package com.johan.vertretungsplan.utils;
 
 import android.content.Context;
 import android.graphics.Typeface;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -29,7 +28,6 @@ public final class FontUtils {
      */
     private static Typeface getRobotoTypeface(Context context, String fontType, Typeface typeface) {
         String fontPath = "fonts/" + getFontName(fontType, typeface) + ".ttf";
-        Log.d("vertretungsplan", fontPath);
 
         if (!typefaceCache.containsKey(fontType)) {
             typefaceCache.put(fontType, Typeface.createFromAsset(context.getAssets(), fontPath));
