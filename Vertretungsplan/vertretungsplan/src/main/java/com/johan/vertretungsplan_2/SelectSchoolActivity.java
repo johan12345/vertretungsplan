@@ -110,13 +110,13 @@ public class SelectSchoolActivity extends ActionBarActivity implements
             public void onItemClick(AdapterView<?> arg0, View arg1,
                                     int position, long arg3) {
                 selectedSchool = schools.get(position);
-                settings.edit()
-                        .putString("selected_school", selectedSchool.getId())
-                        .commit();
                 if (selectedSchool.requiresLogin()) {
                     dialog = LoginDialogFragment.getInstance(selectedSchool.getLogin());
                     dialog.show(getSupportFragmentManager(), "login");
                 } else {
+                    settings.edit()
+                            .putString("selected_school", selectedSchool.getId())
+                            .commit();
                     launchApp();
                 }
             }
@@ -242,6 +242,7 @@ public class SelectSchoolActivity extends ActionBarActivity implements
         Editor edit = prefs.edit();
         edit.putString("login", login);
         edit.putString("password", password);
+        edit.putString("selected_school", selectedSchool.getId());
         edit.commit();
         new LoginTask().execute(selectedSchool.getId(), login, password);
     }
