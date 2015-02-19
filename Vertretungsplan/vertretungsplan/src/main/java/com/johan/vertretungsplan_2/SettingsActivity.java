@@ -19,6 +19,7 @@ package com.johan.vertretungsplan_2;
 import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -32,14 +33,17 @@ import com.johan.vertretungsplan.widget.VertretungsplanWidgetProvider;
 
 public class SettingsActivity extends ActionBarActivity {
 
+    private SettingsFragment fragment;
+
     @SuppressLint("NewApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
+        fragment = new SettingsFragment();
         getSupportFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment()).commit();
+                .replace(android.R.id.content, fragment).commit();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
@@ -113,4 +117,9 @@ public class SettingsActivity extends ActionBarActivity {
         GoogleAnalytics.getInstance(this).reportActivityStop(this);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        fragment.onActivityResult(requestCode, resultCode, data);
+    }
 }
