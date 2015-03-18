@@ -1,19 +1,19 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 21
+    compileSdkVersion 22
     buildToolsVersion "21.1.2"
 
     defaultConfig {
         applicationId "com.johan.vertretungsplan_2"
         minSdkVersion 9
-        targetSdkVersion 21
+        targetSdkVersion 22
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            minifyEnabled true
+            proguardFiles 'proguard-rules.txt'
         }
         debug {}
     }
@@ -44,12 +44,11 @@ dependencies {
     }
     compile project(':pagersliding')
     compile project(':supportpreferencefragment')
-    compile 'com.android.support:support-v4:21.0.3'
-    compile 'com.google.android.gms:play-services:+'
-    compile 'com.google.code.gson:gson:2.1'
-    compile 'com.android.support:appcompat-v7:21.0.3'
-    compile 'com.android.support:cardview-v7:21.0.+'
+    compile 'com.android.support:support-v4:22.0.0'
+    compile 'com.google.android.gms:play-services:6.5.87'
+    compile 'com.google.code.gson:gson:2.3'
+    compile 'com.android.support:appcompat-v7:22.0.0'
+    compile 'com.android.support:cardview-v7:22.0.0'
     compile 'ch.acra:acra:4.5.0'
     compile 'org.jsoup:jsoup:1.8.1'
-    compile 'com.nineoldandroids:library:2.4.0'
 }

@@ -1,0 +1,5 @@
+-dontoptimize
+-dontobfuscate
+-repackageclasses "android.support.v7"
+-keep class android.support.v7.widget.** { *; }
+-keep interface android.support.v7.widget.** { *; }
