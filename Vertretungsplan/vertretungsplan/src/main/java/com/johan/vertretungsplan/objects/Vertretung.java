@@ -31,9 +31,13 @@ public class Vertretung implements Serializable {
     private static final String YELLOW = "#FFA000";
     private static final String PURPLE = "#9C27B0";
     private static final String GREEN = "#4CAF50";
+    // Red: Lesson is cancelled or the students are supposed to work without a teacher ("EVA" = Eigenverantwortliches Arbeiten)
     private static final String[] RED_VALUES = {"Entfall", "EVA", "Entf.", "Fällt aus!", "Fällt aus", "entfällt"};
+    // Blue: Lesson will be given by a different teacher and/or with a different subject or a special event will replace the lesson
     private static final String[] BLUE_VALUES = {"Vertretung", "Sondereins.", "Statt-Vertretung", "Veranst.", "Betreuung"};
+    // Yellow: Lesson will take place at another time or swapped with another lesson
     private static final String[] YELLOW_VALUES = {"Tausch", "Verlegung", "Zusammenlegung", "Unterricht geändert"};
+    // Green: Lesson will take place in another room
     private static final String[] GREEN_VALUES = {"Raum", "KLA", "Raum-Vtr.", "Raumtausch"};
     private String lesson;
     private String type;
