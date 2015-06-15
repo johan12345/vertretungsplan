@@ -29,7 +29,7 @@ public class Vertretung implements Serializable {
     private static final String RED = "#F44336";
     private static final String BLUE = "#2196F3";
     private static final String YELLOW = "#FFA000";
-    private static final String PURPLE = "#4CAF50";
+    private static final String PURPLE = "#9C27B0";
     private static final String GREEN = "#4CAF50";
     private static final String[] RED_VALUES = {"Entfall", "EVA", "Entf.", "Fällt aus!", "Fällt aus", "entfällt"};
     private static final String[] BLUE_VALUES = {"Vertretung", "Sondereins.", "Statt-Vertretung", "Veranst.", "Betreuung"};
