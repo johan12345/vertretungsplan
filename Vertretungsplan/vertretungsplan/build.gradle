@@ -20,13 +20,13 @@ android {
     productFlavors {
         standard {
             applicationId "com.johan.vertretungsplan_2"
-            versionCode 42
-            versionName "2.0.6"
+            versionCode 43
+            versionName "2.0.7"
             buildConfigField "String", "FIXED_SCHOOL", "null"
         }
         ls {
             applicationId "com.johan.vertretungsplan"
-            versionCode 42
+            versionCode 43
             versionName "3.0.4"
             buildConfigField "String", "FIXED_SCHOOL", "\"Schleswig_Lornsenschule\""
         }
