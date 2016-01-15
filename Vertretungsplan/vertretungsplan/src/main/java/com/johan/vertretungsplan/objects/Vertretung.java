@@ -26,27 +26,6 @@ public class Vertretung implements Serializable {
      *
      */
     private static final long serialVersionUID = 8029479872726949613L;
-    private static final String RED = "#F44336";
-    private static final String BLUE = "#2196F3";
-    private static final String YELLOW = "#FFA000";
-    private static final String PURPLE = "#9C27B0";
-    private static final String GREEN = "#4CAF50";
-    private static final String ORANGE = "#FF9800";
-    private static final String BROWN = "#795548";
-    private static final String GREY = "#9E9E9E";
-
-    // Red: Lesson is cancelled or the students are supposed to work without a teacher ("EVA" = Eigenverantwortliches Arbeiten)
-    private static final String[] RED_VALUES = {"Entfall", "EVA", "E V A", "Entf.", "Fällt aus!", "Fällt aus", "entfällt"};
-    // Blue: Lesson will be given by a different teacher and/or with a different subject or a special event will replace the lesson
-    private static final String[] BLUE_VALUES = {"Vertretung", "Sondereins.", "Statt-Vertretung", "Betreuung"};
-    // Yellow: Lesson will take place at another time or swapped with another lesson
-    private static final String[] YELLOW_VALUES = {"Tausch", "Verlegung", "Zusammenlegung", "Unterricht geändert"};
-    // Green: Lesson will take place in another room
-    private static final String[] GREEN_VALUES = {"Raum", "KLA", "Raum-Vtr.", "Raumtausch"};
-
-    private static final String[] ORANGE_VALUES = {"Veranstaltung", "Veranst."};
-    private static final String[] BROWN_VALUES = {"Klausur"};
-    private static final String[] GREY_VALUES = {"Pausenaufsicht"};
 
     private String lesson;
     private String type;
@@ -57,36 +36,7 @@ public class Vertretung implements Serializable {
     private String room;
     private String previousRoom;
     private String desc;
-
-    private static Set<String> makeSet(String[] values) {
-        return new HashSet<String>(Arrays.asList(values));
-    }
-
-    /**
-     * Erzeugt eine Farbe für die Vertretung
-     *
-     * @return Die ermittelte Farbe als Hexadezimaldarstellung,
-     * bei unbekannten Vertretungsarten lila.
-     */
-    public String getColor() {
-        if (makeSet(RED_VALUES).contains(type))
-            return RED;
-        else if (makeSet(BLUE_VALUES).contains(type))
-            return BLUE;
-        else if (makeSet(YELLOW_VALUES).contains(type))
-            return YELLOW;
-        else if (makeSet(GREEN_VALUES).contains(type))
-            return GREEN;
-        else if (makeSet(ORANGE_VALUES).contains(type))
-            return ORANGE;
-        else if (makeSet(BROWN_VALUES).contains(type))
-            return BROWN;
-        else if (makeSet(GREY_VALUES).contains(type))
-            return GREY;
-        else
-            return PURPLE;
-    }
-
+    private String color;
     /**
      * Erzeugt einen Text, der die Vertretung beschreibt
      * (ohne die Art und die Stunde).
@@ -265,6 +215,20 @@ public class Vertretung implements Serializable {
      */
     public void setPreviousRoom(String previousRoom) {
         this.previousRoom = previousRoom;
+    }
+
+    /**
+     * @return the color
+     */
+    public String getColor() {
+        return color;
+    }
+
+    /**
+     * @param color the color to set
+     */
+    public void setColor(String color) {
+        this.color = color;
     }
 
     /* (non-Javadoc)
