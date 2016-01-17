@@ -325,22 +325,20 @@ public class VertretungFragment extends VertretungsplanFragment {
 
             switch (type) {
                 case TYPE_ITEM:
-                    holder.stunde.setText((CharSequence) ((Vertretung) mData
-                            .get(position)).getLesson().toString());
-                    holder.art.setText((CharSequence) ((Vertretung) mData
-                            .get(position)).getType());
-                    holder.text.setText((CharSequence) ((Vertretung) mData
-                            .get(position)).toString());
+                    Vertretung vertretung = (Vertretung) mData.get(position);
+                    CardView cardView = (CardView) convertView;
 
-                    if (farben) {
-                        ((CardView) convertView).setCardBackgroundColor(Color
-                                .parseColor((String) ((Vertretung) mData
-                                        .get(position)).getColor()));
+                    holder.stunde.setText(vertretung.getLesson());
+                    holder.art.setText(vertretung.getType());
+                    holder.text.setText(vertretung.toString());
+
+                    if (farben && vertretung.getColor() != null) {
+                        cardView.setCardBackgroundColor(Color.parseColor(vertretung.getColor()));
                         holder.stunde.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
                         holder.art.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
                         holder.text.setTextColor(getResources().getColor(android.R.color.primary_text_dark));
                     } else {
-                        ((CardView) convertView).setCardBackgroundColor(Color.WHITE);
+                        cardView.setCardBackgroundColor(Color.WHITE);
                         holder.stunde.setTextColor(getResources().getColor(android.R.color.primary_text_light));
                         holder.art.setTextColor(getResources().getColor(android.R.color.primary_text_light));
                         holder.text.setTextColor(getResources().getColor(android.R.color.secondary_text_light));

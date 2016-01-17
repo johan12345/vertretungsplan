@@ -20,8 +20,8 @@ android {
     productFlavors {
         standard {
             applicationId "com.johan.vertretungsplan_2"
-            versionCode 44
-            versionName "2.0.8"
+            versionCode 45
+            versionName "2.0.9"
             buildConfigField "String", "FIXED_SCHOOL", "null"
         }
         ls {
