@@ -1,4 +1,4 @@
-vertretungsplan (DEPRECATED)
+vertretungsplan (DEPRECATED)  [![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
 =================
 
 Diese Version der Vertretungsplan-App wird seit Anfang 2016 nicht mehr gepflegt. Die neue Version ist nicht mehr komplett Open Source, nur noch die [Bibliothek zum Einlesen der Vertretungspläne](https://github.com/johan12345/substitution-schedule-parser). Weitere Informationen zur neuen App gibt es auch unter [vertretungsplan.me](https://vertretungsplan.me/).
